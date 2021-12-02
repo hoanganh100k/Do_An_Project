@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">E-commerce</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="delivery">Thanh toán</string>
+    <string name="menu_home">Trang chủ</string>
+    <string name="menu_order">Đơn hàng</string>
+    <string name="menu_reward">Khuyến mãi/Coupon</string>
+    <string name="menu_cart">Giỏ hàng</string>
+    <string name="menu_wishlist">Yêu thích</string>
+    <string name="menu_account">Tài khoản</string>
+    <string name="menu_sign_out">Đăng xuất</string>
+    <string name="menu_theme">Giao diện</string>
+    <string name="full_name">Full name</string>
+    <string name="email_address">Địa chỉ email</string>
+    <string name="sdt">Số điện thoại</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="notification">Thông báo</string>
+    <string name="not_signed_in">Chưa đăng nhập</string>
+    <string name="system">Hệ thống</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="live">Live</string>
+    <string name="btn_all">Tất cả</string>
+    <string name="todo">TODO</string>
+    <string name="discount_coupan">Discount Coupon</string>
+    <string name="Đượcgiảm10chobấtkìsảnphẩmnào">Được giảm 10% cho bất kì sản phẩm nào</string>
+    <string name="save">Lưu</string>
+    <string name="open_navigation_drawer">Mở menu</string>
+    <string name="close_navigation_drawer">Đóng menu</string>
+    <string name="oops_connection">Oops! Dường như bạn chưa kết nối Internet. Vui lòng kết nối Internet nhé</string>
+
+
+</resources>

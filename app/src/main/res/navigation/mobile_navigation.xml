@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.e_commerce.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_order"
+        android:name="com.example.e_commerce.ui.order.OrderFragment"
+        android:label="@string/menu_order"
+        tools:layout="@layout/fragment_order" />
+
+    <fragment
+        android:id="@+id/nav_coupon"
+        android:name="com.example.e_commerce.ui.coupon.CouponFragment"
+        android:label="@string/menu_reward"
+        tools:layout="@layout/fragment_coupon" />
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.example.e_commerce.ui.cart.CartFragment"
+        android:label="@string/menu_cart"
+        tools:layout="@layout/fragment_cart" />
+    <fragment
+        android:id="@+id/nav_wishlist"
+        android:name="com.example.e_commerce.ui.wishlist.WishlistFragment"
+        android:label="@string/menu_wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+    <fragment
+        android:id="@+id/nav_theme"
+        android:name="com.example.e_commerce.ui.theme.ThemeFragment"
+        android:label="@string/menu_theme"
+        tools:layout="@layout/fragment_theme" />
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="com.example.e_commerce.ui.account.AccountFragment"
+        android:label="@string/menu_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/nav_sign_out"
+        android:name="com.example.e_commerce.ui.sign_out.SignOutFragment"
+        android:label="@string/menu_sign_out"
+        tools:layout="@layout/fragment_sign_out" />
+</navigation>
