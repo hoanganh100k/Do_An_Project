@@ -1,0 +1,3 @@
+[submodule "mobile-app"]
+	path = mobile-app
+	url = git@gitlab.com:phamchinghi/mobile-app.git
