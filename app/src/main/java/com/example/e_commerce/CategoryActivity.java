@@ -1,6 +1,8 @@
 package com.example.e_commerce;
 
+import static com.example.e_commerce.DBqueries.categoryModelList1;
 import static com.example.e_commerce.DBqueries.lists;
+import static com.example.e_commerce.DBqueries.loadCategories1;
 import static com.example.e_commerce.DBqueries.loadedCategoriesName;
 import static com.example.e_commerce.DBqueries.setCategoryData;
 
@@ -23,9 +25,11 @@ import com.example.lib.Model.HomePageModel;
 import java.util.ArrayList;
 
 public class CategoryActivity extends AppCompatActivity {
-
+    private RecyclerView categoryRecyclerView1;
     private RecyclerView categoryRecyclerView;
     private HomePageAdapter adapter;
+    private CategoryAdapter categoryAdapter;
+
     @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +44,25 @@ public class CategoryActivity extends AppCompatActivity {
 
 
         categoryRecyclerView = findViewById(R.id.category_recyclerview);
+        categoryRecyclerView1 = findViewById(R.id.category_1);
+
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayout.VERTICAL);
+        LinearLayoutManager testingLayoutManager1 = new LinearLayoutManager(this);
+        testingLayoutManager1.setOrientation(LinearLayout.HORIZONTAL);
         categoryRecyclerView.setLayoutManager(testingLayoutManager);
+        categoryRecyclerView1.setLayoutManager(testingLayoutManager1);
+        //Đổ vào category con
+        categoryAdapter = new CategoryAdapter(categoryModelList1);
+        categoryRecyclerView1.setAdapter(categoryAdapter);
 
+        if(categoryModelList1.size() == 0){
+            loadCategories1(this, categoryAdapter);
+        }else{
+            categoryAdapter.notifyDataSetChanged();
+        }
+
+        //In sản phẩm của category đó
         int positionOfList = 0;
         for(int i = 0;i<loadedCategoriesName.size();i++){
             if(loadedCategoriesName.get(i).equals(title.toUpperCase())){

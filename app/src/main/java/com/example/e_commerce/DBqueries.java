@@ -49,6 +49,8 @@ public class DBqueries {
 
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public static List<CategoryModel> categoryModelList = new ArrayList<>();
+    public static List<CategoryModel> categoryModelList1 = new ArrayList<>();
+
     public static List<HomePageModel> homePageModelsList = new ArrayList<>();
     public static List<String> wishlist = new ArrayList<>();
     public static List<WishlistModel>wishlistModelList = new ArrayList<>();
@@ -72,8 +74,12 @@ public class DBqueries {
         categoryModelList.add(new CategoryModel(2,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
         categoryModelList.add(new CategoryModel(3,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
         categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
-
-
+    }
+    public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter) {
+        categoryModelList1.add(new CategoryModel(4,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng Con"));
+        categoryModelList1.add(new CategoryModel(5,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm Con"));
+        categoryModelList1.add(new CategoryModel(6,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu Con"));
+        categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
     }
 
     public static void setFragmentData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName){
