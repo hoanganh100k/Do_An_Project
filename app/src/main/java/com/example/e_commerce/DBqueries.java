@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DBqueries {
-    public static String email,fullname,profile;
+    public static String email, fullname, profile;
 
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public static List<CategoryModel> categoryModelList = new ArrayList<>();
@@ -53,36 +53,37 @@ public class DBqueries {
 
     public static List<HomePageModel> homePageModelsList = new ArrayList<>();
     public static List<String> wishlist = new ArrayList<>();
-    public static List<WishlistModel>wishlistModelList = new ArrayList<>();
+    public static List<WishlistModel> wishlistModelList = new ArrayList<>();
     public static List<List<HomePageModel>> lists = new ArrayList<>();
     public static List<String> loadedCategoriesName = new ArrayList<>();
-    public static List<String> loadedCategoriesNames=new ArrayList<>();
+    public static List<String> loadedCategoriesNames = new ArrayList<>();
 
-    public static List<AddressesModel> addressesModelList=new ArrayList<>();
-    public static List<NotificationModel> notificationModelList=new ArrayList<>();
-    public static List<String> cartList=new ArrayList<>();
-    public static List<CartItemModel> cartItemModelList=new ArrayList<>();
-    public static List<RewardModel> rewardModelList=new ArrayList<>();
+    public static List<AddressesModel> addressesModelList = new ArrayList<>();
+    public static List<NotificationModel> notificationModelList = new ArrayList<>();
+    public static List<String> cartList = new ArrayList<>();
+    public static List<CartItemModel> cartItemModelList = new ArrayList<>();
+    public static List<RewardModel> rewardModelList = new ArrayList<>();
     private static ListenerRegistration registration;
-    public static List<Long> Rating=new ArrayList<>();
-    public static List<String> RatedIds=new ArrayList<>();
-    public static List<MyOrderItemModel> myOrderItemModelList=new ArrayList<>();
-    public static int selectedAddress=-1;
+    public static List<Long> Rating = new ArrayList<>();
+    public static List<String> RatedIds = new ArrayList<>();
+    public static List<MyOrderItemModel> myOrderItemModelList = new ArrayList<>();
+    public static int selectedAddress = -1;
 
     public static void loadCategories(final Context context, final CategoryAdapter categoryAdapter) {
-        categoryModelList.add(new CategoryModel(1,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"));
-        categoryModelList.add(new CategoryModel(2,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
-        categoryModelList.add(new CategoryModel(3,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
-        categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
-    }
-    public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter) {
-        categoryModelList1.add(new CategoryModel(4,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng Con"));
-        categoryModelList1.add(new CategoryModel(5,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm Con"));
-        categoryModelList1.add(new CategoryModel(6,"https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu Con"));
+        categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"));
+        categoryModelList.add(new CategoryModel(2, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
+        categoryModelList.add(new CategoryModel(3, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
         categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
     }
 
-    public static void setFragmentData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName){
+    public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter) {
+        categoryModelList1.add(new CategoryModel(4, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng Con"));
+        categoryModelList1.add(new CategoryModel(5, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm Con"));
+        categoryModelList1.add(new CategoryModel(6, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu Con"));
+        categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
+    }
+
+    public static void setFragmentData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
         //Banner
         List<SliderModel> sliderModelList = new ArrayList<>();
         sliderModelList.add(new SliderModel("https://free.vector6.com/wp-content/uploads/2020/11/211104082-Vector-thiet-ke-banner-chuyen-nghiep.jpg"));        // lay data cua banner ve gan vao list
@@ -95,120 +96,120 @@ public class DBqueries {
         List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "1"
-                ,"https://i.ibb.co/vhxHPq1/CNG2-1.png"
-                ,"Bột Làm Đẹp"
-                ,"Đ"
-                ,"100"));                    // lay data cua banner ve gan vao list
+                , "https://i.ibb.co/vhxHPq1/CNG2-1.png"
+                , "Bột Làm Đẹp"
+                , "Đ"
+                , "100"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "1"
-                ,"https://i.ibb.co/vhxHPq1/CNG2-1.png"
-                ,"Bột Làm Đẹp"
-                ,1000
-                ,"3"
-                ,5
-                ,"1000"
-                ,"1000"
-                ,false
-                ,true));
+                , "https://i.ibb.co/vhxHPq1/CNG2-1.png"
+                , "Bột Làm Đẹp"
+                , 1000
+                , "3"
+                , 5
+                , "1000"
+                , "1000"
+                , false
+                , true));
 
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "11"
-                ,"https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
-                ,"Bột Gạo"
-                ,"Đ"
-                ,"100"));                    // lay data cua banner ve gan vao list
+                , "https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
+                , "Bột Gạo"
+                , "Đ"
+                , "100"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "11"
-                ,"https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
-                ,"Bột Gạo"
-                ,1000
-                ,"3"
-                ,5
-                ,"1000"
-                ,"1000"
-                ,false
-                ,true));
+                , "https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
+                , "Bột Gạo"
+                , 1000
+                , "3"
+                , 5
+                , "1000"
+                , "1000"
+                , false
+                , true));
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "16"
-                ,"https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
-                ,"Phân Bón"
-                ,"Đ"
-                ,"100"));                    // lay data cua banner ve gan vao list
+                , "https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
+                , "Phân Bón"
+                , "Đ"
+                , "100"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "16"
-                ,"https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
-                ,"Phân Bón"
-                ,1000
-                ,"3"
-                ,5
-                ,"1000"
-                ,"1000"
-                ,false
-                ,true));
-        lists.get(position).add(new HomePageModel(1, "Sản phẩm Hot","#FFFFFF",horizontalProductScrollModelList,viewAllProduct));
+                , "https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
+                , "Phân Bón"
+                , 1000
+                , "3"
+                , 5
+                , "1000"
+                , "1000"
+                , false
+                , true));
+        lists.get(position).add(new HomePageModel(1, "Sản phẩm Hot", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
         //Sản Phẩm
         List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "0"
-                ,"https://i.ibb.co/nw2GyRk/DPSK1-1.jpg"
-                ,"Dầu mỏ"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/nw2GyRk/DPSK1-1.jpg"
+                , "Dầu mỏ"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "1"
-                ,"https://i.ibb.co/5RyGsns/DPSK2-1.jpg"
-                ,"Dầu mỏ 1"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/5RyGsns/DPSK2-1.jpg"
+                , "Dầu mỏ 1"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "2"
-                ,"https://i.ibb.co/YfZBbV7/DPSK3-1.jpg"
-                ,"Dầu mỏ 2"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/YfZBbV7/DPSK3-1.jpg"
+                , "Dầu mỏ 2"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "3"
-                ,"https://i.ibb.co/2gLBs0Q/DPSK4-1.jpg"
-                ,"Dầu mỏ 3"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/2gLBs0Q/DPSK4-1.jpg"
+                , "Dầu mỏ 3"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "4"
-                ,"https://i.ibb.co/VNs5mh0/DPSK5-1.jpg"
-                ,"Dầu mỏ 4"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/VNs5mh0/DPSK5-1.jpg"
+                , "Dầu mỏ 4"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "5"
-                ,"https://i.ibb.co/k88rct6/DPSK6-1.jpg"
-                ,"Dầu mỏ 5"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/k88rct6/DPSK6-1.jpg"
+                , "Dầu mỏ 5"
+                , "Đ"
+                , "100000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "6"
-                ,"https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"
-                ,"Dầu mỏ 6"
-                ,"Đ"
-                ,"100000"
+                , "https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"
+                , "Dầu mỏ 6"
+                , "Đ"
+                , "100000"
         ));
         // lay data cua banner ve gan vao list
-        lists.get(position).add(new HomePageModel(2, "Sản Phẩm","#FFFFFF",gridLayoutModelList));
+        lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
         adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
 
 
     }
 
     //Mỗi lần bấm vô category sẽ load lại hàm này
-    public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName){
+    public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
         int id_Category = -1; //Đây là ID Của Category
-        for (CategoryModel category: categoryModelList) {
-            if (category.getCategoryName().equals(categoriesName)){
+        for (CategoryModel category : categoryModelList) {
+            if (category.getCategoryName().equals(categoriesName)) {
                 id_Category = category.getCategoryID();
                 break;
             }
@@ -218,100 +219,100 @@ public class DBqueries {
         List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "10"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,"Đ"
-                ,"10000"));                    // lay data cua banner ve gan vao list
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , "Đ"
+                , "10000"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "10"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,10000
-                ,"3"
-                ,5
-                ,"10000"
-                ,"100000"
-                ,true
-                ,true));
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , 10000
+                , "3"
+                , 5
+                , "10000"
+                , "100000"
+                , true
+                , true));
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "21"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,"Đ"
-                ,"10000"));                    // lay data cua banner ve gan vao list
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , "Đ"
+                , "10000"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "21"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,10000
-                ,"3"
-                ,5
-                ,"10000"
-                ,"100000"
-                ,true
-                ,true));
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , 10000
+                , "3"
+                , 5
+                , "10000"
+                , "100000"
+                , true
+                , true));
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "31"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,"Đ"
-                ,"10000"));                    // lay data cua banner ve gan vao list
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , "Đ"
+                , "10000"));                    // lay data cua banner ve gan vao list
         viewAllProduct.add(new WishlistModel(
                 "31"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Dầu 1"
-                ,10000
-                ,"3"
-                ,5
-                ,"10000"
-                ,"100000"
-                ,true
-                ,true));
-        lists.get(position).add(new HomePageModel(1, "Sản Phẩm","#FFFFFF",horizontalProductScrollModelList,viewAllProduct));
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Dầu 1"
+                , 10000
+                , "3"
+                , 5
+                , "10000"
+                , "100000"
+                , true
+                , true));
+        lists.get(position).add(new HomePageModel(1, "Sản Phẩm", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
         //San pham 2
         //Lưu ý: Phải trên 4 sản phẩm ở mục này
         List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "21"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Xăng 1"
-                ,"Đ"
-                ,"10000"
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Xăng 1"
+                , "Đ"
+                , "10000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "22"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Xăng 2"
-                ,"Đ"
-                ,"10000"
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Xăng 2"
+                , "Đ"
+                , "10000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "23"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Xăng 3"
-                ,"Đ"
-                ,"10000"
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Xăng 3"
+                , "Đ"
+                , "10000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "24"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Xăng 4"
-                ,"Đ"
-                ,"10000"
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Xăng 4"
+                , "Đ"
+                , "10000"
         ));
         gridLayoutModelList.add(new HorizontalProductScrollModel(
                 "25"
-                ,"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                ,"Xăng 5"
-                ,"Đ"
-                ,"10000"
+                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                , "Xăng 5"
+                , "Đ"
+                , "10000"
         ));
-        lists.get(position).add(new HomePageModel(2, "Sản Phẩm 2","#FFFFFF",gridLayoutModelList));
+        lists.get(position).add(new HomePageModel(2, "Sản Phẩm 2", "#FFFFFF", gridLayoutModelList));
         adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
 
     }
 
-    public static void loadRewards(final Context context, final Dialog loadingDialog,final boolean onRewardFragment) {
+    public static void loadRewards(final Context context, final Dialog loadingDialog, final boolean onRewardFragment) {
 
         rewardModelList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).get()
@@ -319,47 +320,46 @@ public class DBqueries {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            final Date lastseendate=task.getResult().getDate("Last seen");
+                            final Date lastseendate = task.getResult().getDate("Last seen");
 
                             firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_REWARDS")
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if(task.isSuccessful()){
+                                            if (task.isSuccessful()) {
 
-                                                for(DocumentSnapshot documentSnapshot:task.getResult()){
-                                                    if(documentSnapshot.get("type").toString().equals("Discount") && lastseendate.before(documentSnapshot.getDate("validity"))){  //&& lastseendate.before(documentSnapshot.getDate("validity"))
+                                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                                                    if (documentSnapshot.get("type").toString().equals("Discount") && lastseendate.before(documentSnapshot.getDate("validity"))) {  //&& lastseendate.before(documentSnapshot.getDate("validity"))
                                                         rewardModelList.add(new RewardModel(
                                                                 documentSnapshot.getId()
-                                                                ,documentSnapshot.get("type").toString()
-                                                                ,documentSnapshot.get("upper_limit").toString()
-                                                                ,documentSnapshot.get("lower_limit").toString()
-                                                                ,documentSnapshot.get("percentage").toString()
-                                                                ,documentSnapshot.get("body").toString()
-                                                                ,(Timestamp) documentSnapshot.get("validity")
-                                                                ,(boolean)documentSnapshot.get("alreadyUsed")
+                                                                , documentSnapshot.get("type").toString()
+                                                                , documentSnapshot.get("upper_limit").toString()
+                                                                , documentSnapshot.get("lower_limit").toString()
+                                                                , documentSnapshot.get("percentage").toString()
+                                                                , documentSnapshot.get("body").toString()
+                                                                , (Timestamp) documentSnapshot.get("validity")
+                                                                , (boolean) documentSnapshot.get("alreadyUsed")
                                                         ));
-                                                    }
-                                                    else if(documentSnapshot.get("type").toString().equals("Flat VND OFF")&& lastseendate.before(documentSnapshot.getDate("validity"))){//&& lastseendate.before(documentSnapshot.getDate("validity"))
+                                                    } else if (documentSnapshot.get("type").toString().equals("Flat VND OFF") && lastseendate.before(documentSnapshot.getDate("validity"))) {//&& lastseendate.before(documentSnapshot.getDate("validity"))
                                                         rewardModelList.add(new RewardModel(
                                                                 documentSnapshot.getId()
-                                                                ,documentSnapshot.get("type").toString()
-                                                                ,documentSnapshot.get("upper_limit").toString()
-                                                                ,documentSnapshot.get("lower_limit").toString()
-                                                                ,documentSnapshot.get("amount").toString()
-                                                                ,documentSnapshot.get("body").toString()
-                                                                ,(Timestamp)documentSnapshot.get("validity")
-                                                                ,(boolean)documentSnapshot.get("alreadyUsed")
+                                                                , documentSnapshot.get("type").toString()
+                                                                , documentSnapshot.get("upper_limit").toString()
+                                                                , documentSnapshot.get("lower_limit").toString()
+                                                                , documentSnapshot.get("amount").toString()
+                                                                , documentSnapshot.get("body").toString()
+                                                                , (Timestamp) documentSnapshot.get("validity")
+                                                                , (boolean) documentSnapshot.get("alreadyUsed")
                                                         ));
                                                     }
                                                 }
-                                                if(onRewardFragment) {
+                                                if (onRewardFragment) {
                                                     CouponFragment.adapter.notifyDataSetChanged();
                                                 }
-                                            }else {
-                                                String error=task.getException().getMessage();
-                                                Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                String error = task.getException().getMessage();
+                                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                                             }
                                             loadingDialog.dismiss();
                                         }
@@ -466,7 +466,7 @@ public class DBqueries {
     }
 
     public static void removeFromWishlist(final int index, final Context context) {
-        final String removedProductId=wishlist.get(index);
+        final String removedProductId = wishlist.get(index);
         wishlist.remove(index);
 
         Map<String, Object> updateWishlist = new HashMap<>();
@@ -482,144 +482,67 @@ public class DBqueries {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            if(wishlistModelList.size() != 0){
+                            if (wishlistModelList.size() != 0) {
                                 wishlistModelList.remove(index);
                                 WishlistFragment.wishlistAdapter.notifyDataSetChanged();
                             }
-                            ProductDetailsActivity.ALREADY_ADDED_TO_WISHLIST=false;
-                            Toast.makeText(context,"Xóa thành công!",Toast.LENGTH_SHORT).show();
+                            ProductDetailsActivity.ALREADY_ADDED_TO_WISHLIST = false;
+                            Toast.makeText(context, "Xóa thành công!", Toast.LENGTH_SHORT).show();
                         } else {
-                            if(ProductDetailsActivity.addToWishListBtn != null) {
+                            if (ProductDetailsActivity.addToWishListBtn != null) {
                                 ProductDetailsActivity.addToWishListBtn.setSupportImageTintList(context.getResources().getColorStateList(R.color.colorPrimary));
                             }
-                            wishlist.add(index,removedProductId);
-                            String error=task.getException().getMessage();
-                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                            wishlist.add(index, removedProductId);
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                         }
-                        ProductDetailsActivity.running_wishlist_querry=false;
+                        ProductDetailsActivity.running_wishlist_querry = false;
                     }
                 });
 
     }
 
-    public static void loadCartList(final Context context, final Dialog dialog,final boolean loadProductData,final TextView badgeCount,final TextView cartTotalAmount){
+    public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData, final TextView badgeCount, final TextView cartTotalAmount) {
 
         cartList.clear();
-        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
-                .collection("USER_DATA").document("CART").get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(long x=0;x<(long)task.getResult().get("list_size");x++){
-                                cartList.add(task.getResult().get("product_ID_"+x).toString());
+        cartList.add("1");
 
-                                if(DBqueries.cartList.contains(ProductDetailsActivity.productID)){
-                                    ProductDetailsActivity.ALREADY_ADDED_TO_CART=true;
-                                }else {
-                                    ProductDetailsActivity.ALREADY_ADDED_TO_CART=false;
-                                }
-
-                                if(loadProductData) {
-                                    cartItemModelList.clear();
-                                    final String productId=task.getResult().get("product_ID_" + x).toString();
-                                    firebaseFirestore.collection("PRODUCTS").document(productId).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        final DocumentSnapshot documentSnapshot=task.getResult();
-                                                        firebaseFirestore.collection("PRODUCTS").document(productId).collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING).get()
-                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                        if(task.isSuccessful()){
-
-                                                                            int index=0;
-                                                                            if(cartList.size()>=2){
-                                                                                index=cartList.size()-2;
-                                                                            }
-
-                                                                            if(task.getResult().getDocuments().size()< (long)documentSnapshot.get("stock_quantity")){
-                                                                                cartItemModelList.add(index,new CartItemModel(CartItemModel.CART_ITEM
-                                                                                        ,productId
-                                                                                        ,documentSnapshot.get("product_image_1").toString()
-                                                                                        , (long) documentSnapshot.get("free_coupens")
-                                                                                        ,(long)1
+        int index = 0;
+        if (cartList.size() >= 2) {
+            index = cartList.size() - 2;
+        }
+        System.out.println("In: "+ index);
+        cartItemModelList.add(index, new CartItemModel(CartItemModel.CART_ITEM
+                , "1"
+                , "https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"
+                , (long) 100
+                , (long) 1
 //                                                                                        ,(long)documentSnapshot.get("offers_applied")
-                                                                                        ,(long)0
-                                                                                        , documentSnapshot.get("product_title").toString()
-                                                                                        , documentSnapshot.get("product_price").toString()
-                                                                                        , documentSnapshot.get("cutted_price").toString()
-                                                                                        ,true
-                                                                                        ,(long)documentSnapshot.get("max_quantity")
-                                                                                        ,(long)documentSnapshot.get("stock_quantity")
-                                                                                        ,(boolean)documentSnapshot.get("COD")
-                                                                                ));
-                                                                            }else {
-                                                                                cartItemModelList.add(index,new CartItemModel(CartItemModel.CART_ITEM
-                                                                                        ,productId
-                                                                                        ,documentSnapshot.get("product_image_1").toString()
-                                                                                        , (long) documentSnapshot.get("free_coupens")
-                                                                                        ,(long)1
-                                                                                        //,(long)documentSnapshot.get("offers_applied")
-                                                                                        ,(long)0
-                                                                                        , documentSnapshot.get("product_title").toString()
-                                                                                        , documentSnapshot.get("product_price").toString()
-                                                                                        , documentSnapshot.get("cutted_price").toString()
-                                                                                        ,false
-                                                                                        ,(long)documentSnapshot.get("max_quantity")
-                                                                                        ,(long)documentSnapshot.get("stock_quantity")
-                                                                                        ,(boolean)documentSnapshot.get("COD")
-                                                                                ));
-                                                                            }
-                                                                            if(cartList.size() == 1){
-                                                                                cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
-                                                                                LinearLayout parent=(LinearLayout)cartTotalAmount.getParent().getParent();
-                                                                                parent.setVisibility(View.VISIBLE);
-                                                                            }
-                                                                            if(cartList.size() == 0) {
-                                                                                cartItemModelList.clear();
-                                                                            }
-                                                                            CartFragment.cartAdapter.notifyDataSetChanged();
-                                                                        }else {
-                                                                            String error=task.getException().getMessage();
-                                                                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }
-                                                                });
-                                                    } else {
-                                                        String error = task.getException().getMessage();
-                                                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                            if(cartList.size() != 0){
-                                badgeCount.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                badgeCount.setVisibility(View.INVISIBLE);
-                            }
-                            if(DBqueries.cartList.size()<99) {
-                                badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
-                            }else {
-                                badgeCount.setText("99");
-                            }
-                        }
-                        else {
-                            String error=task.getException().getMessage();
-                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
-                        }
-                        dialog.dismiss();
-                    }
-                });
+                , (long) 0
+                , "Xăng 1"
+                , "10000"
+                , "10000"
+                , true
+                , (long) 10
+                , (long) 10000
+                , (boolean) true
+        ));
+//        if (cartList.size() == 1) {
+//            cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+//            LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
+//            parent.setVisibility(View.VISIBLE);
+//        }
+//        if (cartList.size() == 0) {
+//            cartItemModelList.clear();
+//        }
+        CartFragment.cartAdapter.notifyDataSetChanged();
+
+
     }
 
-    public static void loadRatingList(final Context context){
-        if(!ProductDetailsActivity.running_rating_querry) {
-            ProductDetailsActivity.running_rating_querry=true;
+    public static void loadRatingList(final Context context) {
+        if (!ProductDetailsActivity.running_rating_querry) {
+            ProductDetailsActivity.running_rating_querry = true;
             RatedIds.clear();
             Rating.clear();
             firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("RATINGS")
@@ -627,7 +550,7 @@ public class DBqueries {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
-                        List<String> orderProductIds=new ArrayList<>();
+                        List<String> orderProductIds = new ArrayList<>();
                         for (int x = 0; x < myOrderItemModelList.size(); x++) {
                             orderProductIds.add(myOrderItemModelList.get(x).getProductId());
                         }
@@ -637,36 +560,36 @@ public class DBqueries {
                             Rating.add((long) task.getResult().get("rating_" + x));
                             if (task.getResult().get("product_ID_" + x).toString().equals(ProductDetailsActivity.productID)) {
                                 ProductDetailsActivity.initialRating = Integer.parseInt(String.valueOf((long) task.getResult().get("rating_" + x))) - 1;
-                                if(ProductDetailsActivity.rateNowContainer != null) {
+                                if (ProductDetailsActivity.rateNowContainer != null) {
                                     ProductDetailsActivity.setRating(ProductDetailsActivity.initialRating);
                                 }
                             }
 
-                            if(orderProductIds.contains(task.getResult().get("product_ID_" + x).toString())){
+                            if (orderProductIds.contains(task.getResult().get("product_ID_" + x).toString())) {
                                 myOrderItemModelList.get(orderProductIds.indexOf(task.getResult().get("product_ID_" + x).toString())).setRating(Integer.parseInt(String.valueOf((long) task.getResult().get("rating_" + x))) - 1);
                             }
                         }
-                        if(OrderFragment.myOrderAdapter != null){
+                        if (OrderFragment.myOrderAdapter != null) {
                             OrderFragment.myOrderAdapter.notifyDataSetChanged();
                         }
                     } else {
                         String error = task.getException().getMessage();
                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                     }
-                    ProductDetailsActivity.running_rating_querry=false;
+                    ProductDetailsActivity.running_rating_querry = false;
                 }
             });
         }
     }
 
-    public static void loadOrders(final Context context, @Nullable final MyOrderAdapter myOrderAdapter, final Dialog loadingDialog){
+    public static void loadOrders(final Context context, @Nullable final MyOrderAdapter myOrderAdapter, final Dialog loadingDialog) {
         myOrderItemModelList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_ORDERS").orderBy("time", Query.Direction.DESCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(!task.getResult().isEmpty()) {
+                        if (!task.getResult().isEmpty()) {
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
                                     firebaseFirestore.collection("ORDERS").document(documentSnapshot.get("order_id").toString())
@@ -723,7 +646,7 @@ public class DBqueries {
                                 String error = task.getException().getMessage();
                                 Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                             }
-                        }else {
+                        } else {
                             loadingDialog.dismiss();
                         }
                     }
@@ -732,7 +655,7 @@ public class DBqueries {
     }
 
     public static void removeFromCart(final int index, final Context context, final TextView cartTotalAmount) {
-        final String removedProductId=cartList.get(index);
+        final String removedProductId = cartList.get(index);
         cartList.remove(index);
 
         Map<String, Object> updateCart = new HashMap<>();
@@ -748,63 +671,63 @@ public class DBqueries {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            if(cartItemModelList.size() != 0){
+                            if (cartItemModelList.size() != 0) {
                                 cartItemModelList.remove(index);
                                 CartFragment.cartAdapter.notifyDataSetChanged();
                             }
-                            if(cartList.size() == 0) {
-                                LinearLayout parent=(LinearLayout)cartTotalAmount.getParent().getParent();
+                            if (cartList.size() == 0) {
+                                LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
                                 parent.setVisibility(View.GONE);
                                 cartItemModelList.clear();
                             }
-                            Toast.makeText(context,"Xóa thành công!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Xóa thành công!", Toast.LENGTH_SHORT).show();
                         } else {
-                            cartList.add(index,removedProductId);
-                            String error=task.getException().getMessage();
-                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                            cartList.add(index, removedProductId);
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                         }
-                        ProductDetailsActivity.running_cart_querry=false;
+                        ProductDetailsActivity.running_cart_querry = false;
                     }
                 });
 
     }
 
-    public static void checkNotifications(boolean remove,@Nullable final TextView notifycount){
+    public static void checkNotifications(boolean remove, @Nullable final TextView notifycount) {
 
-        if(remove){
+        if (remove) {
             registration.remove();
-        }else {
-            registration=firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("NOTIFICATIONS")
+        } else {
+            registration = firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("NOTIFICATIONS")
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            if(documentSnapshot != null && documentSnapshot.exists()) {
+                            if (documentSnapshot != null && documentSnapshot.exists()) {
                                 notificationModelList.clear();
-                                int unread=0;
+                                int unread = 0;
                                 for (long x = 0; x < (long) documentSnapshot.get("list_size"); x++) {
-                                    notificationModelList.add(0,new NotificationModel(
-                                            documentSnapshot.getString("image_"+x)
-                                            ,documentSnapshot.getString("body_"+x)
-                                            ,documentSnapshot.getBoolean("readed_"+x)
+                                    notificationModelList.add(0, new NotificationModel(
+                                            documentSnapshot.getString("image_" + x)
+                                            , documentSnapshot.getString("body_" + x)
+                                            , documentSnapshot.getBoolean("readed_" + x)
 
                                     ));
-                                    if(!documentSnapshot.getBoolean("readed_"+x)){
+                                    if (!documentSnapshot.getBoolean("readed_" + x)) {
                                         unread++;
-                                        if(notifycount != null){
-                                            if(unread > 0) {
+                                        if (notifycount != null) {
+                                            if (unread > 0) {
                                                 notifycount.setVisibility(View.VISIBLE);
                                                 if (unread < 99) {
                                                     notifycount.setText(String.valueOf(unread));
                                                 } else {
                                                     notifycount.setText("99");
                                                 }
-                                            }else {
+                                            } else {
                                                 notifycount.setVisibility(View.INVISIBLE);
                                             }
                                         }
                                     }
                                 }
-                                if(NotificationActivity.adapter != null){
+                                if (NotificationActivity.adapter != null) {
                                     NotificationActivity.adapter.notifyDataSetChanged();
                                 }
                             }
@@ -813,41 +736,41 @@ public class DBqueries {
         }
     }
 
-    public static void loadAddresses(final Context context, final Dialog loadingDialog, final boolean gotoDeliveryActivity){
+    public static void loadAddresses(final Context context, final Dialog loadingDialog, final boolean gotoDeliveryActivity) {
         addressesModelList.clear();
 
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("ADDRESSES").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            if((long)task.getResult().get("list_size") == 0){
-                                context.startActivity(new Intent(context, AddAddressActivity.class).putExtra("INTENT","deliveryIntent"));
-                            }else {
-                                for(long x=1;x<=(long)task.getResult().get("list_size");x++){
+                        if (task.isSuccessful()) {
+                            if ((long) task.getResult().get("list_size") == 0) {
+                                context.startActivity(new Intent(context, AddAddressActivity.class).putExtra("INTENT", "deliveryIntent"));
+                            } else {
+                                for (long x = 1; x <= (long) task.getResult().get("list_size"); x++) {
                                     addressesModelList.add(new AddressesModel(
-                                            task.getResult().get("city_"+x).toString()
-                                            ,task.getResult().get("locality_"+x).toString()
-                                            ,task.getResult().get("flat_no_"+x).toString()
-                                        //  ,task.getResult().get("pincode_"+x).toString()
-                                            ,task.getResult().get("landmark_"+x).toString()
-                                            ,task.getResult().get("name_"+x).toString()
-                                            ,task.getResult().get("mobile_no_"+x).toString()
+                                            task.getResult().get("city_" + x).toString()
+                                            , task.getResult().get("locality_" + x).toString()
+                                            , task.getResult().get("flat_no_" + x).toString()
+                                            //  ,task.getResult().get("pincode_"+x).toString()
+                                            , task.getResult().get("landmark_" + x).toString()
+                                            , task.getResult().get("name_" + x).toString()
+                                            , task.getResult().get("mobile_no_" + x).toString()
 //                                          ,task.getResult().get("alternate_mobile_no_"+x).toString()
 //                                          ,task.getResult().get("state_"+x).toString()
-                                            ,(boolean)task.getResult().get("selected_"+x)
+                                            , (boolean) task.getResult().get("selected_" + x)
                                     ));
-                                    if((boolean)task.getResult().get("selected_"+x)){
-                                        selectedAddress=Integer.parseInt(String.valueOf(x-1));
+                                    if ((boolean) task.getResult().get("selected_" + x)) {
+                                        selectedAddress = Integer.parseInt(String.valueOf(x - 1));
                                     }
                                 }
                                 if (gotoDeliveryActivity) {
                                     context.startActivity(new Intent(context, DeliveryActivity.class));
                                 }
                             }
-                        }else {
-                            String error=task.getException().getMessage();
-                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                        } else {
+                            String error = task.getException().getMessage();
+                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                         }
                         loadingDialog.dismiss();
                     }
@@ -855,7 +778,7 @@ public class DBqueries {
     }
 
 
-    public static void clearData(){
+    public static void clearData() {
         categoryModelList.clear();
         lists.clear();
         loadedCategoriesNames.clear();

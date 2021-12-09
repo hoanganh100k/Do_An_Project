@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -44,8 +43,6 @@ import com.example.e_commerce.ui.order.OrderFragment;
 import com.example.e_commerce.ui.sign_out.SignOutFragment;
 import com.example.e_commerce.ui.theme.ThemeFragment;
 import com.example.e_commerce.ui.wishlist.WishlistFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -53,8 +50,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -317,47 +312,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         super.onStart();
         currentUser= FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser == null){
-            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
-        }
-        else {
-            if(DBqueries.email == null) {
-                FirebaseFirestore.getInstance().collection("USERS").document(currentUser.getUid())
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DBqueries.fullname = task.getResult().getString("fullname");
-                            DBqueries.email = task.getResult().getString("email");
-                            DBqueries.profile = task.getResult().getString("profile");
+        DBqueries.fullname = "Hoàng Anh";
+        DBqueries.email = "hoanganh34k@gmail.com";
+        DBqueries.profile = "1234";
 
-                            fullname.setText(DBqueries.fullname);
-                            email.setText(DBqueries.email);
-                            if (DBqueries.profile.equals("")) {
-                                addProfileIcon.setVisibility(View.VISIBLE);
-                            } else {
-                                addProfileIcon.setVisibility(View.INVISIBLE);
-                                Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
-                            }
-                        } else {
-                            String error = task.getException().getMessage();
-                            Toast.makeText(MainActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }else {
-                fullname.setText(DBqueries.fullname);
-                email.setText(DBqueries.email);
-                if (DBqueries.profile.equals("")) {
-                    profileView.setImageResource(R.mipmap.profile_placeholder);
-                    addProfileIcon.setVisibility(View.VISIBLE);
-                } else {
-                    addProfileIcon.setVisibility(View.INVISIBLE);
-                    Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
-                }
-            }
-
-            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
+        fullname.setText(DBqueries.fullname);
+        email.setText(DBqueries.email);
+        if (DBqueries.profile.equals("")) {
+            addProfileIcon.setVisibility(View.VISIBLE);
+        } else {
+            addProfileIcon.setVisibility(View.INVISIBLE);
+            Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
         }
         if(resetMainActivity){
             actionbarLogo.setVisibility(View.VISIBLE);

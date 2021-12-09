@@ -3,12 +3,6 @@ package com.example.e_commerce;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,9 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -210,23 +206,26 @@ public class SignInFragment extends Fragment {
                     progressBar.setVisibility(View.VISIBLE);
                     signInBtn.setEnabled(false);
                     signInBtn.setTextColor(Color.argb(50,255,255,255));
-
-                    firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        mainIntent();
-                                    }else {
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        signInBtn.setEnabled(true);
-                                        signInBtn.setTextColor(Color.rgb(255,255,255));
-                                        String error = task.getException().getMessage();
-                                        Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
+                    progressBar.setVisibility(View.INVISIBLE);
+                    signInBtn.setEnabled(true);
+                    signInBtn.setTextColor(Color.rgb(255,255,255));
+                    mainIntent();
+//                    firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
+//                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<AuthResult> task) {
+//                                    if (task.isSuccessful()){
+//                                        mainIntent();
+//                                    }else {
+//                                        progressBar.setVisibility(View.INVISIBLE);
+//                                        signInBtn.setEnabled(true);
+//                                        signInBtn.setTextColor(Color.rgb(255,255,255));
+//                                        String error = task.getException().getMessage();
+//                                        Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
+//                                    }
+//
+//                                }
+//                            });
 
                 }else {
                     Toast.makeText(getActivity(),"Incorrect email or password!",Toast.LENGTH_SHORT).show();

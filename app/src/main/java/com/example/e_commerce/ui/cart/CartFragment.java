@@ -65,7 +65,6 @@ public class CartFragment extends Fragment {
         cartItemRecyclerView.setAdapter(cartAdapter);
 //        cartAdapter.notifyDataSetChanged();
 
-
         btnContinue = view.findViewById(R.id.cart_continue_btn);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
