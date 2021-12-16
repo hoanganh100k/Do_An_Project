@@ -78,10 +78,9 @@ public class DBqueries {
     public static List<String> RatedIds = new ArrayList<>();
     public static List<MyOrderItemModel> myOrderItemModelList = new ArrayList<>();
     public static int selectedAddress = -1;
-    private static OkHttpClient client;
+    private static OkHttpClient client = new OkHttpClient();
 
     public static void loadCategories(final Context context, final CategoryAdapter categoryAdapter) {
-        client = new OkHttpClient();
         categoryModelList.add(new CategoryModel(-1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Trang chủ"));
 
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
@@ -104,7 +103,6 @@ public class DBqueries {
                         for (int i = 0; i < a.length(); i++) {
                             JSONObject b = new JSONObject(a.get(i).toString());
                             c.add(b);
-                            System.out.println(b.get("id"));
                             categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"+b.get("id")));
                         }
 
@@ -126,7 +124,6 @@ public class DBqueries {
 //        categoryModelList.add(new CategoryModel(2, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
 //        categoryModelList.add(new CategoryModel(3, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
 
-        categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
     }
 
     public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter) {
@@ -147,41 +144,61 @@ public class DBqueries {
         //Đây là hàm của category đầu tiên
         List<WishlistModel> viewAllProduct = new ArrayList<>();
         List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
-                "1"
-                , "https://i.ibb.co/vhxHPq1/CNG2-1.png"
-                , "Bột Làm Đẹp"
-                , "Đ"
-                , "100"));                    // lay data cua banner ve gan vao list
-        viewAllProduct.add(new WishlistModel(
-                "1"
-                , "https://i.ibb.co/vhxHPq1/CNG2-1.png"
-                , "Bột Làm Đẹp"
-                , 1000
-                , "3"
-                , 5
-                , "1000"
-                , "1000"
-                , false
-                , true));
+        AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                Request request = new Request.Builder()
+                        .url("https://reqres.in/api/articles")
+                        .header("Accept-Encoding", "identity")
+                        .build();
 
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
-                "11"
-                , "https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
-                , "Bột Gạo"
-                , "Đ"
-                , "100"));                    // lay data cua banner ve gan vao list
-        viewAllProduct.add(new WishlistModel(
-                "11"
-                , "https://i.ibb.co/B2dDV4x/CNU2-1.jpg"
-                , "Bột Gạo"
-                , 1000
-                , "3"
-                , 5
-                , "1000"
-                , "1000"
-                , false
-                , true));
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    }else {
+                        String jsonData = response.body().string();
+
+                        JSONObject json = new JSONObject(jsonData);
+                        JSONArray a = json.getJSONArray("data");
+                        ArrayList c = new ArrayList();
+                        for (int i = 0; i < a.length(); i++) {
+                            JSONObject b = new JSONObject(a.get(i).toString());
+                            c.add(b);
+                            System.out.println(b.get("id"));
+                            String id = b.getString("id");
+                            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
+                                    id
+                                    , "https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
+                                    , "Phân Bón " + id
+                                    , "Đ"
+                                    , "100"));                    // lay data cua banner ve gan vao list
+                            viewAllProduct.add(new WishlistModel(
+                                    id
+                                    , "https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
+                                    , "Phân Bón" + id
+                                    , 1000
+                                    , "3"
+                                    , 5
+                                    , "1000"
+                                    , "1000"
+                                    , false
+                                    , true));                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "Load_San_Pham_Hot";
+            }
+
+            protected void onPostExecute(String result) {
+                lists.get(position).add(new HomePageModel(1, "Sản phẩm Hot", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
+                adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+            };
+        };
+        task1.execute("Load_San_Pham_Hot");
         horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                 "16"
                 , "https://i.ibb.co/1zxqfc9/CNU3-1.jpg"
@@ -200,6 +217,7 @@ public class DBqueries {
                 , false
                 , true));
         lists.get(position).add(new HomePageModel(1, "Sản phẩm Hot", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
+
         //Sản Phẩm
         List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
         gridLayoutModelList.add(new HorizontalProductScrollModel(
