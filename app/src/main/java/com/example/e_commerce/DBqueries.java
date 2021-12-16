@@ -3,6 +3,7 @@ package com.example.e_commerce;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,11 +39,20 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class DBqueries {
     public static String email, fullname, profile;
@@ -68,11 +78,54 @@ public class DBqueries {
     public static List<String> RatedIds = new ArrayList<>();
     public static List<MyOrderItemModel> myOrderItemModelList = new ArrayList<>();
     public static int selectedAddress = -1;
+    private static OkHttpClient client;
 
     public static void loadCategories(final Context context, final CategoryAdapter categoryAdapter) {
-        categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"));
-        categoryModelList.add(new CategoryModel(2, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
-        categoryModelList.add(new CategoryModel(3, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
+        client = new OkHttpClient();
+        categoryModelList.add(new CategoryModel(-1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Trang chủ"));
+
+        AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                Request request = new Request.Builder()
+                        .url("https://reqres.in/api/articles")
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    }else {
+                        String jsonData = response.body().string();
+
+                        JSONObject json = new JSONObject(jsonData);
+                        JSONArray a = json.getJSONArray("data");
+                        ArrayList c = new ArrayList();
+                        for (int i = 0; i < a.length(); i++) {
+                            JSONObject b = new JSONObject(a.get(i).toString());
+                            c.add(b);
+                            System.out.println(b.get("id"));
+                            categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"+b.get("id")));
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "categoryLoad";
+            }
+
+            protected void onPostExecute(String result) {
+                categoryAdapter.notifyDataSetChanged();
+            };
+        };
+        task.execute("categoryLoad");
+//        categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"));
+//        categoryModelList.add(new CategoryModel(2, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Sản Phẩm"));
+//        categoryModelList.add(new CategoryModel(3, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Dầu"));
+
         categoryAdapter.notifyDataSetChanged();             //Mỗi lần thêm mới nó sẽ refesh lại cái data
     }
 
