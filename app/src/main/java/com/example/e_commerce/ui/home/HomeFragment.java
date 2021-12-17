@@ -1,23 +1,18 @@
 package com.example.e_commerce.ui.home;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 import static com.example.e_commerce.DBqueries.categoryModelList;
-import static com.example.e_commerce.DBqueries.homePageModelsList;
 import static com.example.e_commerce.DBqueries.lists;
 import static com.example.e_commerce.DBqueries.loadCategories;
 import static com.example.e_commerce.DBqueries.loadedCategoriesName;
 import static com.example.e_commerce.DBqueries.setFragmentData;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.e_commerce.CategoryAdapter;
-import com.example.e_commerce.ProductDetailsActivity;
 import com.example.e_commerce.R;
 import com.example.lib.Model.HomePageModel;
 

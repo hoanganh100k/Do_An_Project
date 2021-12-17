@@ -1,8 +1,10 @@
 package com.example.e_commerce;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,17 +25,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,9 +71,9 @@ public class SignUpFragment extends Fragment {
 
     private ProgressBar progressBar;
     private FirebaseFirestore firebaseFirestore;
-
+    private boolean STATUS_REGISTER = false;
     private FirebaseAuth firebaseAuth;
-    private String emailPattern ="[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    private String emailPattern ="[0-9]+";
     public static boolean disableCloseBtn = false;
 
     /**
@@ -270,102 +271,63 @@ public class SignUpFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 signUpBtn.setEnabled(false);
                 signUpBtn.setTextColor(Color.argb(50,255,255,255));
+                OkHttpClient client = new OkHttpClient();
+                AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        String url = Config.IP_ADDRESS + "/api/user/register";
+                        @SuppressLint("StaticFieldLeak") RequestBody formBody = new FormBody.Builder()
+                                .add("MATK", email.getText().toString())
+                                .add("MATKHAU", password.getText().toString())
+                                .add("HOTEN",fullName.getText().toString())
+                                .add("GIOITINH", "null")
+                                .add("DIACHI", "null")
+                                .add("EMAIL", "null")
+                                .build();
 
-                firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .put(formBody)
+                                .header("Accept-Encoding", "identity")
+                                .build();
 
-                                    Map<Object,String> userdata = new HashMap<>();
-                                    userdata.put("fullname",fullName.getText().toString());
-                                    userdata.put("email",email.getText().toString());
-                                    userdata.put("profile","");
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
+                            } else {
+                                String jsonData = response.body().string();
+//                                JSONObject json = new JSONObject(jsonData);
+//                                System.out.println(json );
+                                if (jsonData.length() == 4){
+                                    STATUS_REGISTER = true;
+                                    System.out.println(jsonData);
 
-                                    firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
-                                        .set(userdata)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if(task.isSuccessful()){
-
-                                                    CollectionReference userDataReference=firebaseFirestore.collection("USERS").document(firebaseAuth.getUid()).collection("USER_DATA");
-
-                                                    Map<String,Object> wishlistMap= new HashMap<>();
-                                                    wishlistMap.put("list_size", (long) 0);
-
-                                                    Map<String,Object> ratingsMap= new HashMap<>();
-                                                    ratingsMap.put("list_size", (long) 0);
-
-                                                    Map<String,Object> cartMap= new HashMap<>();
-                                                    cartMap.put("list_size", (long) 0);
-
-                                                    Map<String,Object> AddressesMap= new HashMap<>();
-                                                    AddressesMap.put("list_size", (long) 0);
-
-                                                    Map<String,Object> notificationMap= new HashMap<>();
-                                                    notificationMap.put("list_size", (long) 0);
-
-                                                    List<String> documentNames = new ArrayList<>();
-                                                    documentNames.add("WISHLIST");
-                                                    documentNames.add("RATINGS");
-                                                    documentNames.add("CART");
-                                                    documentNames.add("ADDRESSES");
-                                                    documentNames.add("NOTIFICATIONS");
-
-                                                    final List<Map<String,Object>> documentFields = new ArrayList<>();
-                                                    documentFields.add(wishlistMap);
-                                                    documentFields.add(ratingsMap);
-                                                    documentFields.add(cartMap);
-                                                    documentFields.add(AddressesMap);
-                                                    documentFields.add(notificationMap);
-
-                                                    for (int x=0; x<documentNames.size() ;x++){
-                                                        final int finalX = x;
-                                                        userDataReference.document(documentNames.get(x))
-                                                                .set(documentFields.get(x))
-                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                                        if(task.isSuccessful()){
-                                                                            if(finalX == documentFields.size()-1) {
-                                                                                if (disableCloseBtn) {
-                                                                                    disableCloseBtn = false;
-                                                                                } else {
-                                                                                    startActivity(new Intent(getActivity(), MainActivity.class));
-                                                                                }
-                                                                                getActivity().finish();
-                                                                            }
-                                                                        }else {
-                                                                            progressBar.setVisibility(View.INVISIBLE);
-                                                                            signUpBtn.setEnabled(true);
-                                                                            signUpBtn.setTextColor(Color.rgb(255,255,255));
-                                                                            String error=task.getException().getMessage();
-                                                                            Toast.makeText(getActivity(), error,Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }
-                                                                });
-                                                    }
-                                                }
-                                                else {
-                                                    String error = task.getException().getMessage();
-                                                    Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                    successSignUp.setVisibility(View.VISIBLE);
-                                    successSignUp.setText("Đăng kí thành công");
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                                else {
-                                    progressBar.setVisibility(View.INVISIBLE);
-                                    signUpBtn.setEnabled(true);
-                                    signUpBtn.setTextColor(Color.rgb(255,255,255));
-                                    String error = task.getException().getMessage();
-                                    Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+//                        catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+                        return "Register";
+                    }
+
+                    protected void onPostExecute(String result) {
+//                        if (STATUS_REGISTER == false){
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                            signUpBtn.setEnabled(true);
+//                            signUpBtn.setTextColor(Color.rgb(255,255,255));
+//                            Toast.makeText(getActivity(), "Số điện thoại đã tồn tại!", Toast.LENGTH_SHORT).show();
+//                        }
+                        Toast.makeText(getActivity(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    ;
+                };
+                task.execute("Register");
+
 
 
             }else {

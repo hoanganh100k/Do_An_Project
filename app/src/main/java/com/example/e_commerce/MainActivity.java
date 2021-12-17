@@ -6,8 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -114,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -312,25 +316,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStart() {
         super.onStart();
         currentUser= FirebaseAuth.getInstance().getCurrentUser();
-        DBqueries.fullname = "Hoàng Anh";
-        DBqueries.email = "hoanganh34k@gmail.com";
-        DBqueries.profile = "1234";
+        AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
+            private String _EMAIL = "";
+            private String _NAME = "";
+            private String _MATK = "";
+            @Override
+            protected String doInBackground(String... params) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                _EMAIL = prefs.getString("EMAIL", null);
+                _NAME = prefs.getString("NAME", null);
+                _MATK = prefs.getString("MATK", null);
+                return "Load_Thong_Tin";
+            }
 
-        fullname.setText(DBqueries.fullname);
-        email.setText(DBqueries.email);
-        if (DBqueries.profile.equals("")) {
-            addProfileIcon.setVisibility(View.VISIBLE);
-        } else {
-            addProfileIcon.setVisibility(View.INVISIBLE);
-            Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
-        }
-        if(resetMainActivity){
-            actionbarLogo.setVisibility(View.VISIBLE);
-            resetMainActivity=false;
-            setFragment(new HomeFragment(),FRAGMENT_HOME);
-            navigationView.getMenu().getItem(0).setChecked(true);
-        }
-        invalidateOptionsMenu();
+            protected void onPostExecute(String result) {
+                DBqueries.fullname = _NAME;
+                DBqueries.email = _EMAIL;
+                DBqueries.profile = _MATK;
+                if (email != null) {
+                    fullname.setText(_NAME + "1");
+                    email.setText(_EMAIL + "1");
+                    if (DBqueries.profile.equals("")) {
+                        addProfileIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        addProfileIcon.setVisibility(View.INVISIBLE);
+                        Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
+                    }
+                    if (resetMainActivity) {
+                        actionbarLogo.setVisibility(View.VISIBLE);
+                        resetMainActivity = false;
+                        setFragment(new HomeFragment(), FRAGMENT_HOME);
+                        navigationView.getMenu().getItem(0).setChecked(true);
+                    }
+                    invalidateOptionsMenu();
+                } else {
+                    DBqueries.fullname = "null";
+                    DBqueries.email = "null";
+                    DBqueries.profile = "";
+                    if (email != null) {
+                        fullname.setText("null");
+                        email.setText("null");
+                        if (DBqueries.profile.equals("")) {
+                            addProfileIcon.setVisibility(View.VISIBLE);
+                        } else {
+                            addProfileIcon.setVisibility(View.INVISIBLE);
+                            Glide.with(MainActivity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.mipmap.profile_placeholder)).into(profileView);
+                        }
+                        if (resetMainActivity) {
+                            actionbarLogo.setVisibility(View.VISIBLE);
+                            resetMainActivity = false;
+                            setFragment(new HomeFragment(), FRAGMENT_HOME);
+                            navigationView.getMenu().getItem(0).setChecked(true);
+                        }
+                        invalidateOptionsMenu();
+                    }
+
+                }
+                ;
+            }
+        };
+        task1.execute("Load_Thong_Tin");
+
+
     }
 
     @Override
@@ -422,6 +469,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseAuth.getInstance().signOut();
                 DBqueries.clearData();
                 DBqueries.email=null;  //my code
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove("MATK"); // delete data by key key_name3
+                editor.remove("NAME"); // delete data by key key_name3
+                editor.remove("EMAIL"); // delete data by key key_name3
+                editor.apply();
                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
                 finish();
                 //openSignOutFragment();
