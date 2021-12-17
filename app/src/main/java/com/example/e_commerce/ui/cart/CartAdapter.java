@@ -189,19 +189,19 @@ public class CartAdapter extends RecyclerView.Adapter {
         public cartItemViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage=itemView.findViewById(R.id.product_image);
-            freeCoupanIcon=itemView.findViewById(R.id.free_coupan_icon);
+            freeCoupanIcon=itemView.findViewById(R.id.product_title);
             productTitle=itemView.findViewById(R.id.product_title);
-            freeCoupans=itemView.findViewById(R.id.tv_free_coupan);
+            freeCoupans=itemView.findViewById(R.id.product_title);
             productPrice=itemView.findViewById(R.id.product_price);
             cuttedPrice=itemView.findViewById(R.id.cutted_price);
-            offersApplied=itemView.findViewById(R.id.offers_applied);
-            coupansApplied=itemView.findViewById(R.id.coupans_applied);
+            offersApplied=itemView.findViewById(R.id.product_title);
+            coupansApplied=itemView.findViewById(R.id.product_title);
             productQuantity=itemView.findViewById(R.id.product_quantity);
             deleteBtn=itemView.findViewById(R.id.remove_item_btn);
             coupanRedemptionLayout=itemView.findViewById(R.id.coupan_redemption_layout);
             reedemBtn=itemView.findViewById(R.id.coupan_redemption_btn);
             coupanRedemptionBody=itemView.findViewById(R.id.tv_coupan_redemption);
-            cod=itemView.findViewById(R.id.cod_indicator);
+            cod=itemView.findViewById(R.id.product_title);
 
         }
 //, Long offersAppliedNo,
