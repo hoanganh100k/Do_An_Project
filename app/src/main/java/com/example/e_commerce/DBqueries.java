@@ -86,8 +86,9 @@ public class DBqueries {
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/category/all";
                 Request request = new Request.Builder()
-                        .url("https://reqres.in/api/articles")
+                        .url(url)
                         .header("Accept-Encoding", "identity")
                         .build();
 
@@ -97,13 +98,12 @@ public class DBqueries {
                     }else {
                         String jsonData = response.body().string();
 
-                        JSONObject json = new JSONObject(jsonData);
-                        JSONArray a = json.getJSONArray("data");
-                        ArrayList c = new ArrayList();
-                        for (int i = 0; i < a.length(); i++) {
-                            JSONObject b = new JSONObject(a.get(i).toString());
-                            c.add(b);
-                            categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"+b.get("id")));
+                        JSONArray json = new JSONArray(jsonData);
+                        for (int i = 0; i < json.length(); i++) {
+                            JSONObject b = new JSONObject(json.get(i).toString());
+                            String name = b.getString("TENLOAI");
+                            String id = b.getString("MALOAI");
+                            categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", name));
                         }
 
                     }
