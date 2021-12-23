@@ -287,7 +287,7 @@ public class SignUpFragment extends Fragment {
 
                         Request request = new Request.Builder()
                                 .url(url)
-                                .put(formBody)
+                                .post(formBody)
                                 .header("Accept-Encoding", "identity")
                                 .build();
 

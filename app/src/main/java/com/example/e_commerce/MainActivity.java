@@ -314,8 +314,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 DBqueries.email = _EMAIL;
                 DBqueries.profile = _MATK;
                 if (email != null) {
-                    fullname.setText(_NAME + "1");
-                    email.setText(_EMAIL + "1");
+                    fullname.setText(_NAME);
+                    email.setText(_EMAIL);
                     if (DBqueries.profile.equals("")) {
                         addProfileIcon.setVisibility(View.VISIBLE);
                     } else {
