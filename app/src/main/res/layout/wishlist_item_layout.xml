@@ -36,37 +36,42 @@
 
     <ImageView
         android:id="@+id/coupan_icon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:tint="#8000ff"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/free_coupan"
         app:layout_constraintStart_toStartOf="@+id/product_title"
         app:layout_constraintTop_toTopOf="@+id/free_coupan"
         app:srcCompat="@drawable/tag"
-        tools:ignore="UseAppTint" />
+        tools:ignore="UseAppTint"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/free_coupan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:text="Phiếu giảm giá "
         android:textColor="#8000ff"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/coupan_icon"
-        app:layout_constraintTop_toBottomOf="@+id/product_title" />
+        app:layout_constraintTop_toBottomOf="@+id/product_title"
+        tools:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/slider_background"
         android:backgroundTint="#2ECC71"
         android:orientation="horizontal"
         android:padding="1dp"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/product_image"
-        app:layout_constraintTop_toBottomOf="@+id/free_coupan">
+        app:layout_constraintTop_toBottomOf="@+id/free_coupan"
+        tools:visibility="gone">
 
         <TextView
             android:id="@+id/tv_product_rating_miniview"
@@ -77,7 +82,9 @@
             android:text="4"
             android:textColor="#ffffff"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
         <ImageView
             android:layout_width="15dp"
@@ -85,18 +92,22 @@
             android:layout_gravity="center"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:src="@mipmap/star" />
+            android:src="@mipmap/star"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/total_ratings"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:text="(27) Đánh giá"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout" />
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/product_price"
@@ -113,12 +124,14 @@
 
     <TextView
         android:id="@+id/cutted_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:text="190.000 VND"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/product_price"
-        app:layout_constraintStart_toEndOf="@+id/product_price" />
+        app:layout_constraintStart_toEndOf="@+id/product_price"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/payment_method"
@@ -147,11 +160,13 @@
     <View
         android:id="@+id/price_cut"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:background="?android:attr/listDivider"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/cutted_price"
         app:layout_constraintEnd_toEndOf="@+id/cutted_price"
         app:layout_constraintStart_toStartOf="@+id/cutted_price"
-        app:layout_constraintTop_toTopOf="@+id/cutted_price" />
+        app:layout_constraintTop_toTopOf="@+id/cutted_price"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

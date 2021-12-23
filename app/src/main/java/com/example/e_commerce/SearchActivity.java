@@ -198,7 +198,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     class Adapter extends WishlistAdapter implements Filterable {
-
         private List<WishlistModel> originalList;
 
         public Adapter(List<WishlistModel> wishlistModelList, Boolean wishlist) {
@@ -214,7 +213,6 @@ public class SearchActivity extends AppCompatActivity {
                     FilterResults filterResults = new FilterResults();
                     List<WishlistModel> filteredList = new ArrayList<>();
                     final String[] tags = charSequence.toString().toLowerCase().split(" ");
-
                     for (WishlistModel model : originalList) {
                         ArrayList<String> presentTags = new ArrayList<>();
                         for (String tag : tags) {
@@ -233,18 +231,13 @@ public class SearchActivity extends AppCompatActivity {
                     }
                     filterResults.values = filteredList;
                     filterResults.count = filteredList.size();
-
-
                     return filterResults;
                 }
-
                 @Override
                 protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-
                     if (filterResults.count > 0) {
                         setWishlistModelList((List<WishlistModel>) filterResults.values);
                     }
-
                     notifyDataSetChanged();
                 }
             };

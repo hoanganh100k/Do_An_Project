@@ -7,11 +7,6 @@
         android:icon="@drawable/search_white"
         android:orderInCategory="100"
         app:showAsAction="always"/>
-    <item android:id="@+id/main_bell_icon"
-        android:title="@string/notification"
-        android:icon="@drawable/notification"
-        android:orderInCategory="100"
-        app:showAsAction="always"/>
     <item android:id="@+id/main_cart_icon"
         android:title="@string/menu_cart"
         android:icon="@drawable/shopping_cart"

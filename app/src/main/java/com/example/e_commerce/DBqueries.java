@@ -44,6 +44,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -95,7 +97,7 @@ public class DBqueries {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code: " + response);
-                    }else {
+                    } else {
                         String jsonData = response.body().string();
 
                         JSONArray json = new JSONArray(jsonData);
@@ -117,7 +119,9 @@ public class DBqueries {
 
             protected void onPostExecute(String result) {
                 categoryAdapter.notifyDataSetChanged();
-            };
+            }
+
+            ;
         };
         task.execute("categoryLoad");
 //        categoryModelList.add(new CategoryModel(1, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Xăng"));
@@ -136,9 +140,13 @@ public class DBqueries {
     public static void setFragmentData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
         //Banner
         List<SliderModel> sliderModelList = new ArrayList<>();
-        sliderModelList.add(new SliderModel("https://free.vector6.com/wp-content/uploads/2020/11/211104082-Vector-thiet-ke-banner-chuyen-nghiep.jpg"));        // lay data cua banner ve gan vao list
-        sliderModelList.add(new SliderModel("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"));        // lay data cua banner ve gan vao list
-
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/first_banner.png"));        // lay data cua banner ve gan vao list
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner2.png"));        // lay data cua banner ve gan vao list
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner3.png"));
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner4.png"));
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner5.png"));
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner6.png"));
+        sliderModelList.add(new SliderModel("https://www.kienvuongchemistry.tk/img/icon/banner7.png"));
         lists.get(position).add(new HomePageModel(0, sliderModelList));
         //Sản Phẩm Hot
         //Đây là hàm của category đầu tiên
@@ -156,32 +164,34 @@ public class DBqueries {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code: " + response);
-                    }else {
+                    } else {
                         String jsonData = response.body().string();
                         JSONArray json = new JSONArray(jsonData);
                         for (int i = 0; i < json.length(); i++) {
                             JSONObject b = new JSONObject(json.get(i).toString());
                             String name = b.getString("TENHANGHOA");
                             String id = b.getString("MAHANGHOA");
-                            String gia = b.getString("GIA");
+                            NumberFormat formatter = new DecimalFormat("#,###");
+                            String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
                             String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
                             horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
                                     id
                                     , img
                                     , name
-                                    , "Đ"
+                                    , "VNĐ"
                                     , gia));                    // lay data cua banner ve gan vao list
                             viewAllProduct.add(new WishlistModel(
                                     id
                                     , img
                                     , name
                                     , 1000
-                                    , "3"
-                                    , 5
+                                    , ""
+                                    , 0
                                     , gia
                                     , "1000"
                                     , false
-                                    , true));                        }
+                                    , true));
+                        }
 
                     }
                 } catch (IOException e) {
@@ -195,7 +205,9 @@ public class DBqueries {
             protected void onPostExecute(String result) {
                 lists.get(position).add(new HomePageModel(1, "Sản phẩm Hot", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
                 adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
-            };
+            }
+
+            ;
         };
         task1.execute("Load_San_Pham_Hot");
         //Sản Phẩm
@@ -212,22 +224,24 @@ public class DBqueries {
                 try (Response response = client.newCall(request).execute()) {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code: " + response);
-                    }else {
+                    } else {
                         String jsonData = response.body().string();
                         JSONArray json = new JSONArray(jsonData);
                         for (int i = 0; i < json.length(); i++) {
                             JSONObject b = new JSONObject(json.get(i).toString());
                             String name = b.getString("TENHANGHOA");
                             String id = b.getString("MAHANGHOA");
-                            String gia = b.getString("GIA");
+                            NumberFormat formatter = new DecimalFormat("#,###");
+                            String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
                             String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
                             gridLayoutModelList.add(new HorizontalProductScrollModel(
                                     id
                                     , img
-                                    , name.substring(0,6)
-                                    , "Đ"
+                                    , (name.length() > 14) ? name.substring(0, 14) + "..." : name
+                                    , "VNĐ"
                                     , gia
-                            ));                        }
+                            ));
+                        }
 
                     }
                 } catch (IOException e) {
@@ -241,7 +255,9 @@ public class DBqueries {
             protected void onPostExecute(String result) {
                 lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
                 adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
-            };
+            }
+
+            ;
         };
         task.execute("Load_San_Pham");
 
@@ -258,100 +274,122 @@ public class DBqueries {
             }
         }
         System.out.println(id_Category);
+        //Sản Phẩm Hot
+        //Đây là hàm của category đầu tiên
         List<WishlistModel> viewAllProduct = new ArrayList<>();
         List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
-                "10"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , "Đ"
-                , "10000"));                    // lay data cua banner ve gan vao list
-        viewAllProduct.add(new WishlistModel(
-                "10"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , 10000
-                , "3"
-                , 5
-                , "10000"
-                , "100000"
-                , true
-                , true));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
-                "21"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , "Đ"
-                , "10000"));                    // lay data cua banner ve gan vao list
-        viewAllProduct.add(new WishlistModel(
-                "21"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , 10000
-                , "3"
-                , 5
-                , "10000"
-                , "100000"
-                , true
-                , true));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
-                "31"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , "Đ"
-                , "10000"));                    // lay data cua banner ve gan vao list
-        viewAllProduct.add(new WishlistModel(
-                "31"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Dầu 1"
-                , 10000
-                , "3"
-                , 5
-                , "10000"
-                , "100000"
-                , true
-                , true));
-        lists.get(position).add(new HomePageModel(1, "Sản Phẩm", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
-        //San pham 2
-        //Lưu ý: Phải trên 4 sản phẩm ở mục này
-        List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
-        gridLayoutModelList.add(new HorizontalProductScrollModel(
-                "21"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Xăng 1"
-                , "Đ"
-                , "10000"
-        ));
-        gridLayoutModelList.add(new HorizontalProductScrollModel(
-                "22"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Xăng 2"
-                , "Đ"
-                , "10000"
-        ));
-        gridLayoutModelList.add(new HorizontalProductScrollModel(
-                "23"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Xăng 3"
-                , "Đ"
-                , "10000"
-        ));
-        gridLayoutModelList.add(new HorizontalProductScrollModel(
-                "24"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Xăng 4"
-                , "Đ"
-                , "10000"
-        ));
-        gridLayoutModelList.add(new HorizontalProductScrollModel(
-                "25"
-                , "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
-                , "Xăng 5"
-                , "Đ"
-                , "10000"
-        ));
-        lists.get(position).add(new HomePageModel(2, "Sản Phẩm 2", "#FFFFFF", gridLayoutModelList));
-        adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+        String finalId_Category = id_Category;
+        AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+                        JSONArray json = new JSONArray(jsonData);
+                        for (int i = 0; i < json.length(); i++) {
+                            JSONObject b = new JSONObject(json.get(i).toString());
+                            String name = b.getString("TENHANGHOA");
+                            String id = b.getString("MAHANGHOA");
+                            NumberFormat formatter = new DecimalFormat("#,###");
+                            String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
+                            String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
+                            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
+                                    id
+                                    , img
+                                    , name
+                                    , "VNĐ"
+                                    , gia));                    // lay data cua banner ve gan vao list
+                            viewAllProduct.add(new WishlistModel(
+                                    id
+                                    , img
+                                    , name
+                                    , 1000
+                                    , "3"
+                                    , 5
+                                    , gia
+                                    , "1000"
+                                    , false
+                                    , true));
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "Load_San_Pham_Hot";
+            }
+
+            protected void onPostExecute(String result) {
+                lists.get(position).add(new HomePageModel(1, "Sản phẩm", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
+                adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+            }
+
+            ;
+        };
+        task1.execute("Load_San_Pham_Hot");
+        //Sản Phẩm
+        if (horizontalProductScrollModelList.size() >= 4) {
+            List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
+            AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    String url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .header("Accept-Encoding", "identity")
+                            .build();
+
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code: " + response);
+                        } else {
+                            String jsonData = response.body().string();
+                            JSONArray json = new JSONArray(jsonData);
+                            for (int i = 0; i < json.length(); i++) {
+                                JSONObject b = new JSONObject(json.get(i).toString());
+                                String name = b.getString("TENHANGHOA");
+                                String id = b.getString("MAHANGHOA");
+                                NumberFormat formatter = new DecimalFormat("#,###");
+                                String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
+                                String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
+                                gridLayoutModelList.add(new HorizontalProductScrollModel(
+                                        id
+                                        , img
+                                        , (name.length() > 14) ? name.substring(0, 14) + "..." : name
+                                        , "VNĐ"
+                                        , gia
+                                ));
+                            }
+
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return "Load_San_Pham";
+                }
+
+                protected void onPostExecute(String result) {
+                    lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
+                    adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+                }
+
+                ;
+            };
+            task.execute("Load_San_Pham");
+        }
+
 
     }
 
@@ -554,7 +592,7 @@ public class DBqueries {
         if (cartList.size() >= 2) {
             index = cartList.size() - 2;
         }
-        System.out.println("In: "+ index);
+        System.out.println("In: " + index);
         cartItemModelList.add(index, new CartItemModel(CartItemModel.CART_ITEM
                 , "1"
                 , "https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"

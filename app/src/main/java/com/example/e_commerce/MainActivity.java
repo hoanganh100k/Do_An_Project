@@ -71,15 +71,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Dialog signInDialog;
 
     //Cart
-    public static Boolean showCart=false;
+    public static Boolean showCart = false;
     public static Activity mainActivity;
     private FrameLayout frameLayout;
 
     //address
     private CircularImageView addProfileIcon;
-    public static  boolean resetMainActivity=false;
+    public static boolean resetMainActivity = false;
     private CircleImageView profileView;
-    private TextView fullname,email;
+    private TextView fullname, email;
 
     private Window window;
     private Toolbar toolbar;
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        actionbarLogo=findViewById(R.id.action_bar_logo);
+        actionbarLogo = findViewById(R.id.action_bar_logo);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -128,13 +128,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.bottom_nav_home:
                         openHomeFragment();
                         navigationView.setCheckedItem(R.id.nav_home);
-                        break;
-                    case R.id.bottom_nav_live:
-                        openLiveFragment();
                         break;
                     default:
                         openHomeFragment();
@@ -172,52 +169,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         frameLayout = findViewById(R.id.main_frame_layout);
 
-        if(showCart){
+        if (showCart) {
             drawer.setDrawerLockMode(1);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             openCartFragment();
-        }else{
+        } else {
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.open_navigation_drawer,R.string.close_navigation_drawer);
+                    this, drawer, toolbar, R.string.open_navigation_drawer, R.string.close_navigation_drawer);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
             setFragment(new HomeFragment(), FRAGMENT_HOME);
         }
 
-        fullname=navigationView.getHeaderView(0).findViewById(R.id.main_full_name);
-        email=navigationView.getHeaderView(0).findViewById(R.id.main_email_address);
-        addProfileIcon=navigationView.getHeaderView(0).findViewById(R.id.add_profile_icon);
-        profileView=navigationView.getHeaderView(0).findViewById(R.id.main_profile_image);
+        fullname = navigationView.getHeaderView(0).findViewById(R.id.main_full_name);
+        email = navigationView.getHeaderView(0).findViewById(R.id.main_email_address);
+        addProfileIcon = navigationView.getHeaderView(0).findViewById(R.id.add_profile_icon);
+        profileView = navigationView.getHeaderView(0).findViewById(R.id.main_profile_image);
 
         //DiaLog signin
-        signInDialog=new Dialog(MainActivity.this);
+        signInDialog = new Dialog(MainActivity.this);
         signInDialog.setContentView(R.layout.sign_in_dialog);
         signInDialog.setCancelable(true);
 
-        signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        Button signInDialogBtn=signInDialog.findViewById(R.id.sign_in_btn);
-        Button signUpDialogBtn=signInDialog.findViewById(R.id.sign_up_btn);
+        Button signInDialogBtn = signInDialog.findViewById(R.id.sign_in_btn);
+        Button signUpDialogBtn = signInDialog.findViewById(R.id.sign_up_btn);
 
         signInDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SignInFragment.disableCloseBtn=true;
-                SignUpFragment.disableCloseBtn=true;
+                SignInFragment.disableCloseBtn = true;
+                SignUpFragment.disableCloseBtn = true;
                 signInDialog.dismiss();
-                setsignUpFragment=false;
-                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                setsignUpFragment = false;
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
             }
         });
 
         signUpDialogBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SignInFragment.disableCloseBtn=true;
-                SignUpFragment.disableCloseBtn=true;
+                SignInFragment.disableCloseBtn = true;
+                SignUpFragment.disableCloseBtn = true;
                 signInDialog.dismiss();
-                setsignUpFragment=true;
-                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                setsignUpFragment = true;
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
             }
         });
     }
@@ -225,23 +222,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
-            if(currentFragment==FRAGMENT_HOME) {
+        } else {
+            if (currentFragment == FRAGMENT_HOME) {
                 currentFragment = -1;
                 super.onBackPressed();
-            }else{
+            } else {
                 actionbarLogo.setVisibility(View.VISIBLE);
                 invalidateOptionsMenu();
-                setFragment(new HomeFragment(),FRAGMENT_HOME);
+                setFragment(new HomeFragment(), FRAGMENT_HOME);
                 navigationView.getMenu().getItem(0).setChecked(true);
             }
         }
     }
-    private void setFragment(Fragment fragment,int fragementNo){
-        if(fragementNo!=currentFragment) {
-            if(fragementNo == FRAGMENT_COUPON){
+
+    private void setFragment(Fragment fragment, int fragementNo) {
+        if (fragementNo != currentFragment) {
+            if (fragementNo == FRAGMENT_COUPON) {
                 window.setStatusBarColor(Color.parseColor("#5B04B1"));
                 toolbar.setBackgroundColor(Color.parseColor("#5B04B1"));
             }
@@ -251,48 +249,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; thêm các item vào action bar nếu như nó hiển thị
-        if(currentFragment == FRAGMENT_HOME) {
+        if (currentFragment == FRAGMENT_HOME) {
 //            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getMenuInflater().inflate(R.menu.main, menu);
 
             currentUser = FirebaseAuth.getInstance().getCurrentUser();
             MenuItem cartItem = menu.findItem(R.id.main_cart_icon);
             cartItem.setActionView(R.layout.badge_layout);
-            ImageView badgeIcon=cartItem.getActionView().findViewById(R.id.badge_icon);
+            ImageView badgeIcon = cartItem.getActionView().findViewById(R.id.badge_icon);
             badgeIcon.setImageResource(R.drawable.shopping_cart);
-            badgeCount=cartItem.getActionView().findViewById(R.id.badge_count);
+            badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
 
-            MenuItem notificationItem = menu.findItem(R.id.main_bell_icon);
-            notificationItem.setActionView(R.layout.badge_layout);
-            ImageView badgeeIcon=notificationItem.getActionView().findViewById(R.id.badge_icon);
-            badgeeIcon.setImageResource(R.drawable.notification);
-            TextView notifyCount=notificationItem.getActionView().findViewById(R.id.badge_count);
-
-            if(currentUser!=null){
-                DBqueries.checkNotifications(false,notifyCount);
-            }
-            notificationItem.getActionView().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(currentUser == null){
-                        signInDialog.show();
-                    }else {
-                        startActivity(new Intent(MainActivity.this,NotificationActivity.class));
-                    }
-                }
-            });
-
-            if(currentUser!=null){
-                if(DBqueries.cartList.size() == 0){
-                    DBqueries.loadCartList(MainActivity.this,new Dialog(MainActivity.this),false,badgeCount,new TextView(MainActivity.this));
-                }else {
+            if (currentUser != null) {
+                if (DBqueries.cartList.size() == 0) {
+                    DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this), false, badgeCount, new TextView(MainActivity.this));
+                } else {
                     badgeCount.setVisibility(View.VISIBLE);
-                    if(DBqueries.cartList.size()<99) {
+                    if (DBqueries.cartList.size() < 99) {
                         badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
-                    }else {
+                    } else {
                         badgeCount.setText("99");
                     }
                 }
@@ -301,9 +280,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(currentUser == null){
+                    if (currentUser == null) {
                         signInDialog.show();
-                    }else {
+                    } else {
                         openCartFragment();
                     }
                 }
@@ -315,11 +294,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        currentUser= FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
             private String _EMAIL = "";
             private String _NAME = "";
             private String _MATK = "";
+
             @Override
             protected String doInBackground(String... params) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -383,33 +363,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPause() {
         super.onPause();
-        if(currentUser!=null) {  ///my code
+        if (currentUser != null) {  ///my code
             DBqueries.checkNotifications(true, null);
         }
 
     }
+
     //------------------------------------------------------Sự kiện click cho menu bar ở trang home
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.main_search_icon){
+        if (id == R.id.main_search_icon) {
             //To do search here
-            startActivity(new Intent(MainActivity.this,SearchActivity.class));
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
             return true;
-        }else if(id == R.id.main_bell_icon){
-            //To do notification
-            startActivity(new Intent(MainActivity.this,NotificationActivity.class));
-            return true;
-        }else if(id==R.id.main_cart_icon){
-            if(currentUser == null){
+        } else if (id == R.id.main_cart_icon) {
+            if (currentUser == null) {
                 signInDialog.show();
-            }else {
+            } else {
                 openCartFragment();
             }
             return true;
-        }else if(id==android.R.id.home){
-            if(showCart) {
-                mainActivity=null;
+        } else if (id == android.R.id.home) {
+            if (showCart) {
+                mainActivity = null;
                 showCart = false;
                 finish();
                 return true;
@@ -433,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.nav_home:
                 //to do with home
                 openHomeFragment();
@@ -468,14 +445,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_sign_out:
                 FirebaseAuth.getInstance().signOut();
                 DBqueries.clearData();
-                DBqueries.email=null;  //my code
+                DBqueries.email = null;  //my code
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.remove("MATK"); // delete data by key key_name3
                 editor.remove("NAME"); // delete data by key key_name3
                 editor.remove("EMAIL"); // delete data by key key_name3
                 editor.apply();
-                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 finish();
                 //openSignOutFragment();
                 break;
@@ -488,62 +465,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void openHomeFragment(){
-        if(currentFragment != FRAGMENT_HOME){
+    private void openHomeFragment() {
+        if (currentFragment != FRAGMENT_HOME) {
             replaceFrament(new HomeFragment());
             currentFragment = FRAGMENT_HOME;
         }
     }
-    private void openOrderFragment(){
-        if(currentFragment != FRAGMENT_ORDER){
+
+    private void openOrderFragment() {
+        if (currentFragment != FRAGMENT_ORDER) {
             replaceFrament(new OrderFragment());
             currentFragment = FRAGMENT_ORDER;
         }
     }
-    private void openCouponFragment(){
-        if(currentFragment != FRAGMENT_COUPON){
+
+    private void openCouponFragment() {
+        if (currentFragment != FRAGMENT_COUPON) {
             replaceFrament(new CouponFragment());
             currentFragment = FRAGMENT_COUPON;
         }
     }
-    private void openCartFragment(){
-        if(currentFragment != FRAGMENT_CART){
+
+    private void openCartFragment() {
+        if (currentFragment != FRAGMENT_CART) {
             replaceFrament(new CartFragment());
             currentFragment = FRAGMENT_CART;
         }
     }
-    private void openWishListFragment(){
-        if(currentFragment != FRAGMENT_WISHLIST){
+
+    private void openWishListFragment() {
+        if (currentFragment != FRAGMENT_WISHLIST) {
             replaceFrament(new WishlistFragment());
             currentFragment = FRAGMENT_WISHLIST;
         }
     }
-    private void openAccountFragment(){
-        if(currentFragment != FRAGMENT_ACCOUNT){
+
+    private void openAccountFragment() {
+        if (currentFragment != FRAGMENT_ACCOUNT) {
             replaceFrament(new MyAccountFragment());
             currentFragment = FRAGMENT_ACCOUNT;
         }
     }
-    private void openThemeFragment(){
-        if(currentFragment != FRAGMENT_THEME){
+
+    private void openThemeFragment() {
+        if (currentFragment != FRAGMENT_THEME) {
             replaceFrament(new ThemeFragment());
             currentFragment = FRAGMENT_THEME;
         }
     }
-    private void openLiveFragment(){
-        if(currentFragment != FRAGMENT_LIVE){
+
+    private void openLiveFragment() {
+        if (currentFragment != FRAGMENT_LIVE) {
             replaceFrament(new LiveFragment());
             currentFragment = FRAGMENT_LIVE;
         }
     }
-    private void openSignOutFragment(){
-        if(currentFragment != FRAGMENT_SIGN_OUT){
+
+    private void openSignOutFragment() {
+        if (currentFragment != FRAGMENT_SIGN_OUT) {
             replaceFrament(new SignOutFragment());
             currentFragment = FRAGMENT_SIGN_OUT;
         }
     }
 
-    public void replaceFrament(Fragment fragment){
+    public void replaceFrament(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment);
         fragmentTransaction.commit();
