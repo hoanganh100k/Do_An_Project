@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -50,7 +51,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_THEME = 7;
     private static final int FRAGMENT_LIVE = 8;
     private static final int FRAGMENT_SIGN_OUT = 9;
+    private static boolean statusClick = false;
 
     private int currentFragment = FRAGMENT_HOME;
 
@@ -112,14 +113,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
+        WebView w = findViewById(R.id.webView1);
         //Click vào ô hộp thử ở dưới góc phải
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if(statusClick == false) {
+                    // Load the asset file by URL. Note the 3 slashes "file:///".
+                    w.loadUrl("https://vnexpress.net/");
+                    w.setVisibility(View.VISIBLE);
+                    statusClick = true;
+                }else {
+                    w.setVisibility(View.GONE);
+                    statusClick = false;
+                }
             }
         });
 //----------------Click on bottom nav----------------
