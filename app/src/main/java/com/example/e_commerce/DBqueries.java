@@ -331,6 +331,57 @@ public class DBqueries {
 
             protected void onPostExecute(String result) {
                 lists.get(position).add(new HomePageModel(1, "Sản phẩm", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
+                if (horizontalProductScrollModelList.size() >= 4) {
+                    List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
+                    AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                        @Override
+                        protected String doInBackground(String... params) {
+                            String url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .header("Accept-Encoding", "identity")
+                                    .build();
+
+                            try (Response response = client.newCall(request).execute()) {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected code: " + response);
+                                } else {
+                                    String jsonData = response.body().string();
+                                    JSONArray json = new JSONArray(jsonData);
+                                    for (int i = 0; i < json.length(); i++) {
+                                        JSONObject b = new JSONObject(json.get(i).toString());
+                                        String name = b.getString("TENHANGHOA");
+                                        String id = b.getString("MAHANGHOA");
+                                        NumberFormat formatter = new DecimalFormat("#,###");
+                                        String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
+                                        String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
+                                        gridLayoutModelList.add(new HorizontalProductScrollModel(
+                                                id
+                                                , img
+                                                , (name.length() > 14) ? name.substring(0, 14) + "..." : name
+                                                , "VNĐ"
+                                                , gia
+                                        ));
+                                    }
+
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return "Load_San_Pham";
+                        }
+
+                        protected void onPostExecute(String result) {
+                            lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
+                            adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+                        }
+
+                        ;
+                    };
+                    task.execute("Load_San_Pham");
+                }
                 adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
             }
 
@@ -338,57 +389,6 @@ public class DBqueries {
         };
         task1.execute("Load_San_Pham_Hot");
         //Sản Phẩm
-        if (horizontalProductScrollModelList.size() >= 4) {
-            List<HorizontalProductScrollModel> gridLayoutModelList = new ArrayList<>();
-            AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
-                @Override
-                protected String doInBackground(String... params) {
-                    String url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .header("Accept-Encoding", "identity")
-                            .build();
-
-                    try (Response response = client.newCall(request).execute()) {
-                        if (!response.isSuccessful()) {
-                            throw new IOException("Unexpected code: " + response);
-                        } else {
-                            String jsonData = response.body().string();
-                            JSONArray json = new JSONArray(jsonData);
-                            for (int i = 0; i < json.length(); i++) {
-                                JSONObject b = new JSONObject(json.get(i).toString());
-                                String name = b.getString("TENHANGHOA");
-                                String id = b.getString("MAHANGHOA");
-                                NumberFormat formatter = new DecimalFormat("#,###");
-                                String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
-                                String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
-                                gridLayoutModelList.add(new HorizontalProductScrollModel(
-                                        id
-                                        , img
-                                        , (name.length() > 14) ? name.substring(0, 14) + "..." : name
-                                        , "VNĐ"
-                                        , gia
-                                ));
-                            }
-
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    return "Load_San_Pham";
-                }
-
-                protected void onPostExecute(String result) {
-                    lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
-                    adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
-                }
-
-                ;
-            };
-            task.execute("Load_San_Pham");
-        }
 
 
     }
