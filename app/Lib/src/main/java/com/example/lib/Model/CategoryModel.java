@@ -5,11 +5,24 @@ public class CategoryModel {
     private String CategoryID;
     private String CategoryLink;
     private String CategoryName;
-
-    public CategoryModel(String categoryID,String categoryLink, String categoryName) {
+    private  int categoryType;
+    public CategoryModel(String categoryID,String categoryLink, String categoryName,int categoryTy) {
         CategoryLink = categoryLink;
         CategoryName = categoryName;
         CategoryID = categoryID;
+        categoryType = categoryTy;
+    }
+
+    public int getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryID(String categoryID) {
+        CategoryID = categoryID;
+    }
+
+    public void setCategoryType(int categoryType) {
+        this.categoryType = categoryType;
     }
 
     public String getCategoryLink() {

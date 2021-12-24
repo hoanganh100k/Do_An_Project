@@ -1,6 +1,7 @@
 package com.example.e_commerce.ui.home;
 
 import static com.example.e_commerce.DBqueries.categoryModelList;
+import static com.example.e_commerce.DBqueries.categoryModelList1;
 import static com.example.e_commerce.DBqueries.lists;
 import static com.example.e_commerce.DBqueries.loadCategories;
 import static com.example.e_commerce.DBqueries.loadedCategoriesName;
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
 
             categoryAdapter = new CategoryAdapter(categoryModelList);
             categoryRecyclerView.setAdapter(categoryAdapter);
-
+            categoryModelList1.clear();
             if(categoryModelList.size() == 0){
                 loadCategories(getContext(), categoryAdapter);
             }else{

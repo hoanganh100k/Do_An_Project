@@ -26,9 +26,9 @@ import java.util.ArrayList;
 
 public class CategoryActivity extends AppCompatActivity {
     private RecyclerView categoryRecyclerView1;
-    private RecyclerView categoryRecyclerView;
+    private RecyclerView categoryRecyclerView2;
     private HomePageAdapter adapter;
-    private CategoryAdapter categoryAdapter;
+    private CategoryAdapter categoryAdapter1;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -43,32 +43,33 @@ public class CategoryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        categoryRecyclerView = findViewById(R.id.category_recyclerview);
+        categoryRecyclerView2 = findViewById(R.id.category_recyclerview);
         categoryRecyclerView1 = findViewById(R.id.category_1);
 
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayout.VERTICAL);
         LinearLayoutManager testingLayoutManager1 = new LinearLayoutManager(this);
         testingLayoutManager1.setOrientation(LinearLayout.HORIZONTAL);
-        categoryRecyclerView.setLayoutManager(testingLayoutManager);
+        categoryRecyclerView2.setLayoutManager(testingLayoutManager);
         categoryRecyclerView1.setLayoutManager(testingLayoutManager1);
         //Đổ vào category con
-        categoryAdapter = new CategoryAdapter(categoryModelList1);
-        categoryRecyclerView1.setAdapter(categoryAdapter);
-
-        if(categoryModelList1.size() == 0){
-            loadCategories1(this, categoryAdapter);
-        }else{
-            categoryAdapter.notifyDataSetChanged();
-        }
-
-        //In sản phẩm của category đó
+        categoryAdapter1 = new CategoryAdapter(categoryModelList1);
+        categoryRecyclerView1.setAdapter(categoryAdapter1);
         int positionOfList = 0;
         for(int i = 0;i<loadedCategoriesName.size();i++){
             if(loadedCategoriesName.get(i).equals(title.toUpperCase())){
                 positionOfList = i;
             }
         }
+
+        if(categoryModelList1.size() == 0){
+            loadCategories1(getBaseContext(), categoryAdapter1,title);
+        }else{
+            categoryAdapter1.notifyDataSetChanged();
+        }
+
+        //In sản phẩm của category đó
+
         if(positionOfList == 0){
             loadedCategoriesName.add(title.toUpperCase());
             lists.add(new ArrayList<HomePageModel>());
@@ -78,7 +79,7 @@ public class CategoryActivity extends AppCompatActivity {
             adapter = new HomePageAdapter(lists.get(positionOfList));
         }
 
-        categoryRecyclerView.setAdapter(adapter);
+        categoryRecyclerView2.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
@@ -94,12 +95,20 @@ public class CategoryActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.main_search_icon){
             //To do search here
+            categoryModelList1.clear();
             startActivity(new Intent(this,SearchActivity.class));
             return true;
         }else if(id == android.R.id.home){      //
+            categoryModelList1.clear();
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        categoryModelList1.clear();
+        finish();
+        return;
     }
 }
