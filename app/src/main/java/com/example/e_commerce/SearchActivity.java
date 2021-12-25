@@ -77,6 +77,7 @@ public class SearchActivity extends AppCompatActivity {
                                     JSONObject b = new JSONObject(json.get(i).toString());
                                     String name = b.getString("TENHANGHOA");
                                     String id = b.getString("MAHANGHOA");
+                                    String tenloai = b.getString("TENLOAI");
                                     String gia = b.getString("GIA");
                                     String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
                                     WishlistModel model = new WishlistModel(
@@ -84,7 +85,7 @@ public class SearchActivity extends AppCompatActivity {
                                             , img
                                             , name
                                             , (long) 1000
-                                            , "10"
+                                            , tenloai
                                             , (long) 1000
                                             , gia
                                             , "10000"

@@ -6,7 +6,7 @@ public class WishlistModel {
 
     private long freeCoupens,totalRatings;
     private String productImage,productId;
-    private String productTitle,rating,productPrice,cuttedPrice;
+    private String productTitle,rating,productPrice,cuttedPrice,typeProduct;
     private Boolean COD;
     private boolean inStock;
     private ArrayList<String> tags;
