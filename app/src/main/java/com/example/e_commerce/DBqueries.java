@@ -129,13 +129,14 @@ public class DBqueries {
 
     public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter,String categoriesName) {
         String id_Category = "-1"; //Đây là ID Của Category
+        categoryModelList1.add(new CategoryModel(id_Category, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", categoriesName,1));
         for (CategoryModel category : categoryModelList) {
             if (category.getCategoryName().equals(categoriesName)) {
                 id_Category = category.getCategoryID();
                 break;
             }
         }
-        System.out.println(id_Category+"hhhh");
+        System.out.println(id_Category+"_ID_Category");
         String finalId_Category = id_Category;
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
             @Override
@@ -309,22 +310,24 @@ public class DBqueries {
     public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
         String id_Category = "-1"; //Đây là ID Của Category
         int categoryType = -1;
+        boolean statusCheckType = false;
         for (CategoryModel category : categoryModelList) {
-            if (category.getCategoryName().equals(categoriesName)) {
+            if (category.getCategoryName().equals(categoriesName) && statusCheckType == false) {
                 id_Category = category.getCategoryID();
                 categoryType = category.getCategoryType();
+                statusCheckType = true;
                 break;
             }
         }
         for (CategoryModel category : categoryModelList1) {
-            if (category.getCategoryName().equals(categoriesName)) {
+            if (category.getCategoryName().equals(categoriesName) && statusCheckType == false) {
                 id_Category = category.getCategoryID();
                 categoryType = category.getCategoryType();
+                statusCheckType = true;
                 break;
             }
         }
-        System.out.println(categoryType+"hhhh");
-        System.out.println(id_Category+"hhhh");
+
 
         //Sản Phẩm Hot
         //Đây là hàm của category đầu tiên
@@ -923,7 +926,6 @@ public class DBqueries {
 
 
     public static void clearData() {
-        categoryModelList1.clear();
         categoryModelList.clear();
         lists.clear();
         loadedCategoriesNames.clear();
