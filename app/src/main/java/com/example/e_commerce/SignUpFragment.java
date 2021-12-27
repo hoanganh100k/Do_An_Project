@@ -1,6 +1,7 @@
 package com.example.e_commerce;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -29,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -67,14 +70,16 @@ public class SignUpFragment extends Fragment {
     private EditText confirmPassword;
 
     private ImageButton closeBtn;
+    private EditText editDate;
     private Button signUpBtn;
-
+    private Button btnDateBirtday;
     private ProgressBar progressBar;
     private FirebaseFirestore firebaseFirestore;
     private boolean STATUS_REGISTER = false;
     private FirebaseAuth firebaseAuth;
     private String emailPattern ="[0-9]+";
     public static boolean disableCloseBtn = false;
+    DatePickerDialog datePickerDialog;
 
     /**
      * Use this factory method to create a new instance of
@@ -116,14 +121,12 @@ public class SignUpFragment extends Fragment {
        fullName = view.findViewById(R.id.sign_up_fullname);
        password = view.findViewById(R.id.sign_up_password);
        confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
-
        successSignUp = view.findViewById(R.id.tv_success);
-
+       editDate = view.findViewById(R.id.editTextDate2);
        closeBtn = view.findViewById(R.id.sign_in_close_btn);
        signUpBtn = view.findViewById(R.id.sign_up_btn);
 
        progressBar = view.findViewById(R.id.sign_up_progressbar);
-
        firebaseAuth = FirebaseAuth.getInstance();
        firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -140,6 +143,33 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        editDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(getContext(),R.style.my_dialog_theme,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                editDate.setText(dayOfMonth + "/"
+                                        + (monthOfYear + 1) + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+
         alreadyHaveAnAccount.setOnClickListener((view1) -> {
             setFramegment(new SignInFragment());
         });

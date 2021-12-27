@@ -15,6 +15,14 @@
         <item name="android:windowBackground">@drawable/splash_activity_background</item>
     </style>
 
+    <style name="my_dialog_theme" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/black</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/colorAccent</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">#99E91E63</item> <!--selected day-->
+        <item name="colorControlActivated">#33691e</item>
+        <item name="android:selectableItemBackgroundBorderless">@color/colorAccent</item>
+        <item name="colorControlHighlight">#99E91E63</item>
+    </style>
     <style name="RedProgressbar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>

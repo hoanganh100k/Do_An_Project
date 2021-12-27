@@ -8,16 +8,18 @@
     android:background="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageButton
             android:id="@+id/sign_in_close_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@android:color/transparent"
             android:padding="16dp"
             android:src="@drawable/close_cross"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,ImageContrastCheck" />
@@ -70,8 +72,8 @@
             android:backgroundTint="#70ffffff"
             android:ems="10"
             android:hint="Mật khẩu (ít nhất 8 ký tự)"
-            android:minHeight="48dp"
             android:inputType="textPassword"
+            android:minHeight="48dp"
             android:textColor="@color/colorAccent"
             android:textColorHint="#70ffffff"
             app:layout_constraintEnd_toEndOf="parent"
@@ -160,20 +162,63 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/sign_up_btn"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.101"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password"
+            app:layout_constraintVertical_bias="0.756" />
 
         <TextView
             android:id="@+id/tv_success"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Đăng kí thành công"
             android:textColor="@color/green"
             android:visibility="invisible"
-            android:text="Đăng kí thành công"
             app:layout_constraintBottom_toTopOf="@+id/sign_up_btn"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password" />
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password"
+            app:layout_constraintVertical_bias="0.881" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="80dp"
+            android:text="Ngày Sinh:"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/sign_up_btn"
+            app:layout_constraintEnd_toStartOf="@+id/editTextDate2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password"
+            app:layout_constraintVertical_bias="0.062" />
+
+        <EditText
+            android:id="@+id/editTextDate2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="128dp"
+            android:ems="10"
+            android:hint="DD/MM/YYYY"
+            android:inputType="date"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_success"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/sign_up_confirm_password"
+            app:layout_constraintVertical_bias="0.073"
+            tools:ignore="SpeakableTextPresentCheck" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>
