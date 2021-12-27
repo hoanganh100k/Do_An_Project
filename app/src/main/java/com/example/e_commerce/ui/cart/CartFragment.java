@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.e_commerce.CheckOutActivity;
 import com.example.e_commerce.DBqueries;
 import com.example.e_commerce.DeliveryActivity;
+import com.example.e_commerce.MainActivity;
 import com.example.e_commerce.R;
 import com.example.lib.Model.CartItemModel;
 import com.example.lib.Model.RewardModel;
@@ -69,23 +71,24 @@ public class CartFragment extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeliveryActivity.cartItemModelList = new ArrayList<>();
-                DeliveryActivity.fromCart = true;
-
-                for (int x = 0; x < DBqueries.cartItemModelList.size(); x++) {
-                    CartItemModel cartItemModel = DBqueries.cartItemModelList.get(x);
-                    if (cartItemModel.isInStock()) {
-                        DeliveryActivity.cartItemModelList.add(cartItemModel);
-                    }
-                }
-                DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
-                loadingDialog.show();
-                if (DBqueries.addressesModelList.size() == 0) {
-                    DBqueries.loadAddresses(getContext(), loadingDialog, true);
-                } else {
-                    loadingDialog.dismiss();
-                    startActivity(new Intent(getContext(), DeliveryActivity.class));
-                }
+//                DeliveryActivity.cartItemModelList = new ArrayList<>();
+//                DeliveryActivity.fromCart = true;
+//
+//                for (int x = 0; x < DBqueries.cartItemModelList.size(); x++) {
+//                    CartItemModel cartItemModel = DBqueries.cartItemModelList.get(x);
+//                    if (cartItemModel.isInStock()) {
+//                        DeliveryActivity.cartItemModelList.add(cartItemModel);
+//                    }
+//                }
+//                DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+//                loadingDialog.show();
+//                if (DBqueries.addressesModelList.size() == 0) {
+//                    DBqueries.loadAddresses(getContext(), loadingDialog, true);
+//                } else {
+//                    loadingDialog.dismiss();
+//                    startActivity(new Intent(getContext(), DeliveryActivity.class));
+//                }
+                startActivity(new Intent(getContext(), CheckOutActivity.class));
             }
         });
         return view;

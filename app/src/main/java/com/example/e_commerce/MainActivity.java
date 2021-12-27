@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             badgeIcon.setImageResource(R.drawable.shopping_cart);
             badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
 
-            if (currentUser != null) {
+            if (currentUser == null) {
                 if (DBqueries.cartList.size() == 0) {
                     DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this), false, badgeCount, new TextView(MainActivity.this));
                 } else {

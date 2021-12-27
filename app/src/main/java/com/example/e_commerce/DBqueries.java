@@ -462,63 +462,19 @@ public class DBqueries {
     public static void loadRewards(final Context context, final Dialog loadingDialog, final boolean onRewardFragment) {
 
         rewardModelList.clear();
-        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            final Date lastseendate = task.getResult().getDate("Last seen");
-
-                            firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_REWARDS")
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-
-                                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                                    if (documentSnapshot.get("type").toString().equals("Discount") && lastseendate.before(documentSnapshot.getDate("validity"))) {  //&& lastseendate.before(documentSnapshot.getDate("validity"))
-                                                        rewardModelList.add(new RewardModel(
-                                                                documentSnapshot.getId()
-                                                                , documentSnapshot.get("type").toString()
-                                                                , documentSnapshot.get("upper_limit").toString()
-                                                                , documentSnapshot.get("lower_limit").toString()
-                                                                , documentSnapshot.get("percentage").toString()
-                                                                , documentSnapshot.get("body").toString()
-                                                                , (Timestamp) documentSnapshot.get("validity")
-                                                                , (boolean) documentSnapshot.get("alreadyUsed")
-                                                        ));
-                                                    } else if (documentSnapshot.get("type").toString().equals("Flat VND OFF") && lastseendate.before(documentSnapshot.getDate("validity"))) {//&& lastseendate.before(documentSnapshot.getDate("validity"))
-                                                        rewardModelList.add(new RewardModel(
-                                                                documentSnapshot.getId()
-                                                                , documentSnapshot.get("type").toString()
-                                                                , documentSnapshot.get("upper_limit").toString()
-                                                                , documentSnapshot.get("lower_limit").toString()
-                                                                , documentSnapshot.get("amount").toString()
-                                                                , documentSnapshot.get("body").toString()
-                                                                , (Timestamp) documentSnapshot.get("validity")
-                                                                , (boolean) documentSnapshot.get("alreadyUsed")
-                                                        ));
-                                                    }
-                                                }
-                                                if (onRewardFragment) {
-                                                    CouponFragment.adapter.notifyDataSetChanged();
-                                                }
-                                            } else {
-                                                String error = task.getException().getMessage();
-                                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                                            }
-                                            loadingDialog.dismiss();
-                                        }
-                                    });
-
-                        } else {
-                            loadingDialog.dismiss();
-                            String error = task.getException().getMessage();
-                            Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        rewardModelList.add(new RewardModel(
+                "2"
+                , "2"
+                , "2"
+                , ""
+                , "2"
+                , "2"
+                , new Timestamp(12,12)
+                , false
+        ));
+        if (onRewardFragment) {
+            CouponFragment.adapter.notifyDataSetChanged();
+        }
 
     }
 
@@ -664,7 +620,6 @@ public class DBqueries {
                 , "https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"
                 , (long) 100
                 , (long) 1
-//                                                                                        ,(long)documentSnapshot.get("offers_applied")
                 , (long) 0
                 , "Xăng 1"
                 , "10000"
@@ -674,14 +629,15 @@ public class DBqueries {
                 , (long) 10000
                 , (boolean) true
         ));
-//        if (cartList.size() == 1) {
-//            cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
-//            LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
-//            parent.setVisibility(View.VISIBLE);
-//        }
-//        if (cartList.size() == 0) {
-//            cartItemModelList.clear();
-//        }
+
+        if (cartList.size() == 1) {
+            cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+            LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
+            parent.setVisibility(View.VISIBLE);
+        }
+        if (cartList.size() == 0) {
+            cartItemModelList.clear();
+        }
         CartFragment.cartAdapter.notifyDataSetChanged();
 
 
