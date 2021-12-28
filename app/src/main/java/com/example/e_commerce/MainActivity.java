@@ -1,5 +1,6 @@
 package com.example.e_commerce;
 
+import static com.example.e_commerce.DeliveryActivity.SELECT_ADDRESS;
 import static com.example.e_commerce.RegisterActivity.setsignUpFragment;
 
 import android.annotation.SuppressLint;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static boolean statusClick = false;
 
     private int currentFragment = FRAGMENT_HOME;
+    private Button btnDonHang;
 
 
     @SuppressLint("WrongConstant")
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
 
         //Dòng này để khai báo id bên navigation drawer để click hiện lên fragment
         mAppBarConfiguration = new AppBarConfiguration.Builder(

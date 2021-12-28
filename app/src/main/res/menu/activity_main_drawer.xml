@@ -18,8 +18,15 @@
             android:icon="@drawable/ic_menu_cart"
             android:title="@string/menu_cart" />
 
+        <item
+            android:id="@+id/nav_cart1"
+            android:icon="@drawable/ic_menu_cart"
+            android:title="@string/menu_cart1" />
+
 
     </group>
+
+
     <item android:title="@string/system">
         <menu>
             <item

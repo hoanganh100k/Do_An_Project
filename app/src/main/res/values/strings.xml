@@ -12,6 +12,7 @@
     <string name="menu_order">Đơn hàng</string>
     <string name="menu_reward">Khuyến mãi/Coupon</string>
     <string name="menu_cart">Giỏ hàng</string>
+    <string name="menu_cart1">Giỏ hàng 1</string>
     <string name="menu_wishlist">Yêu thích</string>
     <string name="menu_account">Tài khoản</string>
     <string name="menu_sign_out">Đăng xuất</string>
