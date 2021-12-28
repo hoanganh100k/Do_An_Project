@@ -1,5 +1,7 @@
 package com.example.e_commerce;
 
+import static com.example.e_commerce.DeliveryActivity.SELECT_ADDRESS;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -116,6 +118,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     private DocumentSnapshot documentSnapshot;
 
+    private Button btnGioHang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +133,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         productImagesViewPager = findViewById(R.id.product_images_viewpager);
         viewpagerIndicator = findViewById(R.id.viewpager_indicator);
+
+        btnGioHang = findViewById(R.id.addCart);
 
         addToCartBtn = findViewById(R.id.add_to_cart_btn);
         addToWishListBtn = findViewById(R.id.add_to_wishlist_btn);
@@ -743,6 +749,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 checkCoupanPricedialog.show();
             }
         });
+
+        btnGioHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductDetailsActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
 
 //        couponRedeemBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override

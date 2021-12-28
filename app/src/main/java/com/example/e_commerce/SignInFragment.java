@@ -1,5 +1,7 @@
 package com.example.e_commerce;
 
+import static com.example.e_commerce.DeliveryActivity.SELECT_ADDRESS;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
