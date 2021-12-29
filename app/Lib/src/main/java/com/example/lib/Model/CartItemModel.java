@@ -55,6 +55,14 @@ public class CartItemModel {
 
     }
 
+    public CartItemModel(Long productQuantity, String productID, String productImage, String productTitle, String productPrice) {
+        this.productQuantity = productQuantity;
+        this.productID = productID;
+        this.productImage = productImage;
+        this.productTitle = productTitle;
+        this.productPrice = productPrice;
+    }
+
     public boolean isCOD() {
         return COD;
     }

@@ -107,19 +107,19 @@ public class CartAdapter extends RecyclerView.Adapter {
                 String productID=cartItemModelList.get(position).getProductID();
                 String resource=cartItemModelList.get(position).getProductImage();
                 String title=cartItemModelList.get(position).getProductTitle();
-                Long freecoupans=cartItemModelList.get(position).getFreeCoupans();
+//                Long freecoupans=cartItemModelList.get(position).getFreeCoupans();
                 String productprice=cartItemModelList.get(position).getProductPrice();
-                String cuttedPrice=cartItemModelList.get(position).getCuttedPrice();
-                Long offersApplied=cartItemModelList.get(position).getOffersApplied();
+//                String cuttedPrice=cartItemModelList.get(position).getCuttedPrice();
+//                Long offersApplied=cartItemModelList.get(position).getOffersApplied();
                 Long productQty=cartItemModelList.get(position).getProductQuantity();
-                Long maxQty=cartItemModelList.get(position).getMaxQuantity();
-                Long stockQty=cartItemModelList.get(position).getStockQuantity();
-                boolean inStock=cartItemModelList.get(position).isInStock();
-                boolean codAvailable=cartItemModelList.get(position).isCOD();
-                boolean qtyError=cartItemModelList.get(position).isQtyError();
-                List<String> qtyIDs=cartItemModelList.get(position).getQtyIDs();
+//                Long maxQty=cartItemModelList.get(position).getMaxQuantity();
+//                Long stockQty=cartItemModelList.get(position).getStockQuantity();
+//                boolean inStock=cartItemModelList.get(position).isInStock();
+//                boolean codAvailable=cartItemModelList.get(position).isCOD();
+//                boolean qtyError=cartItemModelList.get(position).isQtyError();
+//                List<String> qtyIDs=cartItemModelList.get(position).getQtyIDs();
 //,offersApplied,
-                ((cartItemViewHolder)holder).setItemDetails(productID,resource,title,freecoupans,productprice,cuttedPrice,position,inStock,productQty,maxQty,stockQty,qtyError,qtyIDs,codAvailable);
+                ((cartItemViewHolder)holder).setItemDetails(productID,resource,title,productprice,position,productQty);
                 break;
             case CartItemModel.TOTAL_AMOUNT:
 
@@ -189,55 +189,35 @@ public class CartAdapter extends RecyclerView.Adapter {
         public cartItemViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage=itemView.findViewById(R.id.product_image);
-            freeCoupanIcon=itemView.findViewById(R.id.product_title);
+//            freeCoupanIcon=itemView.findViewById(R.id.product_title);
             productTitle=itemView.findViewById(R.id.product_title);
-            freeCoupans=itemView.findViewById(R.id.product_title);
+//            freeCoupans=itemView.findViewById(R.id.product_title);
             productPrice=itemView.findViewById(R.id.product_price);
-            cuttedPrice=itemView.findViewById(R.id.cutted_price);
-            offersApplied=itemView.findViewById(R.id.product_title);
-            coupansApplied=itemView.findViewById(R.id.product_title);
+//            cuttedPrice=itemView.findViewById(R.id.cutted_price);
+//            offersApplied=itemView.findViewById(R.id.product_title);
+//            coupansApplied=itemView.findViewById(R.id.product_title);
             productQuantity=itemView.findViewById(R.id.product_quantity);
             deleteBtn=itemView.findViewById(R.id.remove_item_btn);
-            coupanRedemptionLayout=itemView.findViewById(R.id.coupan_redemption_layout);
-            reedemBtn=itemView.findViewById(R.id.coupan_redemption_btn);
-            coupanRedemptionBody=itemView.findViewById(R.id.tv_coupan_redemption);
-            cod=itemView.findViewById(R.id.product_title);
+//            coupanRedemptionLayout=itemView.findViewById(R.id.coupan_redemption_layout);
+//            reedemBtn=itemView.findViewById(R.id.coupan_redemption_btn);
+//            coupanRedemptionBody=itemView.findViewById(R.id.tv_coupan_redemption);
+//            cod=itemView.findViewById(R.id.product_title);
 
         }
 //, Long offersAppliedNo,
-        private void setItemDetails(final String productID, String resource, String title, Long freecoupansNo, final String productPriceText, String cuttedPriceText, final int position, boolean inStock, final Long productQty  , final Long maxQty, final long stockQty, boolean qtyError, final List<String> qtyIDs,boolean codAvaiiable){
+        private void setItemDetails(final String productID, String resource, String title,  final String productPriceText, final int position ,final Long productQty){
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.mipmap.pic)).into(productImage);
             productTitle.setText(title);
+            System.out.println(title + "dsadasdasdsasa");
 
             final Dialog checkCoupanPricedialog = new Dialog(itemView.getContext());
             checkCoupanPricedialog.setCancelable(false);
             checkCoupanPricedialog.setContentView(R.layout.coupan_redeem_dialog);
             checkCoupanPricedialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            if(codAvaiiable){
-                cod.setVisibility(View.VISIBLE);
-            }else {
-                cod.setVisibility(View.INVISIBLE);
-            }
-
-            if(inStock) {
-                if(freecoupansNo>0){
-                    freeCoupans.setVisibility(View.VISIBLE);
-                    freeCoupanIcon.setVisibility(View.VISIBLE);
-                    if(freecoupansNo==1){
-                        freeCoupans.setText("free " + freecoupansNo + " Coupon");
-                    }else{
-                        freeCoupans.setText("free " + freecoupansNo + " Coupons");
-                    }
-                }else {
-                    freeCoupans.setVisibility(View.INVISIBLE);
-                    freeCoupanIcon.setVisibility(View.INVISIBLE);
-                }
 
                 productPrice.setText(productPriceText + "VND");
                 productPrice.setTextColor(Color.parseColor("#000000"));
-                cuttedPrice.setText(cuttedPriceText + "VND");
-                coupanRedemptionLayout.setVisibility(View.VISIBLE);
 
                 ////// coupan redemption dialog
 
@@ -264,59 +244,10 @@ public class CartAdapter extends RecyclerView.Adapter {
 
                 ///for coupan dialog
                 originalPrice.setText(productPrice.getText());
-                productPriceValue= Long.valueOf(productPriceText);
-                RewardAdapter rewardsAdapter = new RewardAdapter(position, DBqueries.rewardModelList, true,coupanRecyclerview,selectedCoupan,productPriceValue,coupanTitle,coupanExpiryDate,coupanBody,discountedPrice,cartItemModelList);
-                rewardsAdapter.notifyDataSetChanged();
-                coupanRecyclerview.setAdapter(rewardsAdapter);
+
                 ///for coupan dialog
 
-                applyCoupanBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(!TextUtils.isEmpty(cartItemModelList.get(position).getSelectedCoupanId())) {
-                            for (RewardModel rewardModel : DBqueries.rewardModelList) {
-                                if (rewardModel.getCoupanId().equals(cartItemModelList.get(position).getSelectedCoupanId())) {
-                                    rewardModel.setAlreadyUsed(true);
 
-
-                                    coupanRedemptionLayout.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.reward_gradient_background));
-                                    coupanRedemptionBody.setText(rewardModel.getCoupanBody());
-                                    reedemBtn.setText("Coupan");
-                                }
-                            }
-                            cartItemModelList.get(position).setDiscountedPrice(discountedPrice.getText().toString().substring(3,discountedPrice.getText().length()-2));
-                            productPrice.setText(discountedPrice.getText());
-                            String offerDiscountedAmount=String.valueOf(Long.valueOf(productPriceText)-Long.valueOf(discountedPrice.getText().toString().substring(3,discountedPrice.getText().length()-2)));
-                            coupansApplied.setVisibility(View.VISIBLE);
-                            coupansApplied.setText("Coupon applied " + offerDiscountedAmount + "VND");
-                            notifyItemChanged(cartItemModelList.size()-1);
-                            checkCoupanPricedialog.dismiss();
-                        }
-                    }
-                });
-
-                removeCoupanBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for(RewardModel rewardModel: DBqueries.rewardModelList){
-                            if(rewardModel.getCoupanId().equals(cartItemModelList.get(position).getSelectedCoupanId())){
-                                rewardModel.setAlreadyUsed(false);
-
-                            }
-                        }
-                        coupanTitle.setText("Coupon");
-                        coupanExpiryDate.setText("till xx-xx-xxxx");
-                        coupanBody.setText("Tap the icon on the top right corner to select your coupon.");
-                        coupansApplied.setVisibility(View.INVISIBLE);
-                        coupanRedemptionLayout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.colorPrimary));
-                        coupanRedemptionBody.setText("Áp dụng mã giảm giá.");
-                        reedemBtn.setText("Redeem");
-                        productPrice.setText(productPriceText+"VND");
-                        cartItemModelList.get(position).setSelectedCoupanId(null);
-                        notifyItemChanged(cartItemModelList.size()-1);
-                        checkCoupanPricedialog.dismiss();
-                    }
-                });
 
 
                 toogleRecyclerView.setOnClickListener(new View.OnClickListener() {
@@ -327,48 +258,11 @@ public class CartAdapter extends RecyclerView.Adapter {
                 });
 
 
-                if(!TextUtils.isEmpty(cartItemModelList.get(position).getSelectedCoupanId())) {
-                    for (RewardModel rewardModel : DBqueries.rewardModelList) {
-                        if (rewardModel.getCoupanId().equals(cartItemModelList.get(position).getSelectedCoupanId())) {
-                            coupanRedemptionLayout.setBackground(itemView.getContext().getResources().getDrawable(R.drawable.reward_gradient_background));
-                            coupanRedemptionBody.setText(rewardModel.getCoupanBody());
-                            reedemBtn.setText("Coupan");
-
-                            coupanBody.setText(rewardModel.getCoupanBody());
-                            if(rewardModel.getType().equals("Discount")){
-                                coupanTitle.setText(rewardModel.getType());
-                            }else {
-                                coupanTitle.setText("FLAT "+rewardModel.getDiscORamt()+"VND OFF");
-                            }
-                            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                            coupanExpiryDate.setText("till " + simpleDateFormat.format(rewardModel.getTimestamp()));
-                        }
-                    }
-                    productPrice.setText(cartItemModelList.get(position).getDiscountedPrice()+"VND");
-                    discountedPrice.setText(cartItemModelList.get(position).getDiscountedPrice()+"VND");
-                    String offerDiscountedAmount=String.valueOf(Long.valueOf(productPriceText)-Long.valueOf(cartItemModelList.get(position).getDiscountedPrice()));
-                    coupansApplied.setVisibility(View.VISIBLE);
-                    coupansApplied.setText("Coupan applied - " + offerDiscountedAmount + "VND");
-                }else {
-                    coupansApplied.setVisibility(View.INVISIBLE);
-                    coupanRedemptionLayout.setBackgroundColor(itemView.getContext().getResources().getColor(R.color.red));
-                    coupanRedemptionBody.setText("Sử dụng mã giảm giá.");
-                    reedemBtn.setText("Redeem");
-                }
-
                 ////// coupan redemption dialog
 
                 productQuantity.setText("Qty: "+String.valueOf(productQty));
 
-                if(!showDeleteBtn) {
-                    if (qtyError) {
-                        productQuantity.setTextColor(itemView.getContext().getResources().getColor(R.color.colorPrimary));
-                        productQuantity.setBackgroundTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.colorPrimary)));
-                    } else {
-                        productQuantity.setTextColor(itemView.getContext().getResources().getColor(android.R.color.black));
-                        productQuantity.setBackgroundTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(android.R.color.black)));
-                    }
-                }
+
 
                 productQuantity.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -382,7 +276,6 @@ public class CartAdapter extends RecyclerView.Adapter {
                         final EditText qtyNo=qtyDialog.findViewById(R.id.quantity_no);
                         Button cancelBtn=qtyDialog.findViewById(R.id.cancel_btn);
                         Button okBtn=qtyDialog.findViewById(R.id.ok_btn);
-                        qtyNo.setHint("Max : "+String.valueOf(maxQty));
 
                         cancelBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -394,107 +287,29 @@ public class CartAdapter extends RecyclerView.Adapter {
                         okBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if(!TextUtils.isEmpty(qtyNo.getText())) {
-                                    if (Long.valueOf(qtyNo.getText().toString()) <= maxQty && Long.valueOf(qtyNo.getText().toString()) != 0) {
-                                        if(itemView.getContext() instanceof MainActivity){
-                                            cartItemModelList.get(position).setProductQuantity(Long.valueOf(qtyNo.getText().toString()));
-                                        }else {
-                                            if (DeliveryActivity.fromCart) {
-                                                cartItemModelList.get(position).setProductQuantity(Long.valueOf(qtyNo.getText().toString()));
-                                            } else {
-                                                DeliveryActivity.cartItemModelList.get(position).setProductQuantity(Long.valueOf(qtyNo.getText().toString()));
-                                            }
-                                        }
-                                        productQuantity.setText("Qty: " + qtyNo.getText().toString());
-                                        notifyItemChanged(cartItemModelList.size()-1);
-
-                                        if(!showDeleteBtn){
-                                            DeliveryActivity.loadingDialog.show();
-                                            DeliveryActivity.cartItemModelList.get(position).setQtyError(false);
-                                            final int finalQty=Integer.parseInt(qtyNo.getText().toString());
-                                            final int initialQty=Integer.parseInt(String.valueOf(productQty));
-                                            final FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
-
-                                            if(finalQty>initialQty) {
-
-                                                for (int y = 0; y < finalQty-initialQty; y++) {
-                                                    final String quantityDocumentName = UUID.randomUUID().toString().substring(0, 20);
-                                                    Map<String, Object> timeStamp = new HashMap<>();
-                                                    timeStamp.put("time", FieldValue.serverTimestamp());
-
-                                                    final int finalY = y;
-                                                    firebaseFirestore.collection("PRODUCTS").document(productID).collection("QUANTITY").document(quantityDocumentName)
-                                                            .set(timeStamp)
-                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    qtyIDs.add(quantityDocumentName);
-                                                                    if (finalY + 1 == finalQty-initialQty) {
-                                                                        firebaseFirestore.collection("PRODUCTS").document(productID).collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING).limit(stockQty).get()
-                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                    @Override
-                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                                        if (task.isSuccessful()) {
-                                                                                            List<String> serverQuantity = new ArrayList<>();
-
-                                                                                            for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                                                                                                serverQuantity.add(queryDocumentSnapshot.getId());
-                                                                                            }
-                                                                                            long availableQty = 0;
-                                                                                            for (String qtyID : qtyIDs) {
-                                                                                                if (!serverQuantity.contains(qtyID)) {
-                                                                                                    DeliveryActivity.cartItemModelList.get(position).setQtyError(true);
-                                                                                                    DeliveryActivity.cartItemModelList.get(position).setMaxQuantity(availableQty);
-                                                                                                    Toast.makeText(itemView.getContext(), "Số lượng không hợp lê", Toast.LENGTH_SHORT).show();
-                                                                                                }else {
-                                                                                                    availableQty++;
-                                                                                                }
-                                                                                            }
-                                                                                            DeliveryActivity.cartAdapter.notifyDataSetChanged();
-                                                                                        } else {
-                                                                                            String error = task.getException().getMessage();
-                                                                                            Toast.makeText(itemView.getContext(), error, Toast.LENGTH_SHORT).show();
-                                                                                        }
-                                                                                        DeliveryActivity.loadingDialog.dismiss();
-                                                                                    }
-                                                                                });
-
-                                                                    }
-                                                                }
-                                                            });
-
-                                                }
-                                            }
-                                            else if(initialQty>finalQty) {
-                                                for (int x=0;x<initialQty-finalQty;x++) {
-                                                    final String qtyID=qtyIDs.get(qtyIDs.size()-1-x);
-
-                                                    final int finalX = x;
-                                                    firebaseFirestore.collection("PRODUCTS").document(productID).collection("QUANTITY").document(qtyID).delete()
-                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    qtyIDs.remove(qtyID);
-                                                                    DeliveryActivity.cartAdapter.notifyDataSetChanged();
-                                                                    if(finalX+1 == initialQty-finalQty){
-                                                                        DeliveryActivity.loadingDialog.dismiss();
-                                                                    }
-                                                                }
-                                                            });
-                                                }
-                                            }
-                                        }
-
-                                    }else {
-                                        Toast.makeText(itemView.getContext(),"Số lượng sản phẩm nhỏ hơn hoặc bằng "+maxQty,Toast.LENGTH_SHORT).show();
-                                    }
-                                }
+                                productQuantity.setText("Qty: " + qtyNo.getText().toString());
+                                notifyItemChanged(cartItemModelList.size()-1);
                                 qtyDialog.dismiss();
                             }
                         });
                         qtyDialog.show();
                     }
                 });
+
+            deleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DBqueries.cartItemModelList.remove(position);
+                    DBqueries.tong = 0;
+                    for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                        DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice());
+                    }
+                    cartTotalAmount.setText(DBqueries.tong + "VND");
+                    CartFragment.cartAdapter.notifyDataSetChanged();
+
+                }
+                });
+
 //                if(offersAppliedNo>0){
 //                    offersApplied.setVisibility(View.VISIBLE);
 //                    String offerDiscountedAmount=String.valueOf(Long.valueOf(cuttedPriceText)-Long.valueOf(productPriceText));
@@ -503,57 +318,8 @@ public class CartAdapter extends RecyclerView.Adapter {
 //                    offersApplied.setVisibility(View.INVISIBLE);
 //                }
             }
-            else {
-                productPrice.setText("Không có hàng trong kho");
-                productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.colorPrimary));
-                cuttedPrice.setText("");
-                coupanRedemptionLayout.setVisibility(View.GONE);
-                productQuantity.setVisibility(View.INVISIBLE);
-                freeCoupans.setVisibility(View.INVISIBLE);
-                freeCoupanIcon.setVisibility(View.INVISIBLE);
-                coupansApplied.setVisibility(View.GONE);
-                offersApplied.setVisibility(View.GONE);
-            }
 
 
-            if(showDeleteBtn){
-                deleteBtn.setVisibility(View.VISIBLE);
-            }else {
-                deleteBtn.setVisibility(View.GONE);
-            }
-
-
-            reedemBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    for(RewardModel rewardModel: DBqueries.rewardModelList){
-                        if(rewardModel.getCoupanId().equals(cartItemModelList.get(position).getSelectedCoupanId())){
-                            rewardModel.setAlreadyUsed(false);
-                        }
-                    }
-                    checkCoupanPricedialog.show();
-                }
-            });
-
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(!TextUtils.isEmpty(cartItemModelList.get(position).getSelectedCoupanId())) {
-                        for(RewardModel rewardModel: DBqueries.rewardModelList){
-                            if(rewardModel.getCoupanId().equals(cartItemModelList.get(position).getSelectedCoupanId())){
-                                rewardModel.setAlreadyUsed(false);
-
-                            }
-                        }
-                    }
-                    if(!ProductDetailsActivity.running_cart_querry){
-                        ProductDetailsActivity.running_cart_querry=true;
-                        DBqueries.removeFromCart(position,itemView.getContext(),cartTotalAmount);
-                    }
-                }
-            });
-
-        }
       //                                         productID,        resource,          title,     freecoupans,                  productprice,         cuttedPrice,              position,                inStock,p        roductQty,maxQty,stockQty,qtyError,qtyIDs,codAvailable
         private void showDialogRecyclerView() {
             if (coupanRecyclerview.getVisibility() == View.GONE) {

@@ -81,6 +81,7 @@ public class DBqueries {
     public static List<String> RatedIds = new ArrayList<>();
     public static List<MyOrderItemModel> myOrderItemModelList = new ArrayList<>();
     public static int selectedAddress = -1;
+    public static int tong = 0;
     private static OkHttpClient client = new OkHttpClient();
 
     public static void loadCategories(final Context context, final CategoryAdapter categoryAdapter) {
@@ -725,21 +726,7 @@ public class DBqueries {
             index = cartList.size() - 2;
         }
         System.out.println("In: " + index);
-        cartItemModelList.add(index, new CartItemModel(CartItemModel.CART_ITEM
-                , "1"
-                , "https://i.ibb.co/FW7Xp7n/DPSK7-1.jpg"
-                , (long) 100
-                , (long) 1
-//                                                                                        ,(long)documentSnapshot.get("offers_applied")
-                , (long) 0
-                , "Xăng 1"
-                , "10000"
-                , "10000"
-                , true
-                , (long) 10
-                , (long) 10000
-                , (boolean) true
-        ));
+
 //        if (cartList.size() == 1) {
 //            cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
 //            LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
