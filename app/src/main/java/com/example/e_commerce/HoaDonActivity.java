@@ -1,6 +1,7 @@
 package com.example.e_commerce;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -18,9 +19,10 @@ public class HoaDonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hoa_don);
-
-        total = findViewById(R.id.text);
         cartItemRecyclerView = findViewById(R.id.cart_hoadon);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        cartItemRecyclerView.setLayoutManager(layoutManager);
         cartAdapter = new CartAdapter(DBqueries.cartItemModelList,total,true, 1);
         System.out.println(cartAdapter.getItemCount()+"cc");
         cartItemRecyclerView.setAdapter(cartAdapter);

@@ -59,14 +59,14 @@ public class CartFragment extends Fragment {
 
 //        Đổ dữ liệu
           List<CartItemModel> cartItemModelList = new ArrayList<>();
-        cartItemModelList.add(new CartItemModel( (long) 2,"1","https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg","Hoddie","100000"));
-        cartItemModelList.add(new CartItemModel( (long) 20,"2","","Hoddie1","110000"));
-        cartItemModelList.add(new CartItemModel( (long) 21,"3","","Hoddie2","150000"));
-        cartItemModelList.add(new CartItemModel( (long) 25,"4","","Hoddie3","120000"));
+        cartItemModelList.add(new CartItemModel( (long) 1,"1","https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg","Hoddie","100000"));
+        cartItemModelList.add(new CartItemModel( (long) 2,"2","","Hoddie1","110000"));
+        cartItemModelList.add(new CartItemModel( (long) 1,"3","","Hoddie2","150000"));
+        cartItemModelList.add(new CartItemModel( (long) 1,"4","","Hoddie3","120000"));
         DBqueries.cartItemModelList = cartItemModelList;
 
         for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-            DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice());
+            DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
         }
         totalAmount.setText(DBqueries.tong + "VND");
 //        cartItemModelList.add(new CartItemModel(1,"Giá (3 sản phẩm)","520.000 VND","Free","520.00 VND"," Giảm 5000 VND"))

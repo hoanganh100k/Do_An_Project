@@ -268,38 +268,40 @@ public class CartAdapter extends RecyclerView.Adapter {
 
             productQuantity.setText("Qty: " + String.valueOf(productQty));
 
+            if (status == 0) {
+                productQuantity.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Dialog qtyDialog = new Dialog(itemView.getContext());
+                        qtyDialog.setContentView(R.layout.quantity_dialog);
+                        qtyDialog.setCancelable(false);
 
-            productQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final Dialog qtyDialog = new Dialog(itemView.getContext());
-                    qtyDialog.setContentView(R.layout.quantity_dialog);
-                    qtyDialog.setCancelable(false);
+                        qtyDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-                    qtyDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        final EditText qtyNo = qtyDialog.findViewById(R.id.quantity_no);
+                        Button cancelBtn = qtyDialog.findViewById(R.id.cancel_btn);
+                        Button okBtn = qtyDialog.findViewById(R.id.ok_btn);
 
-                    final EditText qtyNo = qtyDialog.findViewById(R.id.quantity_no);
-                    Button cancelBtn = qtyDialog.findViewById(R.id.cancel_btn);
-                    Button okBtn = qtyDialog.findViewById(R.id.ok_btn);
+                        cancelBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                qtyDialog.dismiss();
+                            }
+                        });
 
-                    cancelBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            qtyDialog.dismiss();
-                        }
-                    });
+                        okBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                productQuantity.setText("Qty: " + qtyNo.getText().toString());
+                                notifyItemChanged(cartItemModelList.size() - 1);
+                                qtyDialog.dismiss();
+                            }
+                        });
+                        qtyDialog.show();
+                    }
+                });
+            }
 
-                    okBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            productQuantity.setText("Qty: " + qtyNo.getText().toString());
-                            notifyItemChanged(cartItemModelList.size() - 1);
-                            qtyDialog.dismiss();
-                        }
-                    });
-                    qtyDialog.show();
-                }
-            });
 
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
