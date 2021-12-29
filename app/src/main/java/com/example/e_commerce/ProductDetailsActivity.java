@@ -1,19 +1,27 @@
 package com.example.e_commerce;
 
+import static com.example.e_commerce.DBqueries.lists2;
+import static com.example.e_commerce.DBqueries.loadedCategoriesName;
+import static com.example.e_commerce.DBqueries.setFragmentDataSpLienQuan;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +34,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.e_commerce.ui.home.HomePageAdapter;
 import com.example.lib.Model.CartItemModel;
+import com.example.lib.Model.CommentModel;
+import com.example.lib.Model.HomePageModel;
 import com.example.lib.Model.WishlistModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,12 +56,15 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ProductDetailsActivity extends AppCompatActivity {
@@ -115,6 +129,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseUser currentUser;
     private DocumentSnapshot documentSnapshot;
+    private RecyclerView homePageRecyclerView;
+    private HomePageAdapter adapter;
+    private ListView commentList;
+    private CommentAdapter commentAdapter;
+    private List<CommentModel> listComment = new ArrayList<CommentModel>();
+    private Button nhanXetBtn;
+    private EditText nhanXetText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +147,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        lists2.clear();
         productImagesViewPager = findViewById(R.id.product_images_viewpager);
         viewpagerIndicator = findViewById(R.id.viewpager_indicator);
 
@@ -157,7 +178,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
         productTotalRatings = findViewById(R.id.total_rating_miniview);
         productAvgRating = findViewById(R.id.tv_product_rating_miniview);
         ratingsNoContainer = findViewById(R.id.ratings_number_container);
+        commentList = findViewById(R.id.listViewComment);
+        nhanXetBtn = findViewById(R.id.nhanxetbtn);
+        nhanXetText = findViewById(R.id.nhanxetText);
         initialRating = -1;
+
+        homePageRecyclerView = findViewById(R.id.testing);
+        LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
+        testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        homePageRecyclerView.setLayoutManager(testingLayoutManager);
+
 
 ////// coupan redemption dialog
         final Dialog checkCoupanPricedialog = new Dialog(ProductDetailsActivity.this);
@@ -197,6 +227,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        commentAdapter = new CommentAdapter(getBaseContext(), listComment);
+        commentList.setAdapter(commentAdapter);
 
         final List<String> productImages = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
@@ -249,6 +282,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productOnlyDescriptionBody.setText(c.getString("MOTA"));
                     String ChiTietSanPham = "Xuất xứ: " + c.getString("XUATXU") + "\n" + "Quy Cách: " + c.getString("QUYCACH") + "\n" + "Hạn sử dụng: " + c.getString("HANSUDUNG") + "\n" + "Ngày sản xuất: " + c.getString("NGAYSANXUAT") + "\n" + "Nhà cung cấp: " + c.getString("MANHACUNGCAP");
                     productDetailsViewPager.setAdapter(new ProductDetailsAdpater(getSupportFragmentManager(), productDetailsTablayout.getTabCount(), ChiTietSanPham, "", productInformationModelList));
+                    String MaLoai = c.getString("MALOAI");
+                    if (lists2.size() == 0) {
+                        loadedCategoriesName.add("HOME");
+                        lists2.add(new ArrayList<HomePageModel>());
+                        adapter = new HomePageAdapter(lists2.get(0));
+                        setFragmentDataSpLienQuan(getBaseContext(), adapter, 0, "HOME", MaLoai);
+                    } else {
+                        adapter = new HomePageAdapter(lists2.get(0));
+                        adapter.notifyDataSetChanged();
+                    }
+                    homePageRecyclerView.setAdapter(adapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -260,6 +304,112 @@ public class ProductDetailsActivity extends AppCompatActivity {
             ;
         };
         task.execute("categoryLoad");
+        AsyncTask<String, Void, String> task2 = new AsyncTask<String, Void, String>() {
+            private JSONArray c = new JSONArray();
+
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/product/nhanxet/" + productID;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+
+                        JSONArray json = new JSONArray(jsonData);
+                        c = json;
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "commentLoad";
+            }
+
+            protected void onPostExecute(String result) {
+                //Comment
+                try {
+                    for (int i = 0; i < c.length(); i++) {
+                        JSONObject b = new JSONObject(c.get(i).toString());
+                        listComment.add(new CommentModel(b.getString("TENKHACHHANG"), b.getString("NOIDUNG")));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                commentAdapter.notifyDataSetChanged();
+            }
+
+            ;
+        };
+        task2.execute("commentLoad");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String _NAME = prefs.getString("NAME", null);
+        String _MATK = prefs.getString("MATK", null);
+        nhanXetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nhanxet = nhanXetText.getText().toString();
+                if (nhanxet != "") {
+                    AsyncTask<String, Void, String> task2 = new AsyncTask<String, Void, String>() {
+                        @Override
+                        protected String doInBackground(String... params) {
+                            final Calendar c = Calendar.getInstance();
+                            int mYear = c.get(Calendar.YEAR); // current year
+                            int mMonth = c.get(Calendar.MONTH); // current month
+                            int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                            String day = mDay + "/" + (mMonth + 1) + "/" + mYear;
+                            String url = Config.IP_ADDRESS + "/api/product/nhanxet_insert";
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("MAHANGHOA", productID)
+                                    .add("SODIENTHOAI", _MATK)
+                                    .add("NGAY", day)
+                                    .add("NOIDUNG",nhanxet)
+                                    .build();
+
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(formBody)
+                                    .header("Accept-Encoding", "identity")
+                                    .build();
+
+                            try (Response response = client.newCall(request).execute()) {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected code: " + response);
+                                } else {
+                                    String jsonData = response.body().string();
+                                    System.out.println(jsonData);
+                                    JSONArray json = new JSONArray(jsonData);
+
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return "Comment";
+                        }
+
+                        protected void onPostExecute(String result) {
+                            listComment.add(new CommentModel(_NAME, nhanxet));
+                            commentAdapter.notifyDataSetChanged();
+                            nhanXetText.setText("");
+                        }
+
+                        ;
+                    };
+                    task2.execute("Comment");
+                }
+
+            }
+        });
+
         //Đây là thông tin sản phẩm
 
 

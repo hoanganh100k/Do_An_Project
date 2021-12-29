@@ -67,6 +67,8 @@ public class DBqueries {
     public static List<String> wishlist = new ArrayList<>();
     public static List<WishlistModel> wishlistModelList = new ArrayList<>();
     public static List<List<HomePageModel>> lists = new ArrayList<>();
+    public static List<List<HomePageModel>> lists2 = new ArrayList<>();
+
     public static List<String> loadedCategoriesName = new ArrayList<>();
     public static List<String> loadedCategoriesNames = new ArrayList<>();
 
@@ -83,7 +85,7 @@ public class DBqueries {
     private static OkHttpClient client = new OkHttpClient();
 
     public static void loadCategories(final Context context, final CategoryAdapter categoryAdapter) {
-        categoryModelList.add(new CategoryModel("-1", "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Trang chủ",0));
+        categoryModelList.add(new CategoryModel("-1", "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", "Trang chủ", 0));
 
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
             @Override
@@ -105,7 +107,7 @@ public class DBqueries {
                             JSONObject b = new JSONObject(json.get(i).toString());
                             String name = b.getString("TENLINHVUC");
                             String id = b.getString("MALINHVUC");
-                            categoryModelList.add(new CategoryModel(id, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", name,0));
+                            categoryModelList.add(new CategoryModel(id, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", name, 0));
                         }
 
                     }
@@ -127,21 +129,21 @@ public class DBqueries {
 
     }
 
-    public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter,String categoriesName) {
+    public static void loadCategories1(final Context context, final CategoryAdapter categoryAdapter, String categoriesName) {
         String id_Category = "-1"; //Đây là ID Của Category
-        categoryModelList1.add(new CategoryModel(id_Category, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", categoriesName,1));
+        categoryModelList1.add(new CategoryModel(id_Category, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", categoriesName, 1));
         for (CategoryModel category : categoryModelList) {
             if (category.getCategoryName().equals(categoriesName)) {
                 id_Category = category.getCategoryID();
                 break;
             }
         }
-        System.out.println(id_Category+"_ID_Category");
+        System.out.println(id_Category + "_ID_Category");
         String finalId_Category = id_Category;
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
-                String url = Config.IP_ADDRESS + "/api/category/loaihang_LinhVuc/"+ finalId_Category;
+                String url = Config.IP_ADDRESS + "/api/category/loaihang_LinhVuc/" + finalId_Category;
                 Request request = new Request.Builder()
                         .url(url)
                         .header("Accept-Encoding", "identity")
@@ -158,7 +160,7 @@ public class DBqueries {
                             JSONObject b = new JSONObject(json.get(i).toString());
                             String name = b.getString("TENLOAI");
                             String id = b.getString("MALOAI");
-                            categoryModelList1.add(new CategoryModel(id, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", name,1));
+                            categoryModelList1.add(new CategoryModel(id, "https://cdn-icons-png.flaticon.com/512/2250/2250401.png", name, 1));
                         }
 
                     }
@@ -306,6 +308,71 @@ public class DBqueries {
 
     }
 
+    public static void setFragmentDataSpLienQuan(final Context context, final HomePageAdapter adapter, final int position, String categoriesName, String maloai) {
+        //Sản Phẩm Hot
+        //Đây là hàm của category đầu tiên
+        List<WishlistModel> viewAllProduct = new ArrayList<>();
+        List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
+        AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/product/categoryMaLoai/" + maloai;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+                        JSONArray json = new JSONArray(jsonData);
+                        for (int i = 0; i < json.length(); i++) {
+                            JSONObject b = new JSONObject(json.get(i).toString());
+                            String name = b.getString("TENHANGHOA");
+                            String id = b.getString("MAHANGHOA");
+                            NumberFormat formatter = new DecimalFormat("#,###");
+                            String gia = formatter.format(Integer.parseInt(b.getString("GIA")));
+                            String img = Config.IP_IMG_ADDRESS + b.getString("IMGAGESPATH");
+                            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(
+                                    id
+                                    , img
+                                    , name
+                                    , "VNĐ"
+                                    , gia));                    // lay data cua banner ve gan vao list
+                            viewAllProduct.add(new WishlistModel(
+                                    id
+                                    , img
+                                    , name
+                                    , 1000
+                                    , ""
+                                    , 0
+                                    , gia
+                                    , "1000"
+                                    , false
+                                    , true));
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "Load_San_Pham_Hot";
+            }
+
+            protected void onPostExecute(String result) {
+                lists2.get(position).add(new HomePageModel(1, "Sản phẩm liên quan", "#FFFFFF", horizontalProductScrollModelList, viewAllProduct));
+                adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+            }
+
+            ;
+        };
+        task1.execute("Load_San_Pham_Hot");
+    }
+
     //Mỗi lần bấm vô category sẽ load lại hàm này
     public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
         String id_Category = "-1"; //Đây là ID Của Category
@@ -339,9 +406,9 @@ public class DBqueries {
             @Override
             protected String doInBackground(String... params) {
                 String url = "";
-                if(finalCategoryType != 0){
+                if (finalCategoryType != 0) {
                     url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
-                }else {
+                } else {
                     url = Config.IP_ADDRESS + "/api/product/categoryLinhvuc/" + finalId_Category;
                 }
                 Request request = new Request.Builder()
@@ -398,9 +465,9 @@ public class DBqueries {
                         @Override
                         protected String doInBackground(String... params) {
                             String url = "";
-                            if(finalCategoryType != 0){
+                            if (finalCategoryType != 0) {
                                 url = Config.IP_ADDRESS + "/api/product/category/" + finalId_Category;
-                            }else {
+                            } else {
                                 url = Config.IP_ADDRESS + "/api/product/categoryLinhvuc/" + finalId_Category;
                             }
                             Request request = new Request.Builder()
@@ -928,6 +995,7 @@ public class DBqueries {
     public static void clearData() {
         categoryModelList.clear();
         lists.clear();
+        lists2.clear();
         loadedCategoriesNames.clear();
         wishlist.clear();
         wishlistModelList.clear();
