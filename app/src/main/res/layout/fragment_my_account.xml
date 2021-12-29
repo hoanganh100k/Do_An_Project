@@ -20,9 +20,16 @@
             android:orientation="vertical" >
 
             <include layout="@layout/profile_date_layout"/>
-            <include layout="@layout/order_status_layout" />
+
+            <include
+                layout="@layout/order_status_layout"
+                android:visibility="gone" />
             <include layout="@layout/your_recent_oreders_layout"/>
-            <include layout="@layout/my_addresses_layout"/>
+            <include layout="@layout/infomation_user"/>
+
+            <include
+                layout="@layout/my_addresses_layout"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/sign_out_btn"

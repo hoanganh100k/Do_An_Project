@@ -45,7 +45,7 @@ public class MyAccountFragment extends Fragment {
     private Dialog loadingDialog;
     private ImageView orderedIndicator,packedIndicator,shippedIndicator,deliveredIndicator;
     private ProgressBar O_P_progress,P_S_progress,S_D_progress;
-
+    private TextView textName,textBirtday,textDiaChi,textChiTiet,textEmail;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class MyAccountFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        loadingDialog.show();
+//        loadingDialog.show();
 //////////loading dialog
 
         layoutContainer.getChildAt(1).setVisibility(View.GONE);
@@ -175,7 +175,19 @@ public class MyAccountFragment extends Fragment {
                 getContext().startActivity(new Intent(getContext(), MyAddressActivity.class).putExtra("MODE",MANAGE_ADDRESS));
             }
         });
+        //thông tin
+        final View root1 = inflater.inflate(R.layout.infomation_user, container, false);
+        textName = root1.findViewById(R.id.textName);
+        textBirtday = root1.findViewById(R.id.textBirtday);
+        textDiaChi = root1.findViewById(R.id.textDiaChi);
+        textChiTiet = root1.findViewById(R.id.textChiTiet);
+        textEmail = root1.findViewById(R.id.textEmail);
 
+        textName.setText("Phạm Anh");
+        textBirtday.setText("23/06/1999");
+        textDiaChi.setText("14B/33 Kp5 Biên Hòa Đồng Nai");
+        textChiTiet.setText("Khách Hàng");
+        textEmail.setText("hoanganh34k@gmail.com");
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
