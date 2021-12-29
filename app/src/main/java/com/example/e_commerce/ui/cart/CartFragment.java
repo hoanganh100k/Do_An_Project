@@ -71,11 +71,9 @@ public class CartFragment extends Fragment {
         totalAmount.setText(DBqueries.tong + "VND");
 //        cartItemModelList.add(new CartItemModel(1,"Giá (3 sản phẩm)","520.000 VND","Free","520.00 VND"," Giảm 5000 VND"))
 
-        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true, 0);
         cartItemRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
-        System.out.println(cartAdapter.getItemCount());
-
         btnContinue = view.findViewById(R.id.cart_continue_btn);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override

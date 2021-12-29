@@ -129,7 +129,7 @@ public class DeliveryActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
             }
         });
 
@@ -156,26 +156,6 @@ public class DeliveryActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         loadingDialog.dismiss();
-        if (getQTYIDs) {
-            for (int x = 0; x < cartItemModelList.size() - 1; x++) {
-                if (!successResponse) {
-                    for (final String qtyID : cartItemModelList.get(x).getQtyIDs()) {
-                        final int finalX = x;
-                        firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x).getProductID()).collection("QUANTITY").document(qtyID).delete()
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        if (qtyID.equals(cartItemModelList.get(finalX).getQtyIDs().get(cartItemModelList.get(finalX).getQtyIDs().size() - 1))) {
-                                            cartItemModelList.get(finalX).getQtyIDs().clear();
-                                        }
-                                    }
-                                });
-                    }
-                } else {
-                    cartItemModelList.get(x).getQtyIDs().clear();
-                }
-            }
-        }
     }
 
     @Override
