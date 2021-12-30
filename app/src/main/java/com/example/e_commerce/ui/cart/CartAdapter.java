@@ -2,8 +2,8 @@ package com.example.e_commerce.ui.cart;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,29 +22,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.e_commerce.Config;
 import com.example.e_commerce.DBqueries;
 import com.example.e_commerce.DeliveryActivity;
-import com.example.e_commerce.MainActivity;
-import com.example.e_commerce.ProductDetailsActivity;
 import com.example.e_commerce.R;
-import com.example.e_commerce.ui.coupon.RewardAdapter;
 import com.example.lib.Model.CartItemModel;
-import com.example.lib.Model.RewardModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CartAdapter extends RecyclerView.Adapter {
 
@@ -239,7 +232,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             removeCoupanBtn = checkCoupanPricedialog.findViewById(R.id.remove_btn);
             applyORremoveBtnContainer = checkCoupanPricedialog.findViewById(R.id.apply_or_remove_btn_container);
             footerText = checkCoupanPricedialog.findViewById(R.id.footer_text);
-
+            OkHttpClient client = new OkHttpClient();
             footerText.setVisibility(View.GONE);
             applyORremoveBtnContainer.setVisibility(View.VISIBLE);
 
@@ -306,24 +299,57 @@ public class CartAdapter extends RecyclerView.Adapter {
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DBqueries.cartItemModelList.remove(position);
-                    DBqueries.tong = 0;
-                    for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-                        DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice());
-                    }
-                    cartTotalAmount.setText(DBqueries.tong + "VND");
-                    CartFragment.cartAdapter.notifyDataSetChanged();
+                    AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                        boolean CheckStatus = false;
+                        @Override
+                        protected String doInBackground(String... params) {
+                            String url = Config.IP_ADDRESS + "/api/giohang/giohang_delete_sp";
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("SDT", DBqueries.email)
+                                    .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
+                                    .build();
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(formBody)
+                                    .header("Accept-Encoding", "identity")
+                                    .build();
+
+                            try (Response response = client.newCall(request).execute()) {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected code: " + response);
+                                } else {
+                                    String jsonData = response.body().string();
+
+                                    JSONArray json = new JSONArray(jsonData);
+                                    System.out.println(json);
+                                    CheckStatus = true;
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return "cartDeleteItime";
+                        }
+
+                        protected void onPostExecute(String result) {
+                            DBqueries.cartItemModelList.remove(position);
+
+                            DBqueries.tong = 0;
+                            for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice());
+                            }
+                            cartTotalAmount.setText(DBqueries.tong + "VND");
+                            CartFragment.cartAdapter.notifyDataSetChanged();
+                        }
+
+                        ;
+                    };
+                    task.execute("cartDeleteItime");
 
                 }
             });
 
-//                if(offersAppliedNo>0){
-//                    offersApplied.setVisibility(View.VISIBLE);
-//                    String offerDiscountedAmount=String.valueOf(Long.valueOf(cuttedPriceText)-Long.valueOf(productPriceText));
-//                    offersApplied.setText("offer applied "+offerDiscountedAmount+"VND");
-//                }else {
-//                    offersApplied.setVisibility(View.INVISIBLE);
-//                }
         }
 
 

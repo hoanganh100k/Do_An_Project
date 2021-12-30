@@ -118,12 +118,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(statusClick == false) {
+                if (statusClick == false) {
                     // Load the asset file by URL. Note the 3 slashes "file:///".
                     w.loadUrl("https://vnexpress.net/");
                     w.setVisibility(View.VISIBLE);
                     statusClick = true;
-                }else {
+                } else {
                     w.setVisibility(View.GONE);
                     statusClick = false;
                 }
@@ -271,13 +271,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             badgeIcon.setImageResource(R.drawable.shopping_cart);
             badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
 
-            if (currentUser != null) {
-                if (DBqueries.cartList.size() == 0) {
+            if (DBqueries.email != null) {
+                if (DBqueries.cartItemModelList.size() == 0) {
                     DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this), false, badgeCount, new TextView(MainActivity.this));
                 } else {
                     badgeCount.setVisibility(View.VISIBLE);
-                    if (DBqueries.cartList.size() < 99) {
-                        badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
+                    if (DBqueries.cartItemModelList.size() < 99) {
+                        badgeCount.setText("100");
                     } else {
                         badgeCount.setText("99");
                     }
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (currentUser == null) {
+                    if (DBqueries.email == null) {
                         signInDialog.show();
                     } else {
                         openCartFragment();
@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this, SearchActivity.class));
             return true;
         } else if (id == R.id.main_cart_icon) {
-            if (currentUser == null) {
+            if (fullname.getText().toString().equals("")) {
                 signInDialog.show();
             } else {
                 openCartFragment();

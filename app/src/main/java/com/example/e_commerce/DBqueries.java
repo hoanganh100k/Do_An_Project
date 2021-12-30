@@ -719,25 +719,48 @@ public class DBqueries {
     public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData, final TextView badgeCount, final TextView cartTotalAmount) {
 
         cartList.clear();
-        cartList.add("1");
+        AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/giohang/giohang_select/" + DBqueries.email;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
 
-        int index = 0;
-        if (cartList.size() >= 2) {
-            index = cartList.size() - 2;
-        }
-        System.out.println("In: " + index);
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
 
-//        if (cartList.size() == 1) {
-//            cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
-//            LinearLayout parent = (LinearLayout) cartTotalAmount.getParent().getParent();
-//            parent.setVisibility(View.VISIBLE);
-//        }
-//        if (cartList.size() == 0) {
-//            cartItemModelList.clear();
-//        }
-        CartFragment.cartAdapter.notifyDataSetChanged();
+                        JSONArray json = new JSONArray(jsonData);
+                        System.out.println(json);
+                        for (int i = 0; i < json.length(); i++) {
+                            JSONObject b = new JSONObject(json.get(i).toString());
+                            String img = Config.IP_IMG_ADDRESS + b.getString("HINHANH");
+                            cartItemModelList.add(new CartItemModel((long) Integer.parseInt(b.getString("SoLuong")), b.getString("MaHangHoa"), img, b.getString("tensp"), b.getString("gia")));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "cartLoad";
+            }
 
+            protected void onPostExecute(String result) {
+                if (cartItemModelList.size() < 99) {
+                    badgeCount.setText(cartItemModelList.size()+"");
+                } else {
+                    badgeCount.setText("99");
+                }
+            }
 
+            ;
+        };
+        task.execute("cartLoad");
     }
 
     public static void loadRatingList(final Context context) {
@@ -786,7 +809,7 @@ public class DBqueries {
         myOrderItemModelList.clear();
         MyOrderItemModel myOrderItemModel = new MyOrderItemModel(
                 "1"
-                ,""
+                , ""
                 , ""
                 , ""
                 , ""
@@ -800,7 +823,7 @@ public class DBqueries {
                 , (long) 10000
                 , (long) 10000
                 , ""
-                ,""
+                , ""
                 , ""
                 , ""
                 , ""
