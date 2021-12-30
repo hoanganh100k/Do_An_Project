@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +34,7 @@ import java.util.UUID;
 
 public class DeliveryActivity extends AppCompatActivity {
 
-    public static boolean ordered=false;
+    public static boolean ordered = false;
     public static List<CartItemModel> cartItemModelList;
     private Toolbar toolbar;
     private RecyclerView deliveryRecyclerView;
@@ -45,12 +47,18 @@ public class DeliveryActivity extends AppCompatActivity {
     private ConstraintLayout orderConfirmationLayout;
     private boolean successResponse = false;
     public static boolean fromCart, codOrderConfirmed = false, getQTYIDs = true;
-    private String name, mobileNo,paymentMethod;
+    private String name, mobileNo, paymentMethod;
     private String order_id;
     private FirebaseFirestore firebaseFirestore;
     public static CartAdapter cartAdapter;
     private TextView codBtnTitle;
     private View divider;
+    private EditText SDT;
+    private EditText Hoten;
+    private EditText GioiTinh;
+    private EditText NgaySinh;
+    private EditText DiaChi;
+    private EditText Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +70,6 @@ public class DeliveryActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         getQTYIDs = true;
 //////////loading dialog
-
         loadingDialog = new Dialog(DeliveryActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
         loadingDialog.setCancelable(false); //true
@@ -94,18 +101,34 @@ public class DeliveryActivity extends AppCompatActivity {
         totalAmount = findViewById(R.id.total_cart_amount);
         fullname = findViewById(R.id.fullname);
         fullAddress = findViewById(R.id.address);
+        SDT = findViewById(R.id.edtSDT);
+        Hoten = findViewById(R.id.edtTen);
+        GioiTinh = findViewById(R.id.edtGT);
+        Email = findViewById(R.id.edtEmail);
+        DiaChi = findViewById(R.id.edtDC);
+        NgaySinh = findViewById(R.id.edtNS);
 //        pincode = findViewById(R.id.pincode);
         continueBtn = findViewById(R.id.btnTT);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 //        deliveryRecyclerView.setLayoutManager(linearLayoutManager);
 
-
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBqueries.checkOutModel = new CheckOutModel("","","","","","");
-                startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
+                String _SDT = SDT.getText().toString();
+                String _HoTen = Hoten.getText().toString();
+                String _GioiTinh = GioiTinh.getText().toString();
+                String _Email = Email.getText().toString();
+                String _DiaChi = DiaChi.getText().toString();
+                String _NgaySinh = NgaySinh.getText().toString();
+                if (_SDT != "" && _HoTen != "" && _GioiTinh != "" && _Email != "" && _DiaChi != "" && _NgaySinh != "") {
+                    DBqueries.checkOutModel = new CheckOutModel(_SDT, _HoTen, _GioiTinh, _NgaySinh, _DiaChi, _Email);
+                    startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
+                } else {
+                    Toast.makeText(DeliveryActivity.this, "Bạn Chưa nhập đủ", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -128,6 +151,7 @@ public class DeliveryActivity extends AppCompatActivity {
         super.onStart();
 
     }
+
     @Override
     protected void onPause() {
         super.onPause();
