@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     badgeCount.setVisibility(View.VISIBLE);
                     if (DBqueries.cartItemModelList.size() < 99) {
-                        badgeCount.setText("100");
+                        badgeCount.setText(DBqueries.cartItemModelList.size()+"");
                     } else {
                         badgeCount.setText("99");
                     }

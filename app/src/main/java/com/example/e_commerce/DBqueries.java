@@ -21,6 +21,7 @@ import com.example.e_commerce.ui.wishlist.WishlistFragment;
 import com.example.lib.Model.AddressesModel;
 import com.example.lib.Model.CartItemModel;
 import com.example.lib.Model.CategoryModel;
+import com.example.lib.Model.CheckOutModel;
 import com.example.lib.Model.HomePageModel;
 import com.example.lib.Model.HorizontalProductScrollModel;
 import com.example.lib.Model.MyOrderItemModel;
@@ -71,6 +72,7 @@ public class DBqueries {
     public static List<String> loadedCategoriesName = new ArrayList<>();
     public static List<String> loadedCategoriesNames = new ArrayList<>();
 
+    public static CheckOutModel checkOutModel;
     public static List<AddressesModel> addressesModelList = new ArrayList<>();
     public static List<NotificationModel> notificationModelList = new ArrayList<>();
     public static List<String> cartList = new ArrayList<>();

@@ -1,9 +1,7 @@
 package com.example.e_commerce;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,41 +10,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.e_commerce.ui.cart.CartAdapter;
 import com.example.lib.Model.CartItemModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.example.lib.Model.CheckOutModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.paytm.pgsdk.PaytmOrder;
-import com.paytm.pgsdk.PaytmPGService;
-import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,7 +96,6 @@ public class DeliveryActivity extends AppCompatActivity {
         fullAddress = findViewById(R.id.address);
 //        pincode = findViewById(R.id.pincode);
         continueBtn = findViewById(R.id.btnTT);
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 //        deliveryRecyclerView.setLayoutManager(linearLayoutManager);
@@ -129,6 +104,7 @@ public class DeliveryActivity extends AppCompatActivity {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DBqueries.checkOutModel = new CheckOutModel("","","","","","");
                 startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
             }
         });
