@@ -1,47 +1,43 @@
 package com.example.lib.Model;
 
 public class UserModel {
-    private int UserID;
     private String Email;
-    private String UserAvatar;
+    private String GioiTinh;
     private String UserFullName;
+    private String DiaChi;
+    private String NgaySinh;
+    private String SDT;
 
-    public UserModel(int id, String email, String UserAvatar,String  userFullName) {
-        this.UserID = id;
-        this.Email = email;
-        this.UserAvatar = UserAvatar;
-        this.UserFullName = userFullName;
-    }
-
-    public int getUserID() {
-        return UserID;
+    public UserModel(String email, String gioiTinh, String userFullName, String diaChi, String ngaySinh, String SDT) {
+        Email = email;
+        GioiTinh = gioiTinh;
+        UserFullName = userFullName;
+        DiaChi = diaChi;
+        NgaySinh = ngaySinh;
+        this.SDT = SDT;
     }
 
     public String getEmail() {
         return Email;
     }
 
-    public String getUserAvatar() {
-        return UserAvatar;
+    public String getGioiTinh() {
+        return GioiTinh;
     }
 
     public String getUserFullName() {
         return UserFullName;
     }
 
-    public void setUserID(int userID) {
-        UserID = userID;
+    public String getDiaChi() {
+        return DiaChi;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public String getNgaySinh() {
+        return NgaySinh;
     }
 
-    public void setUserAvatar(String userAvatar) {
-        UserAvatar = userAvatar;
-    }
-
-    public void setUserFullName(String userFullName) {
-        UserFullName = userFullName;
+    public String getSDT() {
+        return SDT;
     }
 }

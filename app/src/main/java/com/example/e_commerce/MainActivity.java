@@ -47,6 +47,7 @@ import com.example.e_commerce.ui.order.OrderFragment;
 import com.example.e_commerce.ui.sign_out.SignOutFragment;
 import com.example.e_commerce.ui.theme.ThemeFragment;
 import com.example.e_commerce.ui.wishlist.WishlistFragment;
+import com.example.lib.Model.UserModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
@@ -55,7 +56,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -320,6 +330,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 DBqueries.fullname = _NAME;
                 DBqueries.email = _EMAIL;
                 DBqueries.profile = _MATK;
+                OkHttpClient client = new OkHttpClient();
+                AsyncTask<String, Void, String> task4 = new AsyncTask<String, Void, String>() {
+                    private JSONObject c = new JSONObject();
+
+                    @Override
+                    protected String doInBackground(String... params) {
+                        String url = Config.IP_ADDRESS + "/api/user/get/" + _MATK;
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .header("Accept-Encoding", "identity")
+                                .build();
+
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
+                            } else {
+                                String jsonData = response.body().string();
+
+                                JSONArray json = new JSONArray(jsonData);
+                                JSONObject b = new JSONObject(json.get(0).toString());
+                                c = b;
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return "ttLoad";
+                    }
+
+                    protected void onPostExecute(String result) {
+                        try {
+                            DBqueries.userInfomation = new UserModel(c.getString("EMAIL"),c.getString("GIOITINH"),c.getString("TENKHACHHANG"),c.getString("DIACHI"),c.getString("NGAYSINH"),c.getString("SODIENTHOAI"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    ;
+                };
+                task4.execute("ttLoad");
                 if (email != null) {
                     fullname.setText(_NAME);
                     email.setText(_EMAIL);

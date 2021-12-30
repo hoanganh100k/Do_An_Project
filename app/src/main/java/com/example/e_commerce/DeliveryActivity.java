@@ -107,6 +107,14 @@ public class DeliveryActivity extends AppCompatActivity {
         Email = findViewById(R.id.edtEmail);
         DiaChi = findViewById(R.id.edtDC);
         NgaySinh = findViewById(R.id.edtNS);
+
+        SDT.setText(DBqueries.userInfomation.getSDT());
+        Hoten.setText(DBqueries.userInfomation.getUserFullName());
+        GioiTinh.setText(DBqueries.userInfomation.getGioiTinh());
+        Email.setText(DBqueries.userInfomation.getEmail());
+        DiaChi.setText(DBqueries.userInfomation.getDiaChi());
+        NgaySinh.setText(DBqueries.userInfomation.getNgaySinh());
+
 //        pincode = findViewById(R.id.pincode);
         continueBtn = findViewById(R.id.btnTT);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -122,6 +130,7 @@ public class DeliveryActivity extends AppCompatActivity {
                 String _Email = Email.getText().toString();
                 String _DiaChi = DiaChi.getText().toString();
                 String _NgaySinh = NgaySinh.getText().toString();
+
                 if (_SDT != "" && _HoTen != "" && _GioiTinh != "" && _Email != "" && _DiaChi != "" && _NgaySinh != "") {
                     DBqueries.checkOutModel = new CheckOutModel(_SDT, _HoTen, _GioiTinh, _NgaySinh, _DiaChi, _Email);
                     startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));

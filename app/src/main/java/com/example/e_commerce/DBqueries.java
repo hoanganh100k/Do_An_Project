@@ -27,6 +27,7 @@ import com.example.lib.Model.HorizontalProductScrollModel;
 import com.example.lib.Model.MyOrderItemModel;
 import com.example.lib.Model.RewardModel;
 import com.example.lib.Model.SliderModel;
+import com.example.lib.Model.UserModel;
 import com.example.lib.Model.WishlistModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -73,6 +74,7 @@ public class DBqueries {
     public static List<String> loadedCategoriesNames = new ArrayList<>();
 
     public static CheckOutModel checkOutModel;
+    public static UserModel userInfomation;
     public static List<AddressesModel> addressesModelList = new ArrayList<>();
     public static List<NotificationModel> notificationModelList = new ArrayList<>();
     public static List<String> cartList = new ArrayList<>();

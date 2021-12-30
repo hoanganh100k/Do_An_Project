@@ -182,11 +182,10 @@ public class MyAccountFragment extends Fragment {
         textChiTiet = root.findViewById(R.id.textChiTiet);
         textEmail = root.findViewById(R.id.textEmail);
 
-        textName.setText(DBqueries.fullname);
-        textBirtday.setText("23/06/1999");
-        textDiaChi.setText("14B/33 Kp5 Biên Hòa Đồng Nai");
-        textChiTiet.setText("Khách Hàng");
-        textEmail.setText("hoanganh34k@gmail.com");
+        textName.setText(DBqueries.userInfomation.getUserFullName());
+        textBirtday.setText(DBqueries.userInfomation.getNgaySinh());
+        textDiaChi.setText(DBqueries.userInfomation.getDiaChi());
+        textEmail.setText(DBqueries.userInfomation.getEmail());
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

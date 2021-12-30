@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="8dp">
 
     <TextView
@@ -12,22 +12,33 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="21dp"
-        android:layout_marginBottom="16dp"
         android:text="hoanganh34k@gmail.com"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView39TT"
-        app:layout_constraintTop_toBottomOf="@+id/textChiTietTT"
+        app:layout_constraintTop_toBottomOf="@+id/textChiTietGT"
         tools:text="null" />
 
     <TextView
-        android:id="@+id/textChiTietTT"
+        android:id="@+id/textEmailSDT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="300dp"
+        android:text="hoanganh34k@gmail.com"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textView39TT2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="null" />
+
+    <TextView
+        android:id="@+id/textChiTietGT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:text="Khách Hàng"
+        android:text="Nam"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView35TT"
@@ -53,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="19dp"
-        android:text="Chi tiết::"
+        android:text="Giới tính:"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,13 +76,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="68dp"
-        android:layout_marginBottom="16dp"
         android:text="Email:"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView34TT" />
+
+    <TextView
+        android:id="@+id/textView39TT2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Số điện Thoại:"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView39TT" />
 
     <TextView
         android:id="@+id/textView5TT"
