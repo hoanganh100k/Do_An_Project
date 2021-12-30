@@ -1,114 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".UpdateInfoFragment">
+    tools:context=".DeliveryActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_photo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="0dp"
-        android:src="@mipmap/profile_placeholder"
-        android:elevation="3dp"
-        app:civ_border_color="@color/red"
-        app:civ_border_width="5dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.Ecommerce.AppBarOverlay"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/change_pic_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@android:color/transparent"
-        android:padding="4dp"
-        android:stateListAnimator="@null"
-        android:textColor="@color/blue"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/profile_photo"
-        app:layout_constraintStart_toStartOf="@+id/profile_photo"
-        app:layout_constraintTop_toBottomOf="@+id/profile_photo"
-        android:text="Thay đổi ảnh" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.Ecommerce.PopupOverlay">
 
-    <Button
-        android:id="@+id/remove_pic_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="@android:color/transparent"
-        android:padding="4dp"
-        android:stateListAnimator="@null"
-        android:text="Xóa"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/change_pic_btn"
-        app:layout_constraintStart_toStartOf="@+id/change_pic_btn"
-        app:layout_constraintTop_toBottomOf="@+id/change_pic_btn" />
+        </androidx.appcompat.widget.Toolbar>
 
-    <EditText
-        android:id="@+id/name_et"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="0dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:ems="10"
-        android:textColorHint="@color/colorPrimary"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/email_et"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remove_pic_btn" />
-
-    <EditText
-        android:id="@+id/email_et"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="64dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:ems="10"
-        android:foregroundTint="@color/colorPrimary"
-        android:inputType="textEmailAddress"
-        android:text="abc@gmail.com"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/update_info_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/update_info_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
-        android:text="Cập nhật"
-        android:textAllCaps="false"
-        android:background="@drawable/slider_background"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/colorAccent"
-        android:textSize="16sp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="địa chỉ"
+                app:srcCompat="@drawable/ic_menu_account" />
+
+            <EditText
+                android:id="@+id/edtSDT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="phone"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Số điện thoại"  />
+
+            <EditText
+                android:id="@+id/edtTen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:lines="2"
+                android:gravity="start"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Họ tên"  />
+
+            <EditText
+                android:id="@+id/edtGT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Giới tính"/>
+
+            <EditText
+                android:id="@+id/edtNS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start"
+                android:inputType="date"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Ngày sinh"/>
+
+            <EditText
+                android:id="@+id/edtDC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:lines="3"
+                android:isScrollContainer="true"
+                android:gravity="start"
+                android:inputType="text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Địa chỉ"/>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
+
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorPrimary"
+                android:hint="Email"/>
+
+            <Button
+                android:id="@+id/btnTT"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                android:text="Update"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

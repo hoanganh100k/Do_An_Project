@@ -42,7 +42,11 @@
 
             <include layout="@layout/thong_tin" />
 
-            <include layout="@layout/cart_hoa_don" />
+            <include
+                layout="@layout/cart_hoa_don"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="IncludeLayoutParam" />
 
             <include layout="@layout/tong_tien" />
 

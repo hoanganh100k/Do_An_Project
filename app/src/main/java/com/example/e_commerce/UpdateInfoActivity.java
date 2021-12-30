@@ -15,6 +15,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
     private UpdateInfoFragment updateInfoFragment;
     private PasswordFragment passwordFragment;
     private String name,email,photo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
         name=getIntent().getStringExtra("Name");
         email=getIntent().getStringExtra("Email");
         photo=getIntent().getStringExtra("Photo");
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

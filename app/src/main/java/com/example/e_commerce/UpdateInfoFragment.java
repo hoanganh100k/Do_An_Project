@@ -1,18 +1,8 @@
 package com.example.e_commerce;
 
 
-import android.Manifest;
-import android.app.Dialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.ImageViewTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.example.lib.Model.UserModel;
 
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -52,346 +33,85 @@ public class UpdateInfoFragment extends Fragment {
     public UpdateInfoFragment() {
         // Required empty public constructor
     }
-    private String pattern="[a-zA-Z0-9._-]+@[a-z]+.[a-z]+" ,namee,emaill,photoo;
-    private EditText email,name,password;
-    private CircleImageView photo;
-    private Button changePhotoBtn,removePhotoBtn,updateUserInfoBtn,doneBtn;
-    private Dialog loadingDialog,passwordDialog;
-    private Uri uri;
-    private boolean updatePhoto=false;
+
+    private EditText SDT;
+    private EditText Hoten;
+    private EditText GioiTinh;
+    private EditText NgaySinh;
+    private EditText DiaChi;
+    private EditText Email;
+    private Button btnUpdate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_update_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_info, container, false);
+        SDT = view.findViewById(R.id.edtSDT);
+        Hoten = view.findViewById(R.id.edtTen);
+        GioiTinh = view.findViewById(R.id.edtGT);
+        Email = view.findViewById(R.id.edtEmail);
+        DiaChi = view.findViewById(R.id.edtDC);
+        NgaySinh = view.findViewById(R.id.edtNS);
+        btnUpdate = view.findViewById(R.id.btnTT);
 
-        photo=view.findViewById(R.id.profile_photo);
-        name=view.findViewById(R.id.name_et);
-        email=view.findViewById(R.id.email_et);
-        changePhotoBtn=view.findViewById(R.id.change_pic_btn);
-        removePhotoBtn=view.findViewById(R.id.remove_pic_btn);
-        updateUserInfoBtn=view.findViewById(R.id.update_info_button);
-
-        //////////loading dialog
-
-        loadingDialog = new Dialog(getContext());
-        loadingDialog.setContentView(R.layout.loading_progress_dialog);
-        loadingDialog.setCancelable(false);
-        loadingDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
-        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        //////////loading dialog
-
-        //////////password dialog
-
-        passwordDialog = new Dialog(getContext());
-        passwordDialog.setContentView(R.layout.password_confirmation_dialog);
-        passwordDialog.setCancelable(true);
-        passwordDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.slider_background));
-        passwordDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        password=passwordDialog.findViewById(R.id.enter_password);
-        doneBtn=passwordDialog.findViewById(R.id.done_btn);
-
-        //////////password dialog
-
-        namee=getArguments().getString("Name");
-        emaill=getArguments().getString("Email");
-        photoo=getArguments().getString("Photo");
-
-        Glide.with(getContext()).load(photoo).into(photo);
-        name.setText(namee);
-        email.setText(emaill);
-
-        changePhotoBtn.setOnClickListener(new View.OnClickListener() {
+        SDT.setText(DBqueries.userInfomation.getSDT());
+        Hoten.setText(DBqueries.userInfomation.getUserFullName());
+        GioiTinh.setText(DBqueries.userInfomation.getGioiTinh());
+        Email.setText(DBqueries.userInfomation.getEmail());
+        DiaChi.setText(DBqueries.userInfomation.getDiaChi());
+        NgaySinh.setText(DBqueries.userInfomation.getNgaySinh());
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Build.VERSION.PREVIEW_SDK_INT >= Build.VERSION_CODES.M) {  // đổi sdk cho phù hợp
-                    if (getContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                OkHttpClient client = new OkHttpClient();
+                AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        String url = Config.IP_ADDRESS + "/api/user/update";
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("MATK",DBqueries.email)
+                                .add("HINHANH","null")
+                                .add("HOTEN",Hoten.getText().toString())
+                                .add("SODIENTHOAI",SDT.getText().toString())
+                                .add("GIOITINH",GioiTinh.getText().toString())
+                                .add("NGAYSINH",NgaySinh.getText().toString())
+                                .add("DIACHI",DiaChi.getText().toString())
+                                .add("MAIL",Email.getText().toString())
+                                .build();
 
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                        galleryIntent.setType("image/*");
-                        startActivityForResult(galleryIntent, 1);
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .patch(formBody)
+                                .header("Accept-Encoding", "identity")
+                                .build();
 
-                    }else {
-                        getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},2);
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
+                            } else {
+                                String jsonData = response.body().string();
+                                System.out.println(jsonData);
+                                JSONArray json = new JSONArray(jsonData);
+                                DBqueries.userInfomation = new UserModel(Email.getText().toString(),GioiTinh.getText().toString(),Hoten.getText().toString(),DiaChi.getText().toString(),NgaySinh.getText().toString(),SDT.getText().toString());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return "UpdateAcount";
                     }
-                }else {
-                    Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                    galleryIntent.setType("image/*");
-                    startActivityForResult(galleryIntent, 1);
-                }
-            }
-        });
 
-        removePhotoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uri=null;
-                updatePhoto=true;
-                Glide.with(getContext()).load(R.mipmap.profile_placeholder).into(photo);
-            }
-        });
+                    protected void onPostExecute(String result) {
+                        Toast.makeText(getActivity(), "Sửa thành công!", Toast.LENGTH_SHORT).show();
+                    }
 
-        email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                checkInputs();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-
-        updateUserInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                checkEmail();
+                    ;
+                };
+                task.execute("UpdateAcount");
             }
         });
         return view;
-
-
-    }
-
-    private void checkInputs() {
-        if(!TextUtils.isEmpty(email.getText())){
-            if(!TextUtils.isEmpty(name.getText())){
-                updateUserInfoBtn.setEnabled(true);
-                updateUserInfoBtn.setTextColor(Color.rgb(255,255,255));
-            }else{
-                updateUserInfoBtn.setEnabled(false);
-                updateUserInfoBtn.setTextColor(Color.argb(50,255,255,255));
-            }
-        }else{
-            updateUserInfoBtn.setEnabled(false);
-            updateUserInfoBtn.setTextColor(Color.argb(50,255,255,255));
-        }
-    }
-
-    private void checkEmail() {
-        if(email.getText().toString().matches(pattern)){
-            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if(email.getText().toString().toLowerCase().trim().equals(emaill.toLowerCase().trim())){  ///same email
-                loadingDialog.show();
-                updatePic(user);
-            }
-            else {  //update email
-                passwordDialog.show();
-                doneBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        String userPass=password.getText().toString();
-                        passwordDialog.dismiss();
-                        loadingDialog.show();
-
-                        AuthCredential credential= EmailAuthProvider.getCredential(emaill,userPass);
-                        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    user.updateEmail(email.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
-
-                                                /// update pic
-                                                updatePic(user);
-                                                /// update pic
-                                            }else {
-                                                loadingDialog.dismiss();
-                                                String error=task.getException().getMessage();
-                                                Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                }else {
-                                    loadingDialog.dismiss();
-                                    String error=task.getException().getMessage();
-                                    Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }else {
-            email.setError("Invalid Email!");
-        }
-    }
-
-    private void updatePic(final FirebaseUser user) {
-        if(updatePhoto){
-            final StorageReference storageReference=FirebaseStorage.getInstance().getReference().child("profile/"+user.getUid()+".jpg");
-
-            if(uri != null){
-
-                Glide.with(getContext()).asBitmap().load(uri).centerCrop().into(new ImageViewTarget<Bitmap>(photo) {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        resource.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-
-                        UploadTask uploadTask = storageReference.putBytes(data);
-                        uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Uri> task) {
-                                            if(task.isSuccessful()){
-                                                uri=task.getResult();
-                                                DBqueries.profile=task.getResult().toString();
-                                                Glide.with(getContext()).load(DBqueries.profile).into(photo);
-
-                                                Map<String,Object> userdata= new HashMap<>();
-                                                userdata.put("fullname",name.getText().toString());
-                                                userdata.put("email",email.getText().toString());
-                                                userdata.put("profile",DBqueries.profile);
-
-                                                updateFields(user,userdata);
-
-                                            }else {
-                                                DBqueries.profile="";
-                                                loadingDialog.dismiss();
-                                                String error=task.getException().getMessage();
-                                                Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-
-                                }else {
-                                    loadingDialog.dismiss();
-                                    String error=task.getException().getMessage();
-                                    Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-
-
-                        return;
-                    }
-
-                    @Override
-                    protected void setResource(@Nullable Bitmap resource) {
-                        photo.setImageResource(R.mipmap.profile_placeholder);
-                    }
-                });
-
-            }
-            else {///remove pic
-                storageReference.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            DBqueries.profile="";
-
-                            Map<String,Object> userdata= new HashMap<>();
-                            userdata.put("fullname",name.getText().toString());
-                            userdata.put("email",email.getText().toString());
-                            userdata.put("profile","");
-
-                            updateFields(user,userdata);
-                        }else {
-                            loadingDialog.dismiss();
-                            String error=task.getException().getMessage();
-                            Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }else {
-            Map<String,Object> userdata= new HashMap<>();
-            userdata.put("fullname",name.getText().toString());
-            userdata.put("email",email.getText().toString());
-            updateFields(user,userdata);
-        }
-    }
-
-    private void updateFields(FirebaseUser user, final Map<String, Object> userdata){
-        FirebaseFirestore.getInstance().collection("USERS").document(user.getUid())
-                .update(userdata).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    if(userdata.size() >1){
-                        DBqueries.email=email.getText().toString().trim();
-                        DBqueries.fullname=name.getText().toString().trim();
-                    }else {
-                        DBqueries.fullname=name.getText().toString().trim();
-                        DBqueries.email=email.getText().toString();
-                    }
-                    getActivity().finish();
-                    Toast.makeText(getContext(), "Thay đổi thành công !", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getContext(), "Successfully updated!",Toast.LENGTH_SHORT).show();
-                }else {
-                    String error=task.getException().getMessage();
-                    Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                }
-                loadingDialog.dismiss();
-            }
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1){
-            if(resultCode == getActivity().RESULT_OK){
-                if(data != null){
-                    uri = data.getData();
-                    updatePhoto=true;
-                    Glide.with(getContext()).load(uri).into(photo);
-                }
-                else {
-                    Toast.makeText(getContext(),"Không tìm thấy ảnh!",Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if(requestCode == 2){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-                galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, 1);
-            }else {
-                Toast.makeText(getContext(),"Yêu cầu không được thực hiện",Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
