@@ -176,14 +176,13 @@ public class MyAccountFragment extends Fragment {
             }
         });
         //thông tin
-        final View root1 = inflater.inflate(R.layout.infomation_user, container, false);
-        textName = root1.findViewById(R.id.textName);
-        textBirtday = root1.findViewById(R.id.textBirtday);
-        textDiaChi = root1.findViewById(R.id.textDiaChi);
-        textChiTiet = root1.findViewById(R.id.textChiTiet);
-        textEmail = root1.findViewById(R.id.textEmail);
+        textName = root.findViewById(R.id.textName);
+        textBirtday = root.findViewById(R.id.textBirtday);
+        textDiaChi = root.findViewById(R.id.textDiaChi);
+        textChiTiet = root.findViewById(R.id.textChiTiet);
+        textEmail = root.findViewById(R.id.textEmail);
 
-        textName.setText("Phạm Anh");
+        textName.setText(DBqueries.fullname);
         textBirtday.setText("23/06/1999");
         textDiaChi.setText("14B/33 Kp5 Biên Hòa Đồng Nai");
         textChiTiet.setText("Khách Hàng");

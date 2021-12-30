@@ -136,7 +136,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private List<CommentModel> listComment = new ArrayList<CommentModel>();
     private Button nhanXetBtn;
     private EditText nhanXetText;
-
+    private String imageUrl = "";
+    private String GIA = "";
+    private String TEN = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,6 +269,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             protected void onPostExecute(String result) {
                 try {
                     String img = Config.IP_IMG_ADDRESS + c.getString("IMGAGESPATH");
+                    imageUrl = c.getString("IMGAGESPATH");
                     productImages.add(img);
 
 
@@ -278,6 +281,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productTotalRatings.setText("(" + 5000 + ") Đánh giá");
                     NumberFormat formatter = new DecimalFormat("#,###");
                     String gia = formatter.format(Integer.parseInt(c.getString("GIA")));
+                    GIA = c.getString("GIA");
+                    TEN = c.getString("TENHANGHOA");
                     productPrice.setText(gia + "VND");
                     productOnlyDescriptionBody.setText(c.getString("MOTA"));
                     String ChiTietSanPham = "Xuất xứ: " + c.getString("XUATXU") + "\n" + "Quy Cách: " + c.getString("QUYCACH") + "\n" + "Hạn sử dụng: " + c.getString("HANSUDUNG") + "\n" + "Ngày sản xuất: " + c.getString("NGAYSANXUAT") + "\n" + "Nhà cung cấp: " + c.getString("MANHACUNGCAP");
@@ -409,7 +414,56 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             }
         });
+        //thêm giỏ hàng
+        addToCartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AsyncTask<String, Void, String> task3 = new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        String url = Config.IP_ADDRESS + "/api/giohang/giohang_insert";
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("MAHANGHOA", productID)
+                                .add("SDT", _MATK)
+                                .add("TENHANGHOA", TEN)
+                                .add("GIA", GIA)
+                                .add("SOLUONG", "1")
+                                .add("HINHANH", imageUrl)
+                                .build();
 
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .post(formBody)
+                                .header("Accept-Encoding", "identity")
+                                .build();
+
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
+                            } else {
+                                String jsonData = response.body().string();
+                                System.out.println(jsonData);
+                                JSONArray json = new JSONArray(jsonData);
+                                System.out.println(jsonData+"12314");
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        return "Cartinsert";
+                    }
+
+                    protected void onPostExecute(String result) {
+                        Toast.makeText(ProductDetailsActivity.this,"Thêm thành công",Toast.LENGTH_SHORT).show();
+                    }
+
+                    ;
+                };
+                task3.execute("Cartinsert");
+            }
+        });
         //Đây là thông tin sản phẩm
 
 

@@ -2,27 +2,35 @@ package com.example.e_commerce.ui.cart;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.e_commerce.Config;
 import com.example.e_commerce.DBqueries;
 import com.example.e_commerce.DeliveryActivity;
 import com.example.e_commerce.R;
 import com.example.lib.Model.CartItemModel;
-import com.example.lib.Model.RewardModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class CartFragment extends Fragment {
@@ -58,22 +66,63 @@ public class CartFragment extends Fragment {
         cartItemRecyclerView.setLayoutManager(layoutManager);
 
 //        Đổ dữ liệu
-          List<CartItemModel> cartItemModelList = new ArrayList<>();
-        cartItemModelList.add(new CartItemModel( (long) 1,"1","https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg","Hoddie","100000"));
-        cartItemModelList.add(new CartItemModel( (long) 2,"2","","Hoddie1","110000"));
-        cartItemModelList.add(new CartItemModel( (long) 1,"3","","Hoddie2","150000"));
-        cartItemModelList.add(new CartItemModel( (long) 1,"4","","Hoddie3","120000"));
+        List<CartItemModel> cartItemModelList = new ArrayList<>();
         DBqueries.cartItemModelList = cartItemModelList;
 
-        for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-            DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
-        }
-        totalAmount.setText(DBqueries.tong + "VND");
-//        cartItemModelList.add(new CartItemModel(1,"Giá (3 sản phẩm)","520.000 VND","Free","520.00 VND"," Giảm 5000 VND"))
+
 
         cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true, 0);
         cartItemRecyclerView.setAdapter(cartAdapter);
-        cartAdapter.notifyDataSetChanged();
+
+
+        OkHttpClient client = new OkHttpClient();
+
+        AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/giohang/giohang_select/" + DBqueries.email;
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+
+                        JSONArray json = new JSONArray(jsonData);
+                        System.out.println(json);
+                        for (int i = 0;i<json.length();i++){
+                            JSONObject b = new JSONObject(json.get(i).toString());
+                            String img = Config.IP_IMG_ADDRESS + b.getString("HINHANH");
+                            cartItemModelList.add(new CartItemModel( (long) Integer.parseInt(b.getString("SoLuong")),b.getString("MaHangHoa"),img,b.getString("tensp"),b.getString("gia")));
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "cartLoad";
+            }
+
+            protected void onPostExecute(String result) {
+                for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                    DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
+                }
+                totalAmount.setText(DBqueries.tong + "VND");
+                cartAdapter.notifyDataSetChanged();
+            }
+
+            ;
+        };
+        task.execute("cartLoad");
+
+
+
+
         btnContinue = view.findViewById(R.id.cart_continue_btn);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
