@@ -22,6 +22,8 @@
             android:id="@+id/chuyenkhoan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:buttonTint="#000000"
+            android:checked="true"
             android:text="Chuyển khoản"
             android:textStyle="bold" />
 
@@ -29,6 +31,8 @@
             android:id="@+id/noidia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:buttonTint="#000000"
+            android:checked="false"
             android:text="Thanh toán nội địa"
             android:textStyle="bold" />
 
@@ -36,13 +40,18 @@
             android:id="@+id/quocte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:buttonTint="#000000"
+            android:checked="false"
             android:text="Thanh toán quốc tế"
             android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/khinhanhang"
+            style="@android:style/Widget.Holo.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:buttonTint="#000000"
+            android:checked="false"
             android:text="Thanh toán khi nhận hàng"
             android:textStyle="bold" />
     </RadioGroup>

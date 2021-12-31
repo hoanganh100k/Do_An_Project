@@ -48,6 +48,12 @@
                 android:layout_height="wrap_content"
                 tools:ignore="IncludeLayoutParam" />
 
+            <EditText
+                android:id="@+id/ghichuText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Nhập ghi chú cho đơn hàng"
+                android:textAlignment="center" />
             <include layout="@layout/tong_tien" />
 
             <include layout="@layout/phuong_thuc_thanh_toan" />

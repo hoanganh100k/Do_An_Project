@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".HistoryHoaDon"
+            android:exported="false" />
+        <activity
             android:name=".DatHang"
             android:exported="false" />
         <activity

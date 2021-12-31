@@ -363,7 +363,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     protected void onPostExecute(String result) {
                         try {
-                            DBqueries.userInfomation = new UserModel(c.getString("EMAIL"),c.getString("GIOITINH"),c.getString("TENKHACHHANG"),c.getString("DIACHI"),c.getString("NGAYSINH"),c.getString("SODIENTHOAI"));
+                            String ngaySinhTemp = c.getString("NGAYSINH");
+                            String[] temp = ngaySinhTemp.split("-");
+                            String ngaySinhResult = temp[2] + "/" + temp[1] + "/" + temp[0];
+                            System.out.println(ngaySinhResult);
+
+                            DBqueries.userInfomation = new UserModel(c.getString("EMAIL"),c.getString("GIOITINH"),c.getString("TENKHACHHANG"),c.getString("DIACHI"),ngaySinhResult,c.getString("SODIENTHOAI"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

@@ -75,6 +75,7 @@ public class DBqueries {
 
     public static CheckOutModel checkOutModel;
     public static UserModel userInfomation;
+    public static String urlThanhToan = "";
     public static List<AddressesModel> addressesModelList = new ArrayList<>();
     public static List<NotificationModel> notificationModelList = new ArrayList<>();
     public static List<String> cartList = new ArrayList<>();
