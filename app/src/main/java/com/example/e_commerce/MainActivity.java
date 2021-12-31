@@ -482,7 +482,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_order:
                 //to do with order
-                openOrderFragment();
+                Intent intent = new Intent(MainActivity.this,HistoryHoaDon.class);
+                startActivity(intent);
                 break;
             case R.id.nav_coupon:
                 //to do with coupon
