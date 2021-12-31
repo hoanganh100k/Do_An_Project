@@ -102,23 +102,22 @@ public class HoaDonActivity extends AppCompatActivity {
                         int mMonth = c.get(Calendar.MONTH); // current month
                         int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
                         String dateNow = mDay + "/" + (mMonth + 1) + "/" + mYear;
-                        String url = Config.IP_ADDRESS + "/api/hoadon/HoaDon_insert";
+                        String url = Config.IP_ADDRESS + "/api/hoadon/hoadon_insert";
+
                         RequestBody formBody = new FormBody.Builder()
-                                .add("MATAIKHOAN", DBqueries.email)
+                                .add("MATAIKHOAN", DBqueries.email+"")
                                 .add("MAHOADON", tickTime+"")
-                                .add("SODIENTHOAI", SDT.getText().toString())
-                                .add("TENKHACHHANG", Hoten.getText().toString())
-                                .add("GIOITINH", GioiTinh.getText().toString())
-                                .add("NGAYSINH", NgaySinh.getText().toString())
-                                .add("DIACHI", DiaChi.getText().toString())
-                                .add("EMAIL", Email.getText().toString())
-                                .add("NGAYTAO", dateNow)
+                                .add("SODIENTHOAI", SDT.getText().toString()+"")
+                                .add("TENKHACHHANG", Hoten.getText().toString()+"")
+                                .add("GIOITINH", GioiTinh.getText().toString()+"")
+                                .add("NGAYSINH", NgaySinh.getText().toString()+"")
+                                .add("DIACHI", DiaChi.getText().toString()+"")
+                                .add("EMAIL", Email.getText().toString()+"")
+                                .add("NGAYTAO", dateNow+"")
                                 .add("TONGTIEN", DBqueries.tong+"")
-                                .add("THANHTIEN", ThanhTien.getText().toString())
+                                .add("THANHTIEN", ThanhTien.getText().toString()+"")
                                 .add("THANHTOAN", phuongThucThanhToan)
-                                .add("GHICHU", ghiChu.getText().toString())
-                                .add("TRANGTHAI", "Chờ")
-                                .add("TRANGTHAITT", "Chưa thanh toán")
+                                .add("GHICHU", ghiChu.getText().toString()+"null")
                                 .add("MATHANHTOAN", tickTime+"")
                                 .build();
 
@@ -126,13 +125,16 @@ public class HoaDonActivity extends AppCompatActivity {
                                 .url(url)
                                 .post(formBody)
                                 .header("Accept-Encoding", "identity")
+                                .header("accept-charset","utf8")
                                 .build();
 
                         try (Response response = client.newCall(request).execute()) {
                             if (!response.isSuccessful()) {
+                                System.out.println(formBody);
                                 throw new IOException("Unexpected code: " + response);
                             } else {
                                 String jsonData = response.body().string();
+
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
