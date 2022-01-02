@@ -42,6 +42,7 @@ public class HoaDonActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private String phuongThucThanhToan = "ck";
     private EditText ghiChu;
+    private String ThanhTienValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,8 @@ public class HoaDonActivity extends AppCompatActivity {
         radioButtonDefaut.setChecked(true);
 
         TongTien.setText(DBqueries.tong + "VND");
-        ThanhTien.setText(DBqueries.tong + "VND");
+        ThanhTienValue = DBqueries.tong+"";
+        ThanhTien.setText( ThanhTienValue+ "VND");
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -112,10 +114,10 @@ public class HoaDonActivity extends AppCompatActivity {
                                 .add("GIOITINH", GioiTinh.getText().toString()+"")
                                 .add("NGAYSINH", NgaySinh.getText().toString()+"")
                                 .add("DIACHI", DiaChi.getText().toString()+"")
-                                .add("EMAIL", Email.getText().toString()+"")
+                                .add("EMAIL", Email.getText().toString().trim()+"")
                                 .add("NGAYTAO", dateNow+"")
                                 .add("TONGTIEN", DBqueries.tong+"")
-                                .add("THANHTIEN", ThanhTien.getText().toString()+"")
+                                .add("THANHTIEN", ThanhTienValue)
                                 .add("THANHTOAN", phuongThucThanhToan)
                                 .add("GHICHU", ghiChu.getText().toString()+"null")
                                 .add("MATHANHTOAN", tickTime+"")

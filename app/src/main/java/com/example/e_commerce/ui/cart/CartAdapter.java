@@ -286,7 +286,56 @@ public class CartAdapter extends RecyclerView.Adapter {
                             @Override
                             public void onClick(View view) {
                                 productQuantity.setText("Qty: " + qtyNo.getText().toString());
-                                notifyItemChanged(cartItemModelList.size() - 1);
+                                DBqueries.cartItemModelList.get(position).setCartQty(Long.parseLong(qtyNo.getText().toString()));
+                                System.out.println(DBqueries.cartItemModelList.get(position).getProductQuantity());
+
+
+                                AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                                    boolean CheckStatus = false;
+                                    @Override
+                                    protected String doInBackground(String... params) {
+                                        String url = Config.IP_ADDRESS + "/api/giohang/giohang_edit";
+                                        RequestBody formBody = new FormBody.Builder()
+                                                .add("SDT", DBqueries.email)
+                                                .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
+                                                .add("SOLUONG",  qtyNo.getText().toString())
+                                                .build();
+                                        Request request = new Request.Builder()
+                                                .url(url)
+                                                .patch(formBody)
+                                                .header("Accept-Encoding", "identity")
+                                                .build();
+
+                                        try (Response response = client.newCall(request).execute()) {
+                                            if (!response.isSuccessful()) {
+                                                throw new IOException("Unexpected code: " + response);
+                                            } else {
+                                                String jsonData = response.body().string();
+
+                                                JSONArray json = new JSONArray(jsonData);
+                                                System.out.println(json);
+                                                CheckStatus = true;
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return "cartUpdate";
+                                    }
+
+                                    protected void onPostExecute(String result) {
+                                        DBqueries.tong = 0;
+                                        for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                                            DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                        }
+                                        cartTotalAmount.setText(DBqueries.tong + "VND");
+                                        CartFragment.cartAdapter.notifyDataSetChanged();
+                                    }
+
+                                    ;
+                                };
+                                task.execute("cartUpdate");
                                 qtyDialog.dismiss();
                             }
                         });
@@ -337,7 +386,7 @@ public class CartAdapter extends RecyclerView.Adapter {
 
                             DBqueries.tong = 0;
                             for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice());
+                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
                             }
                             cartTotalAmount.setText(DBqueries.tong + "VND");
                             CartFragment.cartAdapter.notifyDataSetChanged();

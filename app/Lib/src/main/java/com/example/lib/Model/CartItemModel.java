@@ -62,7 +62,10 @@ public class CartItemModel {
         this.productTitle = productTitle;
         this.productPrice = productPrice;
     }
-
+    public boolean setCartQty(Long soluong){
+        this.productQuantity = soluong;
+        return true;
+    }
     public boolean isCOD() {
         return COD;
     }
