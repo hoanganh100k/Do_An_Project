@@ -79,7 +79,9 @@ public class SignUpFragment extends Fragment {
     private String emailPattern ="[0-9]+";
     public static boolean disableCloseBtn = false;
     DatePickerDialog datePickerDialog;
-
+    private EditText gioiTinh;
+    private EditText emailText;
+    private EditText diaChiText;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -124,7 +126,9 @@ public class SignUpFragment extends Fragment {
        editDate = view.findViewById(R.id.editTextDate2);
        closeBtn = view.findViewById(R.id.sign_in_close_btn);
        signUpBtn = view.findViewById(R.id.sign_up_btn);
-
+       gioiTinh = view.findViewById(R.id.sign_up_gioi_tinh);
+       emailText = view.findViewById(R.id.sign_up_email_txt);
+       diaChiText = view.findViewById(R.id.sign_up_dia_chi);
        progressBar = view.findViewById(R.id.sign_up_progressbar);
        firebaseAuth = FirebaseAuth.getInstance();
        firebaseFirestore = FirebaseFirestore.getInstance();
@@ -309,9 +313,10 @@ public class SignUpFragment extends Fragment {
                                 .add("MATK", email.getText().toString())
                                 .add("MATKHAU", password.getText().toString())
                                 .add("HOTEN",fullName.getText().toString())
-                                .add("GIOITINH", "null")
-                                .add("DIACHI", "null")
-                                .add("EMAIL", "null")
+                                .add("GIOITINH", gioiTinh.getText().toString())
+                                .add("DIACHI", diaChiText.getText().toString())
+                                .add("EMAIL", emailText.getText().toString())
+                                .add("NGAYSINH", editDate.getText().toString())
                                 .build();
 
                         Request request = new Request.Builder()
