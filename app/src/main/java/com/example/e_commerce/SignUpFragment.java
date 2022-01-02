@@ -1,6 +1,5 @@
 package com.example.e_commerce;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -306,7 +305,7 @@ public class SignUpFragment extends Fragment {
                     @Override
                     protected String doInBackground(String... params) {
                         String url = Config.IP_ADDRESS + "/api/user/register";
-                        @SuppressLint("StaticFieldLeak") RequestBody formBody = new FormBody.Builder()
+                        RequestBody formBody = new FormBody.Builder()
                                 .add("MATK", email.getText().toString())
                                 .add("MATKHAU", password.getText().toString())
                                 .add("HOTEN",fullName.getText().toString())
@@ -350,6 +349,7 @@ public class SignUpFragment extends Fragment {
 //                            signUpBtn.setTextColor(Color.rgb(255,255,255));
 //                            Toast.makeText(getActivity(), "Số điện thoại đã tồn tại!", Toast.LENGTH_SHORT).show();
 //                        }
+                        setFramegment(new SignInFragment());
                         Toast.makeText(getActivity(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
 
                     }

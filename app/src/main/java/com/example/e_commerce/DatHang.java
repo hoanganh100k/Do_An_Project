@@ -83,5 +83,11 @@ public class DatHang extends AppCompatActivity {
         task.execute("getLinkThanhToan");
         System.out.println();
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(DatHang.this,MainActivity.class);
+        startActivity(intent);
+    }
+
 
 }

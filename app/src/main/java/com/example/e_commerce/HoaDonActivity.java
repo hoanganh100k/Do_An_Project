@@ -78,8 +78,13 @@ public class HoaDonActivity extends AppCompatActivity {
         radioButtonDefaut.setChecked(true);
 
         TongTien.setText(DBqueries.tong + "VND");
-        ThanhTienValue = DBqueries.tong+"";
-        ThanhTien.setText( ThanhTienValue+ "VND");
+        if(DBqueries.tong >= 20000000){
+            ThanhTienValue = DBqueries.tong+""; //Thuật toán giảm giá
+            ThanhTien.setText( ThanhTienValue+ "VND" + "  -20%");
+        }else {
+            ThanhTienValue = DBqueries.tong+"";
+            ThanhTien.setText( ThanhTienValue+ "VND");
+        }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

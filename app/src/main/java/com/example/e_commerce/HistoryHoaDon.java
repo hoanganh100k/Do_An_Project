@@ -22,7 +22,7 @@ import okhttp3.Response;
 
 public class HistoryHoaDon extends AppCompatActivity {
     private ListView listHoaDon;
-    private HistoryHoaDonAdapter adapter;
+    public static HistoryHoaDonAdapter adapter;
     private List<HoaDon> listHoaDonData = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

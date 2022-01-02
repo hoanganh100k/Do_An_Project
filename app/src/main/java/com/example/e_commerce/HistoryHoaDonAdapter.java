@@ -1,17 +1,26 @@
 package com.example.e_commerce;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lib.Model.HoaDon;
 
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class HistoryHoaDonAdapter extends BaseAdapter {
     private List<HoaDon> listData;
@@ -53,49 +62,111 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaTT)).setText(historyHoaDonn.getMaTT());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).setText(historyHoaDonn.getThanhTien());
         Button btn = (Button) viewHistoRyHoaDon.findViewById(R.id.btnThanhToanLai);
-        if (!((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaTT)).getText().toString().equals("Chưa thanh toán")) {
-            btn.setVisibility(View.GONE);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String[] phuongthuc = {"Chuyển Khoản", "Nội Địa", "Quốc tế", "Khi nhận hàng"};
+        String maHD = ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).getText().toString();
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] lyDoDuy = {"Chờ giao hàng lâu", "Tìm thấy sản phẩm khác tốt hơn", "Không muốn mua tiếp", "Khác"};
 
-                    builder = new AlertDialog.Builder(viewHistoRyHoaDon.getContext());
-                    builder.setTitle("Chọn phương thức thanh toán");
-                    builder.setItems(phuongthuc, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // the user clicked on colors[which]
-                            String maPhuongThuc = "";
-                            switch (phuongthuc[which]) {
-                                case "Chuyển Khoản":
-                                    maPhuongThuc = "ck";
-                                    break;
-                                case "Nội Địa":
-                                    maPhuongThuc = "nd";
-                                    break;
-                                case "Quốc tế":
-                                    maPhuongThuc = "qt";
-                                    break;
-                                case "Khi nhận hàng":
-                                    maPhuongThuc = "off";
-                                    break;
-                            }
-                            if (maPhuongThuc != "") {
-                                Intent intent = new Intent(viewHistoRyHoaDon.getContext(),DatHang.class);
-                                intent.putExtra("maHoaDon",((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).getText().toString());
-                                intent.putExtra("phuongThuc",maPhuongThuc);
-                                DBqueries.tong = Integer.parseInt(((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).getText().toString());
-                                viewHistoRyHoaDon.getContext().startActivity(intent);
-                            }
+                builder = new AlertDialog.Builder(viewHistoRyHoaDon.getContext());
+                builder.setTitle("Chọn lý do hủy");
+                builder.setItems(lyDoDuy, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        String lyDoHuyStr = "";
+                        switch (lyDoDuy[which]) {
+                            case "Chờ giao hàng lâu":
+                                lyDoHuyStr = "Chờ giao hàng lâu";
+                                deleteHoadon(lyDoHuyStr, maHD, "null", i);
+                                break;
+                            case "Tìm thấy sản phẩm khác tốt hơn":
+                                lyDoHuyStr = "Tìm thấy sản phẩm khác tốt hơn";
+                                deleteHoadon(lyDoHuyStr, maHD, "null", i);
+                                break;
+                            case "Không muốn mua tiếp":
+                                lyDoHuyStr = "Không muốn mua tiếp";
+                                deleteHoadon(lyDoHuyStr, maHD, "null", i);
+                                break;
+                            case "Khác":
+                                lyDoHuyStr = "Khác";
+                                LyDoKhacText(viewHistoRyHoaDon.getContext(), i, maHD, lyDoHuyStr);
+//                                deleteHoadon(lyDoHuyStr,maHD,"null",i);
+                                break;
                         }
-                    });
-                    builder.show();
-                }
-            });
-        } else {
-            btn.setVisibility(View.VISIBLE);
-        }
+                    }
+                });
+                builder.show();
+            }
+        });
         return viewHistoRyHoaDon;
+    }
+
+    public void deleteHoadon(String str, String MaHoaDon, String other, int postion) {
+        OkHttpClient client = new OkHttpClient();
+        AsyncTask<String, Void, String> task2 = new AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/hoadon/hoadon_Huy";
+                RequestBody formBody = new FormBody.Builder()
+                        .add("MAHOADON", MaHoaDon)
+                        .add("MATAIKHOAN", DBqueries.email)
+                        .add("LYDOHUY", str)
+                        .add("LYDOKHAC", other)
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(formBody)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+                        System.out.println(jsonData);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "DeleteHoaDon";
+            }
+
+            protected void onPostExecute(String result) {
+                listData.remove(postion);
+                HistoryHoaDon.adapter.notifyDataSetChanged();
+            }
+
+            ;
+        };
+        task2.execute("DeleteHoaDon");
+    }
+
+    public void LyDoKhacText(Context context, int postion, String MaHoaDon, String lyDo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialogTheme);
+        builder.setTitle("Nhập lý do khác");
+
+// Set up the input
+        final EditText input = new EditText(context);
+        input.setHint("Nhập lý do khác");
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteHoadon(lyDo, MaHoaDon, input.getText().toString(), postion);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }
