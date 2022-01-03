@@ -76,12 +76,13 @@ public class SignUpFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private boolean STATUS_REGISTER = false;
     private FirebaseAuth firebaseAuth;
-    private String emailPattern ="[0-9]+";
+    private String emailPattern = "[0-9]+";
     public static boolean disableCloseBtn = false;
     DatePickerDialog datePickerDialog;
     private EditText gioiTinh;
     private EditText emailText;
     private EditText diaChiText;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -114,33 +115,34 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
-       alreadyHaveAnAccount = view.findViewById(R.id.tv_already_have_an_account);
+        alreadyHaveAnAccount = view.findViewById(R.id.tv_already_have_an_account);
 
-       parentFrameLayout = getActivity().findViewById(R.id.register_framelayout);
+        parentFrameLayout = getActivity().findViewById(R.id.register_framelayout);
 
-       email = view.findViewById(R.id.sign_up_email);
-       fullName = view.findViewById(R.id.sign_up_fullname);
-       password = view.findViewById(R.id.sign_up_password);
-       confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
-       successSignUp = view.findViewById(R.id.tv_success);
-       editDate = view.findViewById(R.id.editTextDate2);
-       closeBtn = view.findViewById(R.id.sign_in_close_btn);
-       signUpBtn = view.findViewById(R.id.sign_up_btn);
-       gioiTinh = view.findViewById(R.id.sign_up_gioi_tinh);
-       emailText = view.findViewById(R.id.sign_up_email_txt);
-       diaChiText = view.findViewById(R.id.sign_up_dia_chi);
-       progressBar = view.findViewById(R.id.sign_up_progressbar);
-       firebaseAuth = FirebaseAuth.getInstance();
-       firebaseFirestore = FirebaseFirestore.getInstance();
-
-        if(disableCloseBtn){
+        email = view.findViewById(R.id.sign_up_email);
+        fullName = view.findViewById(R.id.sign_up_fullname);
+        password = view.findViewById(R.id.sign_up_password);
+        confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
+        successSignUp = view.findViewById(R.id.tv_success);
+        editDate = view.findViewById(R.id.editTextDate2);
+        closeBtn = view.findViewById(R.id.sign_in_close_btn);
+        signUpBtn = view.findViewById(R.id.sign_up_btn);
+        gioiTinh = view.findViewById(R.id.sign_up_gioi_tinh);
+        emailText = view.findViewById(R.id.sign_up_email_txt);
+        diaChiText = view.findViewById(R.id.sign_up_dia_chi);
+        progressBar = view.findViewById(R.id.sign_up_progressbar);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        TextWatcher textWatcher = new DateFormatTextWatcher(editDate);
+        editDate.addTextChangedListener(textWatcher);
+        if (disableCloseBtn) {
             closeBtn.setVisibility(View.GONE);
 
-        }else {
+        } else {
             closeBtn.setVisibility(View.VISIBLE);
         }
 
-       return  view;
+        return view;
     }
 
     @Override
@@ -156,7 +158,7 @@ public class SignUpFragment extends Fragment {
                 int mMonth = c.get(Calendar.MONTH); // current month
                 int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
                 // date picker dialog
-                datePickerDialog = new DatePickerDialog(getContext(),R.style.my_dialog_theme,
+                datePickerDialog = new DatePickerDialog(getContext(), R.style.my_dialog_theme,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -250,8 +252,6 @@ public class SignUpFragment extends Fragment {
         });
 
 
-
-
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view1) {
@@ -261,49 +261,50 @@ public class SignUpFragment extends Fragment {
     }
 
 
-
     private void setFramegment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_from_left,R.anim.slideout_from_right);
-        fragmentTransaction.replace(parentFrameLayout.getId(),fragment);
+        fragmentTransaction.setCustomAnimations(R.anim.slide_from_left, R.anim.slideout_from_right);
+        fragmentTransaction.replace(parentFrameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
-    private void checkInputs(){
-        if(!TextUtils.isEmpty(email.getText())){
-            if(!TextUtils.isEmpty(fullName.getText())){
-                if(!TextUtils.isEmpty(password.getText()) && password.length() >= 8){
-                    if (!TextUtils.isEmpty(confirmPassword.getText())){
+
+    private void checkInputs() {
+        if (!TextUtils.isEmpty(email.getText())) {
+            if (!TextUtils.isEmpty(fullName.getText())) {
+                if (!TextUtils.isEmpty(password.getText()) && password.length() >= 8) {
+                    if (!TextUtils.isEmpty(confirmPassword.getText())) {
                         signUpBtn.setEnabled(true);
-                        signUpBtn.setTextColor(Color.rgb(255,255,255));
-                    }else{
+                        signUpBtn.setTextColor(Color.rgb(255, 255, 255));
+                    } else {
                         signUpBtn.setEnabled(false);
-                        signUpBtn.setTextColor(Color.argb(50,255,255,255));
+                        signUpBtn.setTextColor(Color.argb(50, 255, 255, 255));
                     }
-                }else {
+                } else {
                     signUpBtn.setEnabled(false);
-                    signUpBtn.setTextColor(Color.argb(50,255,255,255));
+                    signUpBtn.setTextColor(Color.argb(50, 255, 255, 255));
                 }
-            }else {
+            } else {
                 signUpBtn.setEnabled(false);
-                signUpBtn.setTextColor(Color.argb(50,255,255,255));
+                signUpBtn.setTextColor(Color.argb(50, 255, 255, 255));
             }
-        }else {
+        } else {
             signUpBtn.setEnabled(false);
-            signUpBtn.setTextColor(Color.argb(50,255,255,255));
+            signUpBtn.setTextColor(Color.argb(50, 255, 255, 255));
         }
     }
-    private void checkEmailAndPassword(){
+
+    private void checkEmailAndPassword() {
 
         Drawable customErrorIcon = getResources().getDrawable(R.mipmap.custom_error_icon);
-        customErrorIcon.setBounds(0,0,customErrorIcon.getIntrinsicWidth(),customErrorIcon.getIntrinsicHeight());
+        customErrorIcon.setBounds(0, 0, customErrorIcon.getIntrinsicWidth(), customErrorIcon.getIntrinsicHeight());
 
 
-        if (email.getText().toString().matches(emailPattern)){
-            if (password.getText().toString().equals(confirmPassword.getText().toString())){
+        if (email.getText().toString().matches(emailPattern)) {
+            if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 
                 progressBar.setVisibility(View.VISIBLE);
                 signUpBtn.setEnabled(false);
-                signUpBtn.setTextColor(Color.argb(50,255,255,255));
+                signUpBtn.setTextColor(Color.argb(50, 255, 255, 255));
                 OkHttpClient client = new OkHttpClient();
                 AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
                     @Override
@@ -312,7 +313,7 @@ public class SignUpFragment extends Fragment {
                         RequestBody formBody = new FormBody.Builder()
                                 .add("MATK", email.getText().toString())
                                 .add("MATKHAU", password.getText().toString())
-                                .add("HOTEN",fullName.getText().toString())
+                                .add("HOTEN", fullName.getText().toString())
                                 .add("GIOITINH", gioiTinh.getText().toString())
                                 .add("DIACHI", diaChiText.getText().toString())
                                 .add("EMAIL", emailText.getText().toString())
@@ -332,7 +333,7 @@ public class SignUpFragment extends Fragment {
                                 String jsonData = response.body().string();
 //                                JSONObject json = new JSONObject(jsonData);
 //                                System.out.println(json );
-                                if (jsonData.length() == 4){
+                                if (jsonData.length() == 4) {
                                     STATUS_REGISTER = true;
                                     System.out.println(jsonData);
 
@@ -364,17 +365,16 @@ public class SignUpFragment extends Fragment {
                 task.execute("Register");
 
 
-
-            }else {
-                confirmPassword.setError("Mật khẩu không khớp!",customErrorIcon);
+            } else {
+                confirmPassword.setError("Mật khẩu không khớp!", customErrorIcon);
             }
-        }else {
-            email.setError("Email không hợp lệ!",customErrorIcon);
+        } else {
+            email.setError("Email không hợp lệ!", customErrorIcon);
         }
     }
 
-    private void mainIntent(){
-        Intent mainIntent = new Intent(getActivity(),MainActivity.class);
+    private void mainIntent() {
+        Intent mainIntent = new Intent(getActivity(), MainActivity.class);
         startActivity(mainIntent);
         getActivity().finish();
     }

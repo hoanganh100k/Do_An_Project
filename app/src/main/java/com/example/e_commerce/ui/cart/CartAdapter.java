@@ -32,6 +32,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -213,8 +215,8 @@ public class CartAdapter extends RecyclerView.Adapter {
             checkCoupanPricedialog.setContentView(R.layout.coupan_redeem_dialog);
             checkCoupanPricedialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-
-            productPrice.setText(productPriceText + "VND");
+            NumberFormat formatter = new DecimalFormat("#,###");
+            productPrice.setText(formatter.format(Integer.parseInt(productPriceText))+"VNĐ");
             productPrice.setTextColor(Color.parseColor("#000000"));
 
             ////// coupan redemption dialog
@@ -329,7 +331,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                                         for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
                                             DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
                                         }
-                                        cartTotalAmount.setText(DBqueries.tong + "VND");
+                                        NumberFormat formatter = new DecimalFormat("#,###");
+                                        cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
                                         CartFragment.cartAdapter.notifyDataSetChanged();
                                     }
 
@@ -388,7 +391,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                             for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
                                 DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
                             }
-                            cartTotalAmount.setText(DBqueries.tong + "VND");
+                            NumberFormat formatter = new DecimalFormat("#,###");
+                            cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
                             CartFragment.cartAdapter.notifyDataSetChanged();
                         }
 

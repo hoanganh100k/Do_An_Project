@@ -21,6 +21,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.lib.Model.WishlistModel;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
@@ -137,7 +139,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
                 rating.setText(averageRate);
                 totalRatings.setText("(" + totalRatingsNo + ")ratings");
-                productPrice.setText(price + "VND");
+                NumberFormat formatter = new DecimalFormat("#,###");
+                productPrice.setText(formatter.format(Integer.parseInt(price))+" VNĐ");
                 cuttedPrice.setText(cuttedPriceValue + "VND");
 
                 if (payMethod) {

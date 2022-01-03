@@ -46,4 +46,8 @@ public class HoaDon {
     public String getThanhTien() {
         return ThanhTien;
     }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
 }

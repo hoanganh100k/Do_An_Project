@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.example.lib.Model.HoaDon;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -25,7 +27,7 @@ import okhttp3.Response;
 public class HistoryHoaDonAdapter extends BaseAdapter {
     private List<HoaDon> listData;
     private AlertDialog.Builder builder;
-
+    private Button btnTemp;
     public HistoryHoaDonAdapter(List<HoaDon> listDataCS) {
         this.listData = listDataCS;
     }
@@ -54,14 +56,19 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
 
         //Bind sữ liệu phần tử vào View
         HoaDon historyHoaDonn = listData.get(i);
+        NumberFormat formatter = new DecimalFormat("#,###");
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).setText(historyHoaDonn.getMaHD());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTenHD)).setText(historyHoaDonn.getTenKH());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textGioiTinhHD)).setText(historyHoaDonn.getGioiTinh());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTTHD)).setText(historyHoaDonn.getTrangThai());
-        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTONGTIENHD)).setText(historyHoaDonn.getTongTien());
+        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTONGTIENHD)).setText(formatter.format(Integer.parseInt(historyHoaDonn.getTongTien()))+"VNĐ");
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaTT)).setText(historyHoaDonn.getMaTT());
-        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).setText(historyHoaDonn.getThanhTien());
+        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).setText(formatter.format(Integer.parseInt(historyHoaDonn.getThanhTien()))+"VNĐ");
         Button btn = (Button) viewHistoRyHoaDon.findViewById(R.id.btnThanhToanLai);
+        if(((TextView) viewHistoRyHoaDon.findViewById(R.id.textTTHD)).getText().toString().equals("Đã hủy")){
+            btn.setVisibility(View.GONE);
+        }
+        btnTemp = btn;
         String maHD = ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).getText().toString();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +142,8 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
             }
 
             protected void onPostExecute(String result) {
-                listData.remove(postion);
+                listData.get(postion).setTrangThai("Đã hủy");
+                btnTemp.setVisibility(View.GONE);
                 HistoryHoaDon.adapter.notifyDataSetChanged();
             }
 

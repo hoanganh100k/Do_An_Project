@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.e_commerce.ui.cart.CartAdapter;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Calendar;
 
 import okhttp3.FormBody;
@@ -76,14 +78,15 @@ public class HoaDonActivity extends AppCompatActivity {
         ghiChu = findViewById(R.id.ghichuText);
         radioButtonDefaut = findViewById(R.id.chuyenkhoan);
         radioButtonDefaut.setChecked(true);
-
-        TongTien.setText(DBqueries.tong + "VND");
+        NumberFormat formatter = new DecimalFormat("#,###");
+        TongTien.setText(formatter.format(DBqueries.tong)+"VNĐ");
         if(DBqueries.tong >= 20000000){
-            ThanhTienValue = DBqueries.tong+""; //Thuật toán giảm giá
-            ThanhTien.setText( ThanhTienValue+ "VND" + "  -20%");
+            double a =  DBqueries.tong*((1.0 - 20.0/100.0)/1.0);
+            ThanhTienValue = ((int) a)+""; //Thuật toán giảm giá
+            ThanhTien.setText( formatter.format(Integer.parseInt(ThanhTienValue))+"VNĐ" + "  (-20%)");
         }else {
             ThanhTienValue = DBqueries.tong+"";
-            ThanhTien.setText( ThanhTienValue+ "VND");
+            ThanhTien.setText( formatter.format(Integer.parseInt(ThanhTienValue))+"VNĐ");
         }
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
@@ -160,6 +163,7 @@ public class HoaDonActivity extends AppCompatActivity {
                         Intent intent = new Intent(HoaDonActivity.this, com.example.e_commerce.DatHang.class);
                         intent.putExtra("phuongThuc",phuongThucThanhToan);
                         intent.putExtra("maHoaDon",tickTime+"");
+                        intent.putExtra("thanhTien",ThanhTienValue+"");
                         startActivity(intent);
                     }
 

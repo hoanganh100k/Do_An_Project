@@ -139,6 +139,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private String imageUrl = "";
     private String GIA = "";
     private String TEN = "";
+    private TextView tonHang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +184,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         commentList = findViewById(R.id.listViewComment);
         nhanXetBtn = findViewById(R.id.nhanxetbtn);
         nhanXetText = findViewById(R.id.nhanxetText);
+        tonHang = findViewById(R.id.text_ton_hang);
         initialRating = -1;
 
         homePageRecyclerView = findViewById(R.id.testing);
@@ -275,7 +277,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     ProductImagesAdapter productImagesAdapter = new ProductImagesAdapter(productImages);
                     productImagesViewPager.setAdapter(productImagesAdapter); //hinhanhchitietsanppham
-
+                    String _tonHang = c.getString("TINHTRANG");
+                    if (!_tonHang.equals("0")){
+                        tonHang.setText("Hàng hiện có: " + _tonHang);
+                        tonHang.setTextColor(Color.parseColor("#56FF33"));
+                    }else {
+                        tonHang.setText("Hàng hiện có: Hết Hàng");
+                        tonHang.setTextColor(Color.parseColor("#FF0000"));
+                    }
                     productTitle.setText(c.getString("TENHANGHOA"));     //tensanpham
                     productAvgRating.setText("5");  //danhgia
                     productTotalRatings.setText("(" + 5000 + ") Đánh giá");
@@ -287,6 +296,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productOnlyDescriptionBody.setText(c.getString("MOTA"));
                     String ChiTietSanPham = "Xuất xứ: " + c.getString("XUATXU") + "\n" + "Quy Cách: " + c.getString("QUYCACH") + "\n" + "Hạn sử dụng: " + c.getString("HANSUDUNG") + "\n" + "Ngày sản xuất: " + c.getString("NGAYSANXUAT") + "\n" + "Nhà cung cấp: " + c.getString("MANHACUNGCAP");
                     productDetailsViewPager.setAdapter(new ProductDetailsAdpater(getSupportFragmentManager(), productDetailsTablayout.getTabCount(), ChiTietSanPham, "", productInformationModelList));
+
                     String MaLoai = c.getString("MALOAI");
                     if (lists2.size() == 0) {
                         loadedCategoriesName.add("HOME");

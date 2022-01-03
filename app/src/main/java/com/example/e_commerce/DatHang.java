@@ -28,14 +28,14 @@ public class DatHang extends AppCompatActivity {
         web = findViewById(R.id.webViewThanhToan);
         Intent intent = getIntent();
         OkHttpClient client = new OkHttpClient();
-
+        System.out.println(intent.getStringExtra("thanhTien"));
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
             String urlThanhToan = "";
             @Override
             protected String doInBackground(String... params) {
                 String url = Config.IP_ADDRESS + "/api/hoadon/thanhToanHoaDon";
                 RequestBody formBody = new FormBody.Builder()
-                        .add("THANHTIEN",DBqueries.tong+"")
+                        .add("THANHTIEN",intent.getStringExtra("thanhTien"))
                         .add("MATHANHTOAN", intent.getStringExtra("maHoaDon"))
                         .add("PHUONGTHUC", intent.getStringExtra("phuongThuc"))
                         .build();

@@ -25,6 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +114,8 @@ public class CartFragment extends Fragment {
                 for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
                     DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
                 }
-                totalAmount.setText(DBqueries.tong + "VND");
+                NumberFormat formatter = new DecimalFormat("#,###");
+                totalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
                 cartAdapter.notifyDataSetChanged();
             }
 
