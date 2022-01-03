@@ -67,6 +67,9 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
         Button btn = (Button) viewHistoRyHoaDon.findViewById(R.id.btnThanhToanLai);
         if(((TextView) viewHistoRyHoaDon.findViewById(R.id.textTTHD)).getText().toString().equals("Đã hủy")){
             btn.setVisibility(View.GONE);
+        }else {
+            btn.setVisibility(View.VISIBLE);
+
         }
         btnTemp = btn;
         String maHD = ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).getText().toString();
