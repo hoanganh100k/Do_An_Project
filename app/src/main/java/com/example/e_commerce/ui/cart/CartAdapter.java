@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,7 +56,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     private Button applyCoupanBtn, removeCoupanBtn;
     private Long productPriceValue;
     private int statusPos = -1;
-
+    private TextView soLuong;
     /////coupan dialog
 
     private List<CartItemModel> cartItemModelList;
@@ -183,7 +184,7 @@ public class CartAdapter extends RecyclerView.Adapter {
         private LinearLayout deleteBtn, coupanRedemptionLayout;
         private TextView productTitle, freeCoupans, productPrice, cuttedPrice, offersApplied, coupansApplied, productQuantity, coupanRedemptionBody;
         private Button reedemBtn;
-
+        private TextView soLuong;
 
         public cartItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -197,6 +198,9 @@ public class CartAdapter extends RecyclerView.Adapter {
 //            coupansApplied=itemView.findViewById(R.id.product_title);
             productQuantity = itemView.findViewById(R.id.product_quantity);
             deleteBtn = itemView.findViewById(R.id.remove_item_btn);
+            soLuong = itemView.findViewById(R.id.textSoluong);
+            OkHttpClient client = new OkHttpClient();
+
 //            coupanRedemptionLayout=itemView.findViewById(R.id.coupan_redemption_layout);
 //            reedemBtn=itemView.findViewById(R.id.coupan_redemption_btn);
 //            coupanRedemptionBody=itemView.findViewById(R.id.tv_coupan_redemption);
@@ -260,7 +264,38 @@ public class CartAdapter extends RecyclerView.Adapter {
 
 
             ////// coupan redemption dialog
+            AsyncTask<String, Void, String> task2 = new AsyncTask<String, Void, String>() {
+                private JSONArray c = new JSONArray();
+                private String d = "";
+                @Override
+                protected String doInBackground(String... params) {
+                    String url = Config.IP_ADDRESS + "/api/product/gettinhtrang/" + productID;
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .header("Accept-Encoding", "identity")
+                            .build();
 
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected code: " + response);
+                        } else {
+                            String jsonData = response.body().string();
+                            d = jsonData;
+                            System.out.println(jsonData);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return "ProductQty";
+                }
+
+                protected void onPostExecute(String result) {
+                    soLuong.setText(d);
+                }
+
+                ;
+            };
+            task2.execute("ProductQty");
             productQuantity.setText("Qty: " + String.valueOf(productQty));
 
             if (status == 0) {
@@ -287,58 +322,61 @@ public class CartAdapter extends RecyclerView.Adapter {
                         okBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                productQuantity.setText("Qty: " + qtyNo.getText().toString());
-                                DBqueries.cartItemModelList.get(position).setCartQty(Long.parseLong(qtyNo.getText().toString()));
-                                System.out.println(DBqueries.cartItemModelList.get(position).getProductQuantity());
+                                if(Integer.parseInt(qtyNo.getText().toString())<=Integer.parseInt(soLuong.getText().toString())){
+                                    productQuantity.setText("Qty: " + qtyNo.getText().toString());
+                                    DBqueries.cartItemModelList.get(position).setCartQty(Long.parseLong(qtyNo.getText().toString()));
+                                    System.out.println(DBqueries.cartItemModelList.get(position).getProductQuantity());
+                                    AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                                        boolean CheckStatus = false;
+                                        @Override
+                                        protected String doInBackground(String... params) {
+                                            String url = Config.IP_ADDRESS + "/api/giohang/giohang_edit";
+                                            RequestBody formBody = new FormBody.Builder()
+                                                    .add("SDT", DBqueries.email)
+                                                    .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
+                                                    .add("SOLUONG",  qtyNo.getText().toString())
+                                                    .build();
+                                            Request request = new Request.Builder()
+                                                    .url(url)
+                                                    .patch(formBody)
+                                                    .header("Accept-Encoding", "identity")
+                                                    .build();
 
+                                            try (Response response = client.newCall(request).execute()) {
+                                                if (!response.isSuccessful()) {
+                                                    throw new IOException("Unexpected code: " + response);
+                                                } else {
+                                                    String jsonData = response.body().string();
 
-                                AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
-                                    boolean CheckStatus = false;
-                                    @Override
-                                    protected String doInBackground(String... params) {
-                                        String url = Config.IP_ADDRESS + "/api/giohang/giohang_edit";
-                                        RequestBody formBody = new FormBody.Builder()
-                                                .add("SDT", DBqueries.email)
-                                                .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
-                                                .add("SOLUONG",  qtyNo.getText().toString())
-                                                .build();
-                                        Request request = new Request.Builder()
-                                                .url(url)
-                                                .patch(formBody)
-                                                .header("Accept-Encoding", "identity")
-                                                .build();
-
-                                        try (Response response = client.newCall(request).execute()) {
-                                            if (!response.isSuccessful()) {
-                                                throw new IOException("Unexpected code: " + response);
-                                            } else {
-                                                String jsonData = response.body().string();
-
-                                                JSONArray json = new JSONArray(jsonData);
-                                                System.out.println(json);
-                                                CheckStatus = true;
+                                                    JSONArray json = new JSONArray(jsonData);
+                                                    System.out.println(json);
+                                                    CheckStatus = true;
+                                                }
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                            return "cartUpdate";
                                         }
-                                        return "cartUpdate";
-                                    }
 
-                                    protected void onPostExecute(String result) {
-                                        DBqueries.tong = 0;
-                                        for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-                                            DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                        protected void onPostExecute(String result) {
+                                            DBqueries.tong = 0;
+                                            for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                            }
+                                            NumberFormat formatter = new DecimalFormat("#,###");
+                                            cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
+                                            CartFragment.cartAdapter.notifyDataSetChanged();
                                         }
-                                        NumberFormat formatter = new DecimalFormat("#,###");
-                                        cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
-                                        CartFragment.cartAdapter.notifyDataSetChanged();
-                                    }
 
-                                    ;
-                                };
-                                task.execute("cartUpdate");
+                                        ;
+                                    };
+                                    task.execute("cartUpdate");
+                                }else {
+                                    Toast.makeText(itemView.getContext(), "Không thành công số lượng hàng có sẵn không đủ!", Toast.LENGTH_SHORT).show();
+                                }
+
                                 qtyDialog.dismiss();
                             }
                         });
