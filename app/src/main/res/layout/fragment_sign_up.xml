@@ -111,7 +111,7 @@
                 android:layout_marginEnd="8dp"
                 android:backgroundTint="#70ffffff"
                 android:ems="10"
-                android:hint="Nhập giới tính"
+                android:hint="Nhấp vào đây để chọn giới tính"
                 android:inputType="text"
                 android:minHeight="48dp"
                 android:textColor="@color/colorAccent"

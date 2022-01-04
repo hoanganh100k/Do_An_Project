@@ -1,6 +1,8 @@
 package com.example.e_commerce;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -114,7 +116,34 @@ public class DeliveryActivity extends AppCompatActivity {
         Email.setText(DBqueries.userInfomation.getEmail());
         DiaChi.setText(DBqueries.userInfomation.getDiaChi());
         NgaySinh.setText(DBqueries.userInfomation.getNgaySinh());
+        GioiTinh.setShowSoftInputOnFocus(false);
+        GioiTinh.setKeyListener(null);
 
+        GioiTinh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] GioiTinhStr = {"Nam","Nữ"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                builder.setTitle("Chọn Giới tính");
+                builder.setItems(GioiTinhStr, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        switch (GioiTinhStr[which]) {
+                            case "Nam":
+                                GioiTinh.setText("Nam");
+                                break;
+                            case "Nữ":
+                                GioiTinh.setText("Nữ");
+                                break;
+
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
 //        pincode = findViewById(R.id.pincode);
         continueBtn = findViewById(R.id.btnTT);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

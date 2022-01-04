@@ -1,6 +1,8 @@
 package com.example.e_commerce;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -141,7 +143,35 @@ public class SignUpFragment extends Fragment {
         } else {
             closeBtn.setVisibility(View.VISIBLE);
         }
+//        gioiTinh.setEnabled(false);
+        gioiTinh.setShowSoftInputOnFocus(false);
+        gioiTinh.setKeyListener(null);
 
+        gioiTinh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] GioiTinh = {"Nam","Nữ"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Chọn Giới tính");
+                builder.setItems(GioiTinh, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        switch (GioiTinh[which]) {
+                            case "Nam":
+                                gioiTinh.setText("Nam");
+                                break;
+                            case "Nữ":
+                                gioiTinh.setText("Nữ");
+                                break;
+
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
         return view;
     }
 
@@ -300,6 +330,7 @@ public class SignUpFragment extends Fragment {
 
         String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
         String regEmail = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        System.out.println(gioiTinh.getText().toString());
         if (email.getText().toString().matches(reg) && emailText.getText().toString().matches(regEmail)) {
             if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 
