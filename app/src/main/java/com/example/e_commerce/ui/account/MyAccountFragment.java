@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.e_commerce.Config;
 import com.example.e_commerce.DBqueries;
 import com.example.e_commerce.MyAddressActivity;
 import com.example.e_commerce.R;
@@ -28,7 +30,16 @@ import com.example.lib.Model.MyOrderItemModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MyAccountFragment extends Fragment {
 
@@ -176,6 +187,7 @@ public class MyAccountFragment extends Fragment {
             }
         });
         //thông tin
+<<<<<<< Updated upstream
         textName = root.findViewById(R.id.textName);
         textBirtday = root.findViewById(R.id.textBirtday);
         textDiaChi = root.findViewById(R.id.textDiaChi);
@@ -186,6 +198,64 @@ public class MyAccountFragment extends Fragment {
         textBirtday.setText(DBqueries.userInfomation.getNgaySinh());
         textDiaChi.setText(DBqueries.userInfomation.getDiaChi());
         textEmail.setText(DBqueries.userInfomation.getEmail());
+=======
+        final View root1 = inflater.inflate(R.layout.infomation_user, container, false);
+        textName = root1.findViewById(R.id.textName);
+        textBirtday = root1.findViewById(R.id.textBirtday);
+        textDiaChi = root1.findViewById(R.id.textDiaChi);
+        textChiTiet = root1.findViewById(R.id.textChiTiet);
+        textEmail = root1.findViewById(R.id.textEmail);
+        OkHttpClient client = new OkHttpClient();
+        AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+            private JSONObject c = new JSONObject();
+
+            @Override
+            protected String doInBackground(String... params) {
+                String url = Config.IP_ADDRESS + "/api/user/get/" + email.getText();
+                Request request = new Request.Builder()
+                        .url(url)
+                        .header("Accept-Encoding", "identity")
+                        .build();
+
+                try (Response response = client.newCall(request).execute()) {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code: " + response);
+                    } else {
+                        String jsonData = response.body().string();
+
+                        JSONArray json = new JSONArray(jsonData);
+                        JSONObject b = new JSONObject(json.get(0).toString());
+                        c = b;
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return "AccountLoad";
+            }
+
+            protected void onPostExecute(String result) {
+                try {
+                    System.out.println(c);
+                    textName.setText(c.getString("TENKHACHHANG"));
+                    textBirtday.setText(c.getString("NGAYSINH"));
+                    textDiaChi.setText(c.getString("DIACHI"));
+                    textChiTiet.setText(c.getString("CHITIET"));
+                    textEmail.setText(c.getString("EMAIL"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            ;
+        };
+        task.execute("AccountLoad");
+
+>>>>>>> Stashed changes
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
