@@ -140,6 +140,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private String GIA = "";
     private String TEN = "";
     private TextView tonHang;
+    private TextView statusTextAddcart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +186,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         nhanXetBtn = findViewById(R.id.nhanxetbtn);
         nhanXetText = findViewById(R.id.nhanxetText);
         tonHang = findViewById(R.id.text_ton_hang);
+        statusTextAddcart = findViewById(R.id.status_add_cart);
         initialRating = -1;
 
         homePageRecyclerView = findViewById(R.id.testing);
@@ -278,10 +280,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     ProductImagesAdapter productImagesAdapter = new ProductImagesAdapter(productImages);
                     productImagesViewPager.setAdapter(productImagesAdapter); //hinhanhchitietsanppham
                     String _tonHang = c.getString("TINHTRANG");
-                    if (!_tonHang.equals("0")){
+                    if (!_tonHang.equals("0")) {
                         tonHang.setText("Hàng hiện có: " + _tonHang);
                         tonHang.setTextColor(Color.parseColor("#56FF33"));
-                    }else {
+                    } else {
+                        statusTextAddcart.setText("Đã hết hàng");
                         tonHang.setText("Hàng hiện có: Hết Hàng");
                         tonHang.setTextColor(Color.parseColor("#FF0000"));
                     }
@@ -385,7 +388,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                     .add("MAHANGHOA", productID)
                                     .add("SODIENTHOAI", _MATK)
                                     .add("NGAY", day)
-                                    .add("NOIDUNG",nhanxet)
+                                    .add("NOIDUNG", nhanxet)
                                     .build();
 
                             Request request = new Request.Builder()
@@ -428,50 +431,55 @@ public class ProductDetailsActivity extends AppCompatActivity {
         addToCartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AsyncTask<String, Void, String> task3 = new AsyncTask<String, Void, String>() {
-                    @Override
-                    protected String doInBackground(String... params) {
-                        String url = Config.IP_ADDRESS + "/api/giohang/giohang_insert";
-                        RequestBody formBody = new FormBody.Builder()
-                                .add("MAHANGHOA", productID)
-                                .add("SDT", _MATK)
-                                .add("TENHANGHOA", TEN)
-                                .add("GIA", GIA)
-                                .add("SOLUONG", "1")
-                                .add("HINHANH", imageUrl)
-                                .build();
+                if (!tonHang.getText().toString().equals("Hàng hiện có: Hết Hàng")) {
+                    AsyncTask<String, Void, String> task3 = new AsyncTask<String, Void, String>() {
+                        @Override
+                        protected String doInBackground(String... params) {
+                            String url = Config.IP_ADDRESS + "/api/giohang/giohang_insert";
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("MAHANGHOA", productID)
+                                    .add("SDT", _MATK)
+                                    .add("TENHANGHOA", TEN)
+                                    .add("GIA", GIA)
+                                    .add("SOLUONG", "1")
+                                    .add("HINHANH", imageUrl)
+                                    .build();
 
-                        Request request = new Request.Builder()
-                                .url(url)
-                                .post(formBody)
-                                .header("Accept-Encoding", "identity")
-                                .build();
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(formBody)
+                                    .header("Accept-Encoding", "identity")
+                                    .build();
 
-                        try (Response response = client.newCall(request).execute()) {
-                            if (!response.isSuccessful()) {
-                                throw new IOException("Unexpected code: " + response);
-                            } else {
-                                String jsonData = response.body().string();
-                                System.out.println(jsonData);
-                                JSONArray json = new JSONArray(jsonData);
-                                System.out.println(jsonData+"12314");
+                            try (Response response = client.newCall(request).execute()) {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected code: " + response);
+                                } else {
+                                    String jsonData = response.body().string();
+                                    System.out.println(jsonData);
+                                    JSONArray json = new JSONArray(jsonData);
+                                    System.out.println(jsonData + "12314");
 
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            return "Cartinsert";
                         }
-                        return "Cartinsert";
-                    }
 
-                    protected void onPostExecute(String result) {
-                        Toast.makeText(ProductDetailsActivity.this,"Thêm thành công",Toast.LENGTH_SHORT).show();
-                    }
+                        protected void onPostExecute(String result) {
+                            Toast.makeText(ProductDetailsActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                        }
 
-                    ;
-                };
-                task3.execute("Cartinsert");
+                        ;
+                    };
+                    task3.execute("Cartinsert");
+                }else{
+                    Toast.makeText(getBaseContext(), "Xin lỗi quý khác, Số lượng hàng đã hết vui lòng liên hệ vói chúng tôi!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

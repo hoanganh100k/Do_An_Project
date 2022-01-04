@@ -140,7 +140,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                 rating.setText(averageRate);
                 totalRatings.setText("(" + totalRatingsNo + ")ratings");
                 NumberFormat formatter = new DecimalFormat("#,###");
-                productPrice.setText(formatter.format(Integer.parseInt(price))+" VNĐ");
+                productPrice.setText(price+" VNĐ");
                 cuttedPrice.setText(cuttedPriceValue + "VND");
 
                 if (payMethod) {
