@@ -222,7 +222,9 @@ public class SignInFragment extends Fragment {
     }
 
     private void checkEmailAndPassword() {
-        if (email.getText().toString().matches(emailPattern)) {
+        String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
+
+        if (email.getText().toString().matches(reg)) {
             if (password.length() >= 8) {
                 disableBtn = true;
                 progressBar.setVisibility(View.VISIBLE);

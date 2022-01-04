@@ -298,8 +298,9 @@ public class SignUpFragment extends Fragment {
         Drawable customErrorIcon = getResources().getDrawable(R.mipmap.custom_error_icon);
         customErrorIcon.setBounds(0, 0, customErrorIcon.getIntrinsicWidth(), customErrorIcon.getIntrinsicHeight());
 
-
-        if (email.getText().toString().matches(emailPattern)) {
+        String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
+        String regEmail = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        if (email.getText().toString().matches(reg) && emailText.getText().toString().matches(regEmail)) {
             if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 
                 progressBar.setVisibility(View.VISIBLE);
@@ -369,7 +370,8 @@ public class SignUpFragment extends Fragment {
                 confirmPassword.setError("Mật khẩu không khớp!", customErrorIcon);
             }
         } else {
-            email.setError("Email không hợp lệ!", customErrorIcon);
+            email.setError("Nhập không hợp lệ!", customErrorIcon);
+            Toast.makeText(getContext(), "Nhập không hợp lệ!", Toast.LENGTH_SHORT).show();
         }
     }
 
