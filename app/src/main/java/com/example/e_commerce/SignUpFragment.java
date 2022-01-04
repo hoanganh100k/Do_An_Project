@@ -329,8 +329,9 @@ public class SignUpFragment extends Fragment {
         customErrorIcon.setBounds(0, 0, customErrorIcon.getIntrinsicWidth(), customErrorIcon.getIntrinsicHeight());
 
         String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
-        String regEmail = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-        System.out.println(gioiTinh.getText().toString());
+        String regEmail = "^(?=.{1,64}@)[\\p{L}0-9\\+_-]+(\\.[\\p{L}0-9\\+_-]+)*@"
+                + "[^-][\\p{L}0-9\\+-]+(\\.[\\p{L}0-9\\+-]+)*(\\.[\\p{L}]{2,})$";
+        System.out.println(emailText.getText().toString().matches(regEmail));
         if (email.getText().toString().matches(reg) && emailText.getText().toString().matches(regEmail)) {
             if (password.getText().toString().equals(confirmPassword.getText().toString())) {
 

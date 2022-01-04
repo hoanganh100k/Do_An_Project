@@ -187,7 +187,6 @@ public class MyAccountFragment extends Fragment {
             }
         });
         //thông tin
-<<<<<<< Updated upstream
         textName = root.findViewById(R.id.textName);
         textBirtday = root.findViewById(R.id.textBirtday);
         textDiaChi = root.findViewById(R.id.textDiaChi);
@@ -198,7 +197,6 @@ public class MyAccountFragment extends Fragment {
         textBirtday.setText(DBqueries.userInfomation.getNgaySinh());
         textDiaChi.setText(DBqueries.userInfomation.getDiaChi());
         textEmail.setText(DBqueries.userInfomation.getEmail());
-=======
         final View root1 = inflater.inflate(R.layout.infomation_user, container, false);
         textName = root1.findViewById(R.id.textName);
         textBirtday = root1.findViewById(R.id.textBirtday);
@@ -255,7 +253,6 @@ public class MyAccountFragment extends Fragment {
         };
         task.execute("AccountLoad");
 
->>>>>>> Stashed changes
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

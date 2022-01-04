@@ -223,7 +223,7 @@ public class SignInFragment extends Fragment {
 
     private void checkEmailAndPassword() {
         String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
-
+        System.out.println(email.getText().toString().matches(reg));
         if (email.getText().toString().matches(reg)) {
             if (password.length() >= 8) {
                 disableBtn = true;
@@ -263,6 +263,7 @@ public class SignInFragment extends Fragment {
                                     editor.putString("EMAIL", b.getString("MATAIKHOAN"));
                                     editor.commit();
                                     mainIntent();
+
                                 }else {
                                     disableBtn = false;
                                 }
@@ -292,23 +293,6 @@ public class SignInFragment extends Fragment {
                     ;
                 };
                 task.execute("Login");
-
-//                    firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-//                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<AuthResult> task) {
-//                                    if (task.isSuccessful()){
-//                                        mainIntent();
-//                                    }else {
-//                                        progressBar.setVisibility(View.INVISIBLE);
-//                                        signInBtn.setEnabled(true);
-//                                        signInBtn.setTextColor(Color.rgb(255,255,255));
-//                                        String error = task.getException().getMessage();
-//                                        Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                }
-//                            });
 
             } else {
                 Toast.makeText(getActivity(), "Incorrect email or password!", Toast.LENGTH_SHORT).show();
