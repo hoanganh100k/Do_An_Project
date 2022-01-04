@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.e_commerce.ui.cart.CartFragment;
 import com.example.e_commerce.ui.home.HomePageAdapter;
 import com.example.lib.Model.CartItemModel;
 import com.example.lib.Model.CommentModel;
@@ -470,6 +471,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         }
 
                         protected void onPostExecute(String result) {
+                            Intent intent = new Intent(ProductDetailsActivity.this, CartFragment.class);
+                            startActivity(intent);
                             Toast.makeText(ProductDetailsActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                         }
 

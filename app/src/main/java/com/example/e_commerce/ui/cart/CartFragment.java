@@ -70,7 +70,7 @@ public class CartFragment extends Fragment {
 //        Đổ dữ liệu
         List<CartItemModel> cartItemModelList = new ArrayList<>();
         DBqueries.cartItemModelList = cartItemModelList;
-
+        DBqueries.tong = 0;
 
 
         cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true, 0);
