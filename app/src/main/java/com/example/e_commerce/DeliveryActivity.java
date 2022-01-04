@@ -124,7 +124,7 @@ public class DeliveryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String[] GioiTinhStr = {"Nam","Nữ"};
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getBaseContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(DeliveryActivity.this);
                 builder.setTitle("Chọn Giới tính");
                 builder.setItems(GioiTinhStr, new DialogInterface.OnClickListener() {
                     @Override
@@ -161,13 +161,11 @@ public class DeliveryActivity extends AppCompatActivity {
                 String _NgaySinh = NgaySinh.getText().toString();
                 String reg = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
                 String regEmail = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
-                if (_Email.matches(regEmail) && _SDT.matches(reg)) {
-                    if (_SDT != "" && _HoTen != "" && _GioiTinh != "" && _Email != "" && _DiaChi != "" && _NgaySinh != "") {
-                        DBqueries.checkOutModel = new CheckOutModel(_SDT, _HoTen, _GioiTinh, _NgaySinh, _DiaChi, _Email);
-                        startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
-                    } else {
-                        Toast.makeText(DeliveryActivity.this, "Bạn Chưa nhập đủ", Toast.LENGTH_SHORT).show();
-                    }
+                if (_SDT != "" && _HoTen != "" && _GioiTinh != "" && _Email != "" && _DiaChi != "" && _NgaySinh != "") {
+                    DBqueries.checkOutModel = new CheckOutModel(_SDT, _HoTen, _GioiTinh, _NgaySinh, _DiaChi, _Email);
+                    startActivity(new Intent(DeliveryActivity.this, HoaDonActivity.class));
+                } else {
+                    Toast.makeText(DeliveryActivity.this, "Bạn Chưa nhập đủ", Toast.LENGTH_SHORT).show();
                 }
             }
         });

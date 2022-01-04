@@ -263,7 +263,6 @@ public class SignInFragment extends Fragment {
                                     editor.putString("EMAIL", b.getString("MATAIKHOAN"));
                                     editor.commit();
                                     mainIntent();
-
                                 }else {
                                     disableBtn = false;
                                 }
