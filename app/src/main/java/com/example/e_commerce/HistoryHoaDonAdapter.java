@@ -3,6 +3,7 @@ package com.example.e_commerce;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.lib.Model.HoaDon;
+import com.example.lib.Model.HoaDonChiTietModel;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.FormBody;
@@ -28,8 +32,12 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
     private List<HoaDon> listData;
     private AlertDialog.Builder builder;
     private Button btnTemp;
-    public HistoryHoaDonAdapter(List<HoaDon> listDataCS) {
+    private Context context;
+    private List<HoaDonChiTietModel> hoaDonChiTiet = new ArrayList<>();;
+    public HistoryHoaDonAdapter(List<HoaDon> listDataCS,Context _context,List<HoaDonChiTietModel> _hoaDonChiTiet) {
         this.listData = listDataCS;
+        this.context = _context;
+        this.hoaDonChiTiet = _hoaDonChiTiet;
     }
 
     @Override
@@ -73,6 +81,7 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
         }
         btnTemp = btn;
         String maHD = ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaHD)).getText().toString();
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +116,14 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
                     }
                 });
                 builder.show();
+            }
+        });
+        viewHistoRyHoaDon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,HistoryIntermationActivity.class);
+                intent.putExtra("getThongTinChiTiet", (Serializable) hoaDonChiTiet.get(i));
+                context.startActivity(intent);
             }
         });
         return viewHistoRyHoaDon;

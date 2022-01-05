@@ -7,6 +7,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lib.Model.HoaDon;
+import com.example.lib.Model.HoaDonChiTietModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,12 +25,14 @@ public class HistoryHoaDon extends AppCompatActivity {
     private ListView listHoaDon;
     public static HistoryHoaDonAdapter adapter;
     private List<HoaDon> listHoaDonData = new ArrayList<>();
+    private List<HoaDonChiTietModel> listHoaDonChiTietData = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_hoa_don);
         listHoaDon = findViewById(R.id.list_view_history_hoa_don);
-        adapter = new HistoryHoaDonAdapter(listHoaDonData);
+        adapter = new HistoryHoaDonAdapter(listHoaDonData,HistoryHoaDon.this,listHoaDonChiTietData);
         listHoaDon.setAdapter(adapter);
         OkHttpClient client = new OkHttpClient();
         AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
@@ -51,6 +54,7 @@ public class HistoryHoaDon extends AppCompatActivity {
                         for (int i = 0; i < json.length(); i++) {
                             JSONObject b = new JSONObject(json.get(i).toString());
                             listHoaDonData.add(new HoaDon(b.getString("MAHOADON"),b.getString("TENKHACHHANG"),b.getString("GIOITINH"),b.getString("TRANGTHAI"),b.getString("TONGTIEN"),b.getString("TRANGTHAITT"),b.getString("THANHTIEN")));
+                            listHoaDonChiTietData.add(new HoaDonChiTietModel(b.getString("MAHOADON"),b.getString("TENKHACHHANG"),b.getString("SODIENTHOAI"),b.getString("GIOITINH"),b.getString("NGAYSINH"),b.getString("DIACHI"),b.getString("EMAIL"),b.getString("NGAYTAO"),b.getString("NGAYGIAO"),b.getString("TRANGTHAI"),b.getString("TRANGTHAITT"),b.getString("MATHANHTOAN"),b.getString("THANHTOAN"),b.getString("TONGTIEN"),b.getString("THANHTIEN"),b.getString("GHICHU")));
                         }
                     }
                 } catch (IOException e) {
