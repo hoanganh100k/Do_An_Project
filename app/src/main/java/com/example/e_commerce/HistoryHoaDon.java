@@ -2,9 +2,11 @@ package com.example.e_commerce;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.lib.Model.HoaDon;
 import com.example.lib.Model.HoaDonChiTietModel;
@@ -31,6 +33,18 @@ public class HistoryHoaDon extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_hoa_don);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // back button pressed
+                finish();
+            }
+        });
         listHoaDon = findViewById(R.id.list_view_history_hoa_don);
         adapter = new HistoryHoaDonAdapter(listHoaDonData,HistoryHoaDon.this,listHoaDonChiTietData);
         listHoaDon.setAdapter(adapter);
