@@ -63,6 +63,7 @@ public class DatHang extends AppCompatActivity {
             @SuppressLint("JavascriptInterface")
             protected void onPostExecute(String result) {
                 web.getSettings().setJavaScriptEnabled(true);
+
                 web.setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -71,8 +72,16 @@ public class DatHang extends AppCompatActivity {
                         //whatever you want
 
                         //Here is the example that you open it your own webview.
-                        view.loadUrl(url);
-                        return true;
+                        if (url.contains("https://www.kienvuongchemistry.tk/apk/Viewdochat.html")) {
+
+                            finish() ;
+                            // Toast.makeText(DatHang.this, "URL DETECTED", Toast.LENGTH_SHORT).show();
+                            // perform your action here
+                            return true;
+                        }
+                        else{
+                            view.loadUrl(url);
+                            return true;}
                     }
                 });
                 web.loadUrl(urlThanhToan);
@@ -81,7 +90,6 @@ public class DatHang extends AppCompatActivity {
             ;
         };
         task.execute("getLinkThanhToan");
-        System.out.println();
     }
     @Override
     public void onBackPressed() {
