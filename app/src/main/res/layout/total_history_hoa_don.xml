@@ -12,6 +12,8 @@
         android:layout_marginStart="26dp"
         android:layout_marginTop="15dp"
         android:text="Tổng Tiền:"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,6 +24,8 @@
         android:layout_marginStart="26dp"
         android:layout_marginTop="15dp"
         android:text="Thành tiền:"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView59" />
 
@@ -33,12 +37,14 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="50dp"
         android:text="Ghi Chú:"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView60" />
 
     <TextView
-        android:id="@+id/textView63"
+        android:id="@+id/textViewGhiCHu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,17 +56,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView60" />
 
     <TextView
-        android:id="@+id/textView64"
+        android:id="@+id/textViewThanhTien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView60"
-        app:layout_constraintTop_toBottomOf="@+id/textView65" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTongtien" />
 
     <TextView
-        android:id="@+id/textView65"
+        android:id="@+id/textViewTongtien"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -68,4 +74,41 @@
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textView59"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView66"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:text="VNĐ"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewTongtien"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView67"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:text="VNĐ"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewThanhTien"
+        app:layout_constraintTop_toBottomOf="@+id/textView66" />
+
+    <TextView
+        android:id="@+id/textView68"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:alpha="@color/colorPrimary"
+        android:text="VNĐ"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewGhiCHu"
+        app:layout_constraintTop_toBottomOf="@+id/textView67" />
 </androidx.constraintlayout.widget.ConstraintLayout>

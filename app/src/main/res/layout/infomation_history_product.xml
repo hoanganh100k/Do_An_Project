@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView61"
@@ -20,12 +20,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
-        android:id="@+id/tableLayout"
-        android:layout_width="0dp"
-        android:layout_height="636dp"
+        android:id="@+id/tableLayoutProductHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        android:shrinkColumns="*"
         android:stretchColumns="0,1,2,3"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView61">
@@ -33,7 +35,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_span="2">
+            android:layout_span="4">
 
             <TextView
                 android:id="@+id/textView55"
@@ -42,6 +44,7 @@
                 android:text="Tên hóa chất"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -51,6 +54,7 @@
                 android:text="Mã hóa chất"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,6 +64,7 @@
                 android:text="Số lượng"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -69,6 +74,7 @@
                 android:text="Đơn giá"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </TableRow>
 
