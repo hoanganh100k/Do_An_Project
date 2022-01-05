@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser currentUser;
     private TextView badgeCount;
     private Dialog signInDialog;
+    private Dialog loadingDialog;
 
     //Cart
     public static Boolean showCart = false;
@@ -209,7 +210,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         signInDialog.setCancelable(true);
 
         signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        loadingDialog = new Dialog(MainActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(MainActivity.this.getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
         Button signInDialogBtn = signInDialog.findViewById(R.id.sign_in_btn);
         Button signUpDialogBtn = signInDialog.findViewById(R.id.sign_up_btn);
 
@@ -369,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             System.out.println(ngaySinhResult);
 
                             DBqueries.userInfomation = new UserModel(c.getString("EMAIL"),c.getString("GIOITINH"),c.getString("TENKHACHHANG"),c.getString("DIACHI"),ngaySinhResult,c.getString("SODIENTHOAI"));
+                            loadingDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

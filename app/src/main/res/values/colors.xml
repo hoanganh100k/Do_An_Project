@@ -18,5 +18,6 @@
     <color name="colorPrimaryDark">#CE0000</color>
     <color name="colorAccent">#ffffff</color>
     <color name="btnRed">#9f0000</color>
+    <color name="DisabaleButton">#CFC4C4</color>
     <color name="recyclerviewBackground">#d6d6d6</color>
 </resources>

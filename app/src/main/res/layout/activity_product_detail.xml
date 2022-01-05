@@ -29,7 +29,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3Add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
@@ -85,7 +85,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout3Add"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:background="@color/colorAccent"
@@ -93,8 +93,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="10dp">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/add_to_cart_btn"
@@ -121,6 +120,7 @@
 
         </LinearLayout>
         // button buy now
+
         <Button
             android:id="@+id/buy_now_btn"
             android:layout_width="match_parent"
@@ -136,6 +136,15 @@
             tools:visibility="visible" />
 
     </LinearLayout>
+
+    <include
+        android:id="@+id/flagmentcart"
+        layout="@layout/content_product_detail"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

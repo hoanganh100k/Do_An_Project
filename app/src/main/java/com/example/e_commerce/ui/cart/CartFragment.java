@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,7 @@ public class CartFragment extends Fragment {
     public CartFragment(){}
 
     private RecyclerView cartItemRecyclerView;
-    private Button btnContinue;
+    public static Button btnContinue;
     private Dialog loadingDialog;
     public static CartAdapter cartAdapter;
     private TextView totalAmount;
@@ -73,9 +74,13 @@ public class CartFragment extends Fragment {
         DBqueries.tong = 0;
 
 
-        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true, 0);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true, 0,getContext());
         cartItemRecyclerView.setAdapter(cartAdapter);
-
+        btnContinue = view.findViewById(R.id.cart_continue_btn);
+        if(DBqueries.tong == 0){
+            btnContinue.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.DisabaleButton));
+            btnContinue.setEnabled(false);
+        }
 
         OkHttpClient client = new OkHttpClient();
 
@@ -114,6 +119,10 @@ public class CartFragment extends Fragment {
                 for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
                     DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
                 }
+                if(DBqueries.tong != 0){
+                    btnContinue.setBackgroundTintList(ContextCompat.getColorStateList(getContext(),R.color.colorPrimary));
+                    btnContinue.setEnabled(true);
+                }
                 NumberFormat formatter = new DecimalFormat("#,###");
                 totalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
                 cartAdapter.notifyDataSetChanged();
@@ -125,8 +134,6 @@ public class CartFragment extends Fragment {
 
 
 
-
-        btnContinue = view.findViewById(R.id.cart_continue_btn);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

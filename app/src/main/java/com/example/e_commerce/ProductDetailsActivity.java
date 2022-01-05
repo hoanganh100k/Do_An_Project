@@ -30,6 +30,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -112,7 +114,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private Dialog loadingDialog;
     private Dialog signInDialog;
     private TextView coupanTitle, discountedPrice, originalPrice;
-
     //DANHGIA
     public static LinearLayout rateNowContainer;
     private TextView totalRatings, productAvgRating;
@@ -142,6 +143,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private String TEN = "";
     private TextView tonHang;
     private TextView statusTextAddcart;
+    private View viewCart;
+    private LinearLayout v;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -189,12 +192,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
         tonHang = findViewById(R.id.text_ton_hang);
         statusTextAddcart = findViewById(R.id.status_add_cart);
         initialRating = -1;
+        v = findViewById(R.id.linearLayout3Add);
 
         homePageRecyclerView = findViewById(R.id.testing);
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         homePageRecyclerView.setLayoutManager(testingLayoutManager);
-
+        viewCart = (View) findViewById(R.id.flagmentcart);
+        viewCart.setVisibility(View.GONE);
 
 ////// coupan redemption dialog
         final Dialog checkCoupanPricedialog = new Dialog(ProductDetailsActivity.this);
@@ -222,7 +227,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 ////// coupan redemption dialog
-
+        addToCartBtn.setVisibility(View.VISIBLE);
+        buyNowBtn.setVisibility(View.VISIBLE);
 
         //Loangding dialog
         loadingDialog = new Dialog(ProductDetailsActivity.this);
@@ -231,7 +237,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         loadingDialog.show();
-
+        v.setVisibility(View.GONE);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -471,8 +477,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         }
 
                         protected void onPostExecute(String result) {
-                            Intent intent = new Intent(ProductDetailsActivity.this, CartFragment.class);
-                            startActivity(intent);
+                            viewCart.setVisibility(View.VISIBLE);
+                            addToCartBtn.setVisibility(View.GONE);
+                            buyNowBtn.setVisibility(View.GONE);
+                            replaceFrament(new CartFragment());
                             Toast.makeText(ProductDetailsActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
                         }
 
@@ -984,5 +992,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         fromSearch = false;
+    }
+    public void replaceFrament(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment_content_detail, fragment);
+        fragmentTransaction.commit();
     }
 }

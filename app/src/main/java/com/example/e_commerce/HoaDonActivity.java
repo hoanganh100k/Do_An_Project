@@ -92,7 +92,7 @@ public class HoaDonActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemRecyclerView.setLayoutManager(layoutManager);
-        cartAdapter = new CartAdapter(DBqueries.cartItemModelList, total, true, 1);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList, total, true, 1,HoaDonActivity.this);
         System.out.println(cartAdapter.getItemCount() + "cc");
         cartItemRecyclerView.setAdapter(cartAdapter);
 
@@ -160,11 +160,17 @@ public class HoaDonActivity extends AppCompatActivity {
                     }
 
                     protected void onPostExecute(String result) {
-                        Intent intent = new Intent(HoaDonActivity.this, com.example.e_commerce.DatHang.class);
-                        intent.putExtra("phuongThuc",phuongThucThanhToan);
-                        intent.putExtra("maHoaDon",tickTime+"");
-                        intent.putExtra("thanhTien",ThanhTienValue+"");
-                        startActivity(intent);
+                        if(phuongThucThanhToan.equals("ck") || phuongThucThanhToan.equals("off"))
+                        {
+                            Intent intent = new Intent(HoaDonActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(HoaDonActivity.this, com.example.e_commerce.DatHang.class);
+                            intent.putExtra("phuongThuc",phuongThucThanhToan);
+                            intent.putExtra("maHoaDon",tickTime+"");
+                            intent.putExtra("thanhTien",ThanhTienValue+"");
+                            startActivity(intent);
+                        }
                     }
 
                 };

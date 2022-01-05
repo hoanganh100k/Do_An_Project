@@ -2,6 +2,7 @@ package com.example.e_commerce.ui.cart;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,12 +65,14 @@ public class CartAdapter extends RecyclerView.Adapter {
     private boolean showDeleteBtn;
     private int lastpos = -1;
     private TextView cartTotalAmount;
+    private Context contextCartFagment;
 
-    public CartAdapter(List<CartItemModel> cartItemModelList, TextView cartTotalAmount, boolean showDeleteBtn, int _statusPos) {
+    public CartAdapter(List<CartItemModel> cartItemModelList, TextView cartTotalAmount, boolean showDeleteBtn, int _statusPos, Context context) {
         this.cartItemModelList = cartItemModelList;
         this.cartTotalAmount = cartTotalAmount;
         this.showDeleteBtn = showDeleteBtn;
         this.statusPos = _statusPos;
+        this.contextCartFagment = context;
     }
 
     @Override
@@ -220,7 +224,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             checkCoupanPricedialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             NumberFormat formatter = new DecimalFormat("#,###");
-            productPrice.setText(formatter.format(Integer.parseInt(productPriceText))+"VNĐ");
+            productPrice.setText(formatter.format(Integer.parseInt(productPriceText)) + "VNĐ");
             productPrice.setTextColor(Color.parseColor("#000000"));
 
             ////// coupan redemption dialog
@@ -267,6 +271,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             AsyncTask<String, Void, String> task2 = new AsyncTask<String, Void, String>() {
                 private JSONArray c = new JSONArray();
                 private String d = "";
+
                 @Override
                 protected String doInBackground(String... params) {
                     String url = Config.IP_ADDRESS + "/api/product/gettinhtrang/" + productID;
@@ -322,60 +327,67 @@ public class CartAdapter extends RecyclerView.Adapter {
                         okBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if(Integer.parseInt(qtyNo.getText().toString())<=Integer.parseInt(soLuong.getText().toString())){
-                                    productQuantity.setText("Qty: " + qtyNo.getText().toString());
-                                    DBqueries.cartItemModelList.get(position).setCartQty(Long.parseLong(qtyNo.getText().toString()));
-                                    System.out.println(DBqueries.cartItemModelList.get(position).getProductQuantity());
-                                    AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
-                                        boolean CheckStatus = false;
-                                        @Override
-                                        protected String doInBackground(String... params) {
-                                            String url = Config.IP_ADDRESS + "/api/giohang/giohang_edit";
-                                            RequestBody formBody = new FormBody.Builder()
-                                                    .add("SDT", DBqueries.email)
-                                                    .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
-                                                    .add("SOLUONG",  qtyNo.getText().toString())
-                                                    .build();
-                                            Request request = new Request.Builder()
-                                                    .url(url)
-                                                    .patch(formBody)
-                                                    .header("Accept-Encoding", "identity")
-                                                    .build();
+                                if (Integer.parseInt(qtyNo.getText().toString()) > 0) {
+                                    if (Integer.parseInt(qtyNo.getText().toString()) <= Integer.parseInt(soLuong.getText().toString())) {
+                                        productQuantity.setText("Qty: " + qtyNo.getText().toString());
+                                        DBqueries.cartItemModelList.get(position).setCartQty(Long.parseLong(qtyNo.getText().toString()));
+                                        System.out.println(DBqueries.cartItemModelList.get(position).getProductQuantity());
+                                        AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                                            boolean CheckStatus = false;
 
-                                            try (Response response = client.newCall(request).execute()) {
-                                                if (!response.isSuccessful()) {
-                                                    throw new IOException("Unexpected code: " + response);
-                                                } else {
-                                                    String jsonData = response.body().string();
+                                            @Override
+                                            protected String doInBackground(String... params) {
+                                                String url = Config.IP_ADDRESS + "/api/giohang/giohang_edit";
+                                                RequestBody formBody = new FormBody.Builder()
+                                                        .add("SDT", DBqueries.email)
+                                                        .add("MAHANGHOA", DBqueries.cartItemModelList.get(position).getProductID())
+                                                        .add("SOLUONG", qtyNo.getText().toString())
+                                                        .build();
+                                                Request request = new Request.Builder()
+                                                        .url(url)
+                                                        .patch(formBody)
+                                                        .header("Accept-Encoding", "identity")
+                                                        .build();
 
-                                                    JSONArray json = new JSONArray(jsonData);
-                                                    System.out.println(json);
-                                                    CheckStatus = true;
+                                                try (Response response = client.newCall(request).execute()) {
+                                                    if (!response.isSuccessful()) {
+                                                        throw new IOException("Unexpected code: " + response);
+                                                    } else {
+                                                        String jsonData = response.body().string();
+
+                                                        JSONArray json = new JSONArray(jsonData);
+                                                        System.out.println(json);
+                                                        CheckStatus = true;
+                                                    }
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
                                                 }
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
+                                                return "cartUpdate";
                                             }
-                                            return "cartUpdate";
-                                        }
 
-                                        protected void onPostExecute(String result) {
-                                            DBqueries.tong = 0;
-                                            for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-                                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                            protected void onPostExecute(String result) {
+                                                DBqueries.tong = 0;
+                                                for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
+                                                    DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                                }
+                                                NumberFormat formatter = new DecimalFormat("#,###");
+                                                cartTotalAmount.setText(formatter.format(DBqueries.tong) + "VNĐ");
+                                                CartFragment.cartAdapter.notifyDataSetChanged();
                                             }
-                                            NumberFormat formatter = new DecimalFormat("#,###");
-                                            cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
-                                            CartFragment.cartAdapter.notifyDataSetChanged();
-                                        }
 
-                                        ;
-                                    };
-                                    task.execute("cartUpdate");
+                                            ;
+                                        };
+                                        task.execute("cartUpdate");
+                                    } else {
+                                        Toast.makeText(itemView.getContext(), "Không thành công số lượng hàng có sẵn không đủ!", Toast.LENGTH_SHORT).show();
+                                    }
                                 }else {
-                                    Toast.makeText(itemView.getContext(), "Không thành công số lượng hàng có sẵn không đủ!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(itemView.getContext(), "Số lượng phải lớn hơn 0!", Toast.LENGTH_SHORT).show();
+
                                 }
+
 
                                 qtyDialog.dismiss();
                             }
@@ -391,6 +403,7 @@ public class CartAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
                         boolean CheckStatus = false;
+
                         @Override
                         protected String doInBackground(String... params) {
                             String url = Config.IP_ADDRESS + "/api/giohang/giohang_delete_sp";
@@ -427,10 +440,14 @@ public class CartAdapter extends RecyclerView.Adapter {
 
                             DBqueries.tong = 0;
                             for (int i = 0; i < DBqueries.cartItemModelList.size(); i++) {
-                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice())*DBqueries.cartItemModelList.get(i).getProductQuantity();
+                                DBqueries.tong += Integer.parseInt(DBqueries.cartItemModelList.get(i).getProductPrice()) * DBqueries.cartItemModelList.get(i).getProductQuantity();
+                            }
+                            if (DBqueries.tong == 0) {
+                                CartFragment.btnContinue.setBackgroundTintList(ContextCompat.getColorStateList(contextCartFagment, R.color.DisabaleButton));
+                                CartFragment.btnContinue.setEnabled(false);
                             }
                             NumberFormat formatter = new DecimalFormat("#,###");
-                            cartTotalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
+                            cartTotalAmount.setText(formatter.format(DBqueries.tong) + "VNĐ");
                             CartFragment.cartAdapter.notifyDataSetChanged();
                         }
 
