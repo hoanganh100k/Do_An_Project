@@ -69,9 +69,9 @@ public class HistoryHoaDonAdapter extends BaseAdapter {
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTenHD)).setText(historyHoaDonn.getTenKH());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textGioiTinhHD)).setText(historyHoaDonn.getGioiTinh());
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTTHD)).setText(historyHoaDonn.getTrangThai());
-        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTONGTIENHD)).setText(formatter.format(Integer.parseInt(historyHoaDonn.getTongTien()))+"VNĐ");
+        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textTONGTIENHD)).setText(formatter.format(Long.parseLong(historyHoaDonn.getTongTien()))+"VNĐ");
         ((TextView) viewHistoRyHoaDon.findViewById(R.id.textMaTT)).setText(historyHoaDonn.getMaTT());
-        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).setText(formatter.format(Integer.parseInt(historyHoaDonn.getThanhTien()))+"VNĐ");
+        ((TextView) viewHistoRyHoaDon.findViewById(R.id.textThanhTien)).setText(formatter.format(Long.parseLong(historyHoaDonn.getThanhTien()))+"VNĐ");
         Button btn = (Button) viewHistoRyHoaDon.findViewById(R.id.btnThanhToanLai);
         if(((TextView) viewHistoRyHoaDon.findViewById(R.id.textTTHD)).getText().toString().equals("Đã hủy")){
             btn.setVisibility(View.GONE);

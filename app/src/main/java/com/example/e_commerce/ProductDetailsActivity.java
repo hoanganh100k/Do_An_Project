@@ -45,7 +45,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -320,7 +319,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                     homePageRecyclerView.setAdapter(adapter);
-
+                    loadingDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -876,29 +875,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //coupon layout
-        if (currentUser == null) {
-            coupanRedemLayout.setVisibility(View.GONE);
-        } else {
-            coupanRedemLayout.setVisibility(View.VISIBLE);
-        }
-        if (currentUser != null) {
-            if (DBqueries.Rating.size() == 0) {
-                DBqueries.loadRatingList(ProductDetailsActivity.this);
-            }
-            if (DBqueries.cartList.size() != 0 && DBqueries.wishlist.size() != 0 && DBqueries.rewardModelList.size() != 0) {
-                loadingDialog.dismiss();
-            }
-            if (DBqueries.rewardModelList.size() == 0) {
-                DBqueries.loadRewards(ProductDetailsActivity.this, loadingDialog, false);
-            }
-            if (DBqueries.wishlist.size() == 0) {
-                DBqueries.loadWishList(ProductDetailsActivity.this, loadingDialog, false);
-            }
-        } else {
-            loadingDialog.dismiss();
-        }
+
 
 //        if (DBqueries.cartList.contains(productID)) {
 //            ALREADY_ADDED_TO_CART = true;
@@ -940,18 +917,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         badgeIcon.setImageResource(R.drawable.shopping_cart);
         badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
 
-        if (currentUser != null) {
-            if (DBqueries.cartList.size() == 0) {
-                DBqueries.loadCartList(ProductDetailsActivity.this, loadingDialog, false, badgeCount, new TextView(ProductDetailsActivity.this));
-            } else {
-                badgeCount.setVisibility(View.VISIBLE);
-                if (DBqueries.cartList.size() < 99) {
-                    badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
-                } else {
-                    badgeCount.setText("99");
-                }
-            }
-        }
+
 
         cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
