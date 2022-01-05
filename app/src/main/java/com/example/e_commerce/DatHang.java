@@ -74,7 +74,8 @@ public class DatHang extends AppCompatActivity {
                         //Here is the example that you open it your own webview.
                         if (url.contains("https://www.kienvuongchemistry.tk/apk/Viewdochat.html")) {
 
-                            finish() ;
+                            Intent intent = new Intent(DatHang.this,MainActivity.class);
+                            startActivity(intent);
                             // Toast.makeText(DatHang.this, "URL DETECTED", Toast.LENGTH_SHORT).show();
                             // perform your action here
                             return true;

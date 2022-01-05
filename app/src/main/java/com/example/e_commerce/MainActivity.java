@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,7 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -125,16 +130,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         WebView w = findViewById(R.id.webView1);
+
+        w.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if( URLUtil.isNetworkUrl(url) ) {
+                    return false;
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity( intent );
+                return true;
+            }
+
+        });
+
+        WebSettings webSettings = w.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        w.getSettings().setDomStorageEnabled(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
+        w.setWebChromeClient(new WebChromeClient());
         //Click vào ô hộp thử ở dưới góc phải
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (statusClick == false) {
+                if(statusClick == false) {
                     // Load the asset file by URL. Note the 3 slashes "file:///".
-                    w.loadUrl("https://vnexpress.net/");
+                    w.loadUrl("https://www.kienvuongchemistry.tk/APK/ViewDochat.html");
                     w.setVisibility(View.VISIBLE);
                     statusClick = true;
-                } else {
+                }else {
                     w.setVisibility(View.GONE);
                     statusClick = false;
                 }
