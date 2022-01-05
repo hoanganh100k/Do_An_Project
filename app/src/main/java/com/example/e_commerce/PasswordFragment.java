@@ -3,6 +3,7 @@ package com.example.e_commerce;
 
 import android.app.Dialog;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,15 +15,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -125,35 +129,51 @@ public class PasswordFragment extends Fragment {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if(newPassword.getText().toString().equals(confirmNewPass.getText().toString())){
                 loadingDialog.show();
-                AuthCredential credential= EmailAuthProvider.getCredential(emaill,oldPassword.getText().toString());
-                user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                OkHttpClient client = new OkHttpClient();
+                AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>() {
+                    private String statusChangePassword = "";
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            user.updatePassword(newPassword.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        oldPassword.setText(null);
-                                        newPassword.setText(null);
-                                        confirmNewPass.setText(null);
-                                        getActivity().finish();
+                    protected String doInBackground(String... params) {
+                        String url = Config.IP_ADDRESS + "/api/user/changepass";
+                        RequestBody formBody = new FormBody.Builder()
+                                .add("MATK", DBqueries.email)
+                                .add("NEWPASS", newPassword.getText().toString())
+                                .add("OLDPASS", oldPassword.getText().toString())
+                                .build();
 
-                                        Toast.makeText(getContext(), "Thay đổi password thành công!",Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        String error=task.getException().getMessage();
-                                        Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
-                                    }
-                                    loadingDialog.dismiss();
-                                }
-                            });
+                        Request request = new Request.Builder()
+                                .url(url)
+                                .patch(formBody)
+                                .header("Accept-Encoding", "identity")
+                                .build();
+
+                        try (Response response = client.newCall(request).execute()) {
+                            if (!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
+                            } else {
+                                String jsonData = response.body().string();
+                                statusChangePassword = jsonData;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return "ChangePassword";
+                    }
+
+                    protected void onPostExecute(String result) {
+                        System.out.println(statusChangePassword);
+                        if(statusChangePassword.equals("True")){
+                            loadingDialog.dismiss();
+                            Toast.makeText(getContext(), "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
                         }else {
                             loadingDialog.dismiss();
-                            String error=task.getException().getMessage();
-                            Toast.makeText(getContext(), error,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Đổi mật khẩu không thành công", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+
+                    ;
+                };
+                task.execute("ChangePassword");
 
             }else {
                 confirmNewPass.setError("Password không khớp !");

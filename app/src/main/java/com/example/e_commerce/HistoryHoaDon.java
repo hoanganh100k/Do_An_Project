@@ -1,8 +1,10 @@
 package com.example.e_commerce;
 
+import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +30,7 @@ public class HistoryHoaDon extends AppCompatActivity {
     public static HistoryHoaDonAdapter adapter;
     private List<HoaDon> listHoaDonData = new ArrayList<>();
     private List<HoaDonChiTietModel> listHoaDonChiTietData = new ArrayList<>();
-
+    private Dialog loadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,12 @@ public class HistoryHoaDon extends AppCompatActivity {
                 finish();
             }
         });
+        loadingDialog=new Dialog(HistoryHoaDon.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(HistoryHoaDon.this.getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
         listHoaDon = findViewById(R.id.list_view_history_hoa_don);
         adapter = new HistoryHoaDonAdapter(listHoaDonData,HistoryHoaDon.this,listHoaDonChiTietData);
         listHoaDon.setAdapter(adapter);
@@ -81,6 +89,7 @@ public class HistoryHoaDon extends AppCompatActivity {
 
             protected void onPostExecute(String result) {
                 adapter.notifyDataSetChanged();
+                loadingDialog.dismiss();
             }
 
             ;

@@ -59,7 +59,7 @@ public class CartFragment extends Fragment {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-//        loadingDialog.show();
+        loadingDialog.show();
         //////////loading dialog
 
         cartItemRecyclerView= view.findViewById(R.id.cart_items_recycler_view);
@@ -126,6 +126,7 @@ public class CartFragment extends Fragment {
                 NumberFormat formatter = new DecimalFormat("#,###");
                 totalAmount.setText(formatter.format(DBqueries.tong)+"VNĐ");
                 cartAdapter.notifyDataSetChanged();
+                loadingDialog.dismiss();
             }
 
             ;

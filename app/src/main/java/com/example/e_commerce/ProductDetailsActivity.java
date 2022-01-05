@@ -38,7 +38,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.e_commerce.ui.cart.CartFragment;
 import com.example.e_commerce.ui.home.HomePageAdapter;
-import com.example.lib.Model.CartItemModel;
 import com.example.lib.Model.CommentModel;
 import com.example.lib.Model.HomePageModel;
 import com.example.lib.Model.WishlistModel;
@@ -145,6 +144,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private TextView statusTextAddcart;
     private View viewCart;
     private LinearLayout v;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,6 +294,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         statusTextAddcart.setText("Đã hết hàng");
                         tonHang.setText("Hàng hiện có: Hết Hàng");
                         tonHang.setTextColor(Color.parseColor("#FF0000"));
+                        buyNowBtn.setEnabled(false);
+                        buyNowBtn.setTextColor(Color.parseColor("#FF0000"));
                     }
                     productTitle.setText(c.getString("TENHANGHOA"));     //tensanpham
                     productAvgRating.setText("5");  //danhgia
@@ -477,6 +479,59 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         }
 
                         protected void onPostExecute(String result) {
+                            Toast.makeText(ProductDetailsActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+                        }
+
+                        ;
+                    };
+                    task3.execute("Cartinsert");
+                } else {
+                    Toast.makeText(getBaseContext(), "Xin lỗi quý khác, Số lượng hàng đã hết vui lòng liên hệ vói chúng tôi!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        buyNowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!tonHang.getText().toString().equals("Hàng hiện có: Hết Hàng")) {
+                    AsyncTask<String, Void, String> task3 = new AsyncTask<String, Void, String>() {
+                        @Override
+                        protected String doInBackground(String... params) {
+                            String url = Config.IP_ADDRESS + "/api/giohang/giohang_insert";
+                            RequestBody formBody = new FormBody.Builder()
+                                    .add("MAHANGHOA", productID)
+                                    .add("SDT", _MATK)
+                                    .add("TENHANGHOA", TEN)
+                                    .add("GIA", GIA)
+                                    .add("SOLUONG", "1")
+                                    .add("HINHANH", imageUrl)
+                                    .build();
+
+                            Request request = new Request.Builder()
+                                    .url(url)
+                                    .post(formBody)
+                                    .header("Accept-Encoding", "identity")
+                                    .build();
+
+                            try (Response response = client.newCall(request).execute()) {
+                                if (!response.isSuccessful()) {
+                                    throw new IOException("Unexpected code: " + response);
+                                } else {
+                                    String jsonData = response.body().string();
+                                    System.out.println(jsonData);
+                                    JSONArray json = new JSONArray(jsonData);
+                                    System.out.println(jsonData + "12314");
+
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return "Cartinsert";
+                        }
+
+                        protected void onPostExecute(String result) {
                             viewCart.setVisibility(View.VISIBLE);
                             addToCartBtn.setVisibility(View.GONE);
                             buyNowBtn.setVisibility(View.GONE);
@@ -487,13 +542,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         ;
                     };
                     task3.execute("Cartinsert");
-                }else{
+                } else {
                     Toast.makeText(getBaseContext(), "Xin lỗi quý khác, Số lượng hàng đã hết vui lòng liên hệ vói chúng tôi!", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
-
         viewpagerIndicator.setupWithViewPager(productImagesViewPager, true);
 
         addToWishListBtn.setOnClickListener(new View.OnClickListener() {
@@ -712,45 +765,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 //////rating layout
-
-        buyNowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (currentUser == null) {
-                    signInDialog.show();
-                } else {
-                    DeliveryActivity.fromCart = false;
-                    loadingDialog.show();
-                    productDetailsActivity = ProductDetailsActivity.this;
-                    DeliveryActivity.cartItemModelList = new ArrayList<>();
-                    DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.CART_ITEM
-                            , productID
-                            , documentSnapshot.get("product_image_1").toString()
-                            , (long) documentSnapshot.get("free_coupens")
-                            , (long) 1
-                            // ,(long)documentSnapshot.get("offers_applied")
-                            , (long) 0
-                            , documentSnapshot.get("product_title").toString()
-                            , documentSnapshot.get("product_price").toString()
-                            , documentSnapshot.get("cutted_price").toString()
-                            , inStock
-                            , (long) documentSnapshot.get("max_quantity")
-                            , (long) documentSnapshot.get("stock_quantity")
-                            , (boolean) documentSnapshot.get("COD")
-                    ));
-                    DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
-
-                    if (DBqueries.addressesModelList.size() == 0) {
-                        DBqueries.loadAddresses(ProductDetailsActivity.this, loadingDialog, true);
-                    } else {
-                        loadingDialog.dismiss();
-                        startActivity(new Intent(ProductDetailsActivity.this, DeliveryActivity.class));
-                    }
-
-                }
-            }
-        });
 
 
 /////////// Coupen dialog
@@ -993,6 +1007,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onDestroy();
         fromSearch = false;
     }
+
     public void replaceFrament(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.nav_host_fragment_content_detail, fragment);
