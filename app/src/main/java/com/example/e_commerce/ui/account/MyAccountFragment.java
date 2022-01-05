@@ -3,9 +3,11 @@ package com.example.e_commerce.ui.account;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ import com.example.e_commerce.RegisterActivity;
 import com.example.e_commerce.UpdateInfoActivity;
 import com.example.lib.Model.MyOrderItemModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -256,9 +257,14 @@ public class MyAccountFragment extends Fragment {
         signOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
                 DBqueries.clearData();
-                DBqueries.email=null;  //my code
+                DBqueries.email = null;  //my code
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove("MATK"); // delete data by key key_name3
+                editor.remove("NAME"); // delete data by key key_name3
+                editor.remove("EMAIL"); // delete data by key key_name3
+                editor.apply();
                 startActivity(new Intent(getContext(), RegisterActivity.class));
                 getActivity().finish();
             }
