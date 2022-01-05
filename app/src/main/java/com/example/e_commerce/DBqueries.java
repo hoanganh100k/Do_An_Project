@@ -379,7 +379,7 @@ public class DBqueries {
     }
 
     //Mỗi lần bấm vô category sẽ load lại hàm này
-    public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName) {
+    public static void setCategoryData(final Context context, final HomePageAdapter adapter, final int position, String categoriesName,Dialog dialog) {
         String id_Category = "-1"; //Đây là ID Của Category
         int categoryType = -1;
         boolean statusCheckType = false;
@@ -407,6 +407,8 @@ public class DBqueries {
         List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
         String finalId_Category = id_Category;
         int finalCategoryType = categoryType;
+        dialog.show();
+
         AsyncTask<String, Void, String> task1 = new AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -514,12 +516,15 @@ public class DBqueries {
                         protected void onPostExecute(String result) {
                             lists.get(position).add(new HomePageModel(2, "Sản Phẩm", "#FFFFFF", gridLayoutModelList));
                             adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
+                            dialog.dismiss();
+
                         }
 
                         ;
                     };
                     task.execute("Load_San_Pham");
                 }
+                dialog.dismiss();
                 adapter.notifyDataSetChanged();             // NHỚ SET ADAPTER CHO THẰNG NÀO PHẢI XEM KĨ
             }
 
