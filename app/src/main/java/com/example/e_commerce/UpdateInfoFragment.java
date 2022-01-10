@@ -1,6 +1,8 @@
 package com.example.e_commerce;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -61,6 +63,34 @@ public class UpdateInfoFragment extends Fragment {
         Email.setText(DBqueries.userInfomation.getEmail());
         DiaChi.setText(DBqueries.userInfomation.getDiaChi());
         NgaySinh.setText(DBqueries.userInfomation.getNgaySinh());
+        GioiTinh.setShowSoftInputOnFocus(false);
+        GioiTinh.setKeyListener(null);
+
+        GioiTinh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] GioiTinhChon = {"Nam","Nữ"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Chọn Giới tính");
+                builder.setItems(GioiTinhChon, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        switch (GioiTinhChon[which]) {
+                            case "Nam":
+                                GioiTinh.setText("Nam");
+                                break;
+                            case "Nữ":
+                                GioiTinh.setText("Nữ");
+                                break;
+
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
