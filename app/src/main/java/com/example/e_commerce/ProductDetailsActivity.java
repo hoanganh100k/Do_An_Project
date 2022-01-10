@@ -306,9 +306,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productPrice.setText(gia + "VND");
                     productOnlyDescriptionBody.setText(c.getString("MOTA"));
                     String[] arrString = c.getString("HANSUDUNG").split("-");
-                    String HanSuDung = arrString[2] + arrString[1] + arrString[0];
+                    String HanSuDung = arrString[2] + "/" + arrString[1] + "/" + arrString[0];
                     String[] arrString1 = c.getString("NGAYSANXUAT").split("-");
-                    String NgaySanXuat = arrString1[2] + arrString1[1] + arrString1[0];
+                    String NgaySanXuat = arrString1[2] + "/" + arrString1[1] + "/" + arrString1[0];
 
                     String ChiTietSanPham = "Xuất xứ: " + c.getString("XUATXU") + "\n" + "Quy Cách: " + c.getString("QUYCACH") + "\n" + "Hạn sử dụng: " + HanSuDung + "\n" + "Ngày sản xuất: " + NgaySanXuat + "\n" + "Nhà cung cấp: " + c.getString("MANHACUNGCAP");
                     productDetailsViewPager.setAdapter(new ProductDetailsAdpater(getSupportFragmentManager(), productDetailsTablayout.getTabCount(), ChiTietSanPham, "", productInformationModelList));

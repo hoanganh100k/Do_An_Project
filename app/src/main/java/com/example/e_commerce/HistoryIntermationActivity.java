@@ -54,7 +54,7 @@ public class HistoryIntermationActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textView_dia_chi)).setText(ThongTinChiTiet.getDiaChi());
         ((TextView) findViewById(R.id.textView_email)).setText(ThongTinChiTiet.getEmail());
         String[] arrString = ThongTinChiTiet.getNgayTao().split("-");
-        String NgayTao = arrString[2] + arrString[1] + arrString[0];
+        String NgayTao = arrString[2] + "/" + arrString[1] + "/" + arrString[0];
         ((TextView) findViewById(R.id.textView_ngay_tao)).setText(NgayTao);
         ((TextView) findViewById(R.id.textView_ngay_giao)).setText((ThongTinChiTiet.getNgayGiao().equals("null")) ? "Chưa giao" : ThongTinChiTiet.getNgayGiao());
         ((TextView) findViewById(R.id.textView_trang_thai)).setText(ThongTinChiTiet.getTrangThai());
